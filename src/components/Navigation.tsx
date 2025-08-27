@@ -16,13 +16,14 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
-    { href: '#home', label: 'Beranda' },
-    { href: '#about', label: 'Tentang' },
-    { href: '#skills', label: 'Keahlian' },
-    { href: '#experience', label: 'Pengalaman' },
-    { href: '#education', label: 'Pendidikan' },
-    { href: '#certifications', label: 'Sertifikasi' },
-    { href: '#contact', label: 'Kontak' },
+    { href: '#home', label: 'Home' },
+    { href: '#about', label: 'About' },
+    { href: '#skills', label: 'Skills' },
+    { href: '#experience', label: 'Experience' },
+    { href: '#organization', label: 'Organization' },
+    { href: '#education', label: 'Education' },
+    { href: '#certifications', label: 'Certifications' },
+    { href: '#contact', label: 'Contact' },
   ];
 
   const handleNavClick = (href: string) => {
