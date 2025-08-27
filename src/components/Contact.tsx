@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Mail, Phone, Github, ExternalLink, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, Github, Instagram, Linkedin, MapPin, Send } from 'lucide-react';
 
 const Contact = () => {
   const contactInfo = [
@@ -13,14 +13,14 @@ const Contact = () => {
     },
     {
       icon: <Phone size={24} />,
-      label: 'Telepon',
+      label: 'Phone',
       value: '(+62) 858-8078-9045',
       href: 'tel:+6285880789045',
       color: 'from-green-500 to-green-600'
     },
     {
       icon: <MapPin size={24} />,
-      label: 'Lokasi',
+      label: 'Location',
       value: 'Jakarta, Indonesia',
       href: '#',
       color: 'from-red-500 to-red-600'
@@ -33,14 +33,21 @@ const Contact = () => {
       label: 'GitHub',
       value: 'View Projects',
       href: '#',
-      description: 'Lihat proyek dan kontribusi kode saya'
+      description: 'Check out my projects and code contributions'
     },
     {
-      icon: <ExternalLink size={24} />,
+      icon: <Linkedin size={24} />,
       label: 'LinkedIn',
       value: 'Connect with me',
       href: '#',
-      description: 'Terhubung untuk peluang profesional'
+      description: 'Connect for professional opportunities'
+    },
+    {
+      icon: <Instagram size={24} />,
+      label: 'Instagram',
+      value: 'Follow me',
+      href: '#',
+      description: 'Follow my journey and daily insights'
     }
   ];
 
@@ -49,11 +56,11 @@ const Contact = () => {
       <div className="container-custom">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Mari <span className="gradient-text">Berkolaborasi</span>
+            Let's <span className="gradient-text">Collaborate</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Saya terbuka untuk kesempatan baru, proyek menarik, dan diskusi tentang teknologi. 
-            Jangan ragu untuk menghubungi saya!
+            I'm open to new opportunities, exciting projects, and discussions about technology. 
+            Don't hesitate to reach out!
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-glow mx-auto rounded-full mt-6"></div>
         </div>
@@ -62,7 +69,7 @@ const Contact = () => {
           {/* Contact Information */}
           <div className="lg:col-span-1 space-y-6">
             <Card className="card-glass p-6">
-              <h3 className="text-xl font-bold mb-6 gradient-text">Informasi Kontak</h3>
+              <h3 className="text-xl font-bold mb-6 gradient-text">Contact Information</h3>
               <div className="space-y-4">
                 {contactInfo.map((contact, index) => (
                   <a
@@ -84,7 +91,7 @@ const Contact = () => {
 
             {/* Social Links */}
             <Card className="card-glass p-6">
-              <h3 className="text-xl font-bold mb-6 gradient-text">Media Sosial</h3>
+              <h3 className="text-xl font-bold mb-6 gradient-text">Social Media</h3>
               <div className="space-y-4">
                 {socialLinks.map((social, index) => (
                   <a
@@ -99,7 +106,7 @@ const Contact = () => {
                       <div className="text-foreground font-medium">{social.label}</div>
                       <div className="text-sm text-muted-foreground">{social.description}</div>
                     </div>
-                    <ExternalLink size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                    <Github size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                 ))}
               </div>
@@ -114,11 +121,11 @@ const Contact = () => {
                   <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary-glow rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
                     <Send size={32} className="text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">Siap untuk Berkolaborasi?</h3>
+                  <h3 className="text-2xl font-bold mb-4">Ready to Collaborate?</h3>
                   <p className="text-muted-foreground mb-8 leading-relaxed">
-                    Saya selalu tertarik untuk mendengar tentang peluang baru, proyek inovatif, 
-                    atau bahkan hanya untuk berdiskusi tentang teknologi dan tren industri terkini. 
-                    Mari kita ciptakan sesuatu yang luar biasa bersama!
+                    I'm always interested in hearing about new opportunities, innovative projects, 
+                    or even just discussing technology and current industry trends. 
+                    Let's create something amazing together!
                   </p>
                 </div>
 
@@ -126,10 +133,10 @@ const Contact = () => {
                   <Button 
                     size="lg" 
                     className="btn-primary px-8 py-6 text-lg font-semibold"
-                    onClick={() => window.location.href = 'mailto:toriqnain@gmail.com?subject=Mari Berkolaborasi!'}
+                    onClick={() => window.location.href = 'mailto:toriqnain@gmail.com?subject=Let\'s Collaborate!'}
                   >
                     <Mail className="mr-2" size={20} />
-                    Kirim Email
+                    Send Email
                   </Button>
                   <Button 
                     size="lg" 
@@ -138,15 +145,15 @@ const Contact = () => {
                     onClick={() => window.location.href = 'tel:+6285880789045'}
                   >
                     <Phone className="mr-2" size={20} />
-                    Hubungi Sekarang
+                    Call Now
                   </Button>
                 </div>
 
                 <div className="mt-8 p-6 bg-primary/5 rounded-lg border border-primary/20">
                   <p className="text-sm text-muted-foreground">
                     💡 <span className="text-primary font-medium">Fun Fact:</span> 
-                    Saya biasanya merespons email dalam 24 jam dan selalu antusias 
-                    membahas proyek-proyek yang menantang!
+                    I usually respond to emails within 24 hours and am always enthusiastic 
+                    about discussing challenging projects!
                   </p>
                 </div>
               </div>

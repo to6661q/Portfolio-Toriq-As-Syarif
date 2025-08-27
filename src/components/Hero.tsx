@@ -1,5 +1,4 @@
-import { Github, Mail, ExternalLink, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Github, Mail, Instagram, Linkedin, ChevronDown } from 'lucide-react';
 
 const Hero = () => {
   const scrollToSection = (id: string) => {
@@ -29,30 +28,8 @@ const Hero = () => {
               Informatics Engineer
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Seorang Sarjana Teknik Informatika dengan gairah di bidang Android, 
-              keamanan siber, ilmu data, dan machine learning.
+              Fully adaptable. Embrace the process, let's grow together!
             </p>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button 
-              size="lg" 
-              className="btn-primary px-8 py-6 text-lg font-semibold"
-              onClick={() => window.open('#', '_blank')}
-            >
-              <Github className="mr-2" size={20} />
-              Lihat Proyek Saya
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="btn-ghost px-8 py-6 text-lg font-semibold"
-              onClick={() => scrollToSection('contact')}
-            >
-              <Mail className="mr-2" size={20} />
-              Hubungi Saya
-            </Button>
           </div>
 
           {/* Social Links */}
@@ -73,7 +50,13 @@ const Hero = () => {
               href="#"
               className="p-3 rounded-full bg-card-glass border border-border/20 hover:bg-primary/10 hover:border-primary/30 transition-all duration-300 hover:scale-110"
             >
-              <ExternalLink size={24} className="text-muted-foreground hover:text-primary transition-colors" />
+              <Linkedin size={24} className="text-muted-foreground hover:text-primary transition-colors" />
+            </a>
+            <a 
+              href="#"
+              className="p-3 rounded-full bg-card-glass border border-border/20 hover:bg-primary/10 hover:border-primary/30 transition-all duration-300 hover:scale-110"
+            >
+              <Instagram size={24} className="text-muted-foreground hover:text-primary transition-colors" />
             </a>
           </div>
 

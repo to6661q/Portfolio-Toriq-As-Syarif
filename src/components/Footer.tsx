@@ -1,4 +1,4 @@
-import { Github, Mail, ExternalLink, Heart } from 'lucide-react';
+import { Github, Mail, Instagram, Linkedin, Heart } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -23,10 +23,10 @@ const Footer = () => {
             <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
             <div className="flex flex-wrap justify-center gap-4">
               {[
-                { href: '#about', label: 'Tentang' },
-                { href: '#skills', label: 'Keahlian' },
-                { href: '#experience', label: 'Pengalaman' },
-                { href: '#contact', label: 'Kontak' }
+                { href: '#about', label: 'About' },
+                { href: '#skills', label: 'Skills' },
+                { href: '#experience', label: 'Experience' },
+                { href: '#contact', label: 'Contact' }
               ].map((link) => (
                 <button
                   key={link.href}
@@ -65,7 +65,14 @@ const Footer = () => {
                 className="p-3 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110"
                 aria-label="LinkedIn"
               >
-                <ExternalLink size={20} />
+                <Linkedin size={20} />
+              </a>
+              <a 
+                href="#"
+                className="p-3 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110"
+                aria-label="Instagram"
+              >
+                <Instagram size={20} />
               </a>
             </div>
           </div>
