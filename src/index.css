@@ -9,22 +9,22 @@
 @layer base {
   :root {
     /* Dark theme base colors */
-    --background: 220 30% 4%;
+    --background: 220 30% 2%;
     --foreground: 210 40% 98%;
 
     /* Card and surface colors */
-    --card: 220 25% 6%;
+    --card: 220 25% 4%;
     --card-foreground: 210 40% 98%;
-    --card-glass: 220 25% 8%;
+    --card-glass: 220 25% 6%;
 
-    --popover: 220 25% 6%;
+    --popover: 220 25% 4%;
     --popover-foreground: 210 40% 98%;
 
-    /* Brand colors - Neon Yellow theme */
-    --primary: 60 100% 50%;
-    --primary-foreground: 220 30% 4%;
-    --primary-glow: 60 100% 60%;
-    --primary-muted: 60 80% 40%;
+    /* Brand colors - Neon Green theme */
+    --primary: 120 100% 50%;
+    --primary-foreground: 220 30% 2%;
+    --primary-glow: 120 100% 60%;
+    --primary-muted: 120 80% 40%;
 
     --secondary: 220 25% 15%;
     --secondary-foreground: 210 40% 98%;
@@ -32,27 +32,27 @@
     --muted: 220 25% 15%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 60 60% 20%;
-    --accent-foreground: 60 100% 80%;
+    --accent: 120 60% 20%;
+    --accent-foreground: 120 100% 80%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 220 25% 15%;
     --input: 220 25% 15%;
-    --ring: 60 100% 50%;
+    --ring: 120 100% 50%;
 
     --radius: 0.75rem;
 
     /* Custom gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(60 100% 50%), hsl(60 80% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(220 30% 4%) 0%, hsl(220 25% 8%) 50%, hsl(60 60% 8%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(220 25% 6% / 0.8), hsl(220 25% 8% / 0.9));
+    --gradient-primary: linear-gradient(135deg, hsl(120 100% 50%), hsl(120 80% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(220 30% 2%) 0%, hsl(220 25% 6%) 50%, hsl(120 60% 8%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(220 25% 4% / 0.8), hsl(220 25% 6% / 0.9));
     
     /* Shadows and glows */
-    --shadow-glow: 0 0 30px hsl(60 100% 50% / 0.3);
-    --shadow-card: 0 10px 30px -5px hsl(220 30% 2% / 0.5);
-    --shadow-hover: 0 20px 40px -10px hsl(60 100% 50% / 0.2);
+    --shadow-glow: 0 0 30px hsl(120 100% 50% / 0.3);
+    --shadow-card: 0 10px 30px -5px hsl(220 30% 1% / 0.5);
+    --shadow-hover: 0 20px 40px -10px hsl(120 100% 50% / 0.2);
 
     /* Animation values */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -177,7 +177,7 @@
   }
 
   @keyframes glow {
-    from { box-shadow: 0 0 20px hsl(60 100% 50% / 0.3); }
-    to { box-shadow: 0 0 30px hsl(60 100% 50% / 0.6); }
+    from { box-shadow: 0 0 20px hsl(120 100% 50% / 0.3); }
+    to { box-shadow: 0 0 30px hsl(120 100% 50% / 0.6); }
   }
 }

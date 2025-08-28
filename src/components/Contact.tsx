@@ -1,6 +1,5 @@
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Mail, Phone, Github, Instagram, Linkedin, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, Github, Instagram, Linkedin, MapPin, ExternalLink } from 'lucide-react';
 
 const Contact = () => {
   const contactInfo = [
@@ -65,9 +64,9 @@ const Contact = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-glow mx-auto rounded-full mt-6"></div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Contact Information */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="space-y-6">
             <Card className="card-glass p-6">
               <h3 className="text-xl font-bold mb-6 gradient-text">Contact Information</h3>
               <div className="space-y-4">
@@ -88,8 +87,10 @@ const Contact = () => {
                 ))}
               </div>
             </Card>
+          </div>
 
-            {/* Social Links */}
+          {/* Social Media */}
+          <div className="space-y-6">
             <Card className="card-glass p-6">
               <h3 className="text-xl font-bold mb-6 gradient-text">Social Media</h3>
               <div className="space-y-4">
@@ -106,56 +107,9 @@ const Contact = () => {
                       <div className="text-foreground font-medium">{social.label}</div>
                       <div className="text-sm text-muted-foreground">{social.description}</div>
                     </div>
-                    <Github size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                    <ExternalLink size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                 ))}
-              </div>
-            </Card>
-          </div>
-
-          {/* CTA Section */}
-          <div className="lg:col-span-2">
-            <Card className="card-glass p-8 h-full flex flex-col justify-center">
-              <div className="text-center">
-                <div className="mb-8">
-                  <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary-glow rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                    <Send size={32} className="text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4">Ready to Collaborate?</h3>
-                  <p className="text-muted-foreground mb-8 leading-relaxed">
-                    I'm always interested in hearing about new opportunities, innovative projects, 
-                    or even just discussing technology and current industry trends. 
-                    Let's create something amazing together!
-                  </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    size="lg" 
-                    className="btn-primary px-8 py-6 text-lg font-semibold"
-                    onClick={() => window.location.href = 'mailto:toriqnain@gmail.com?subject=Let\'s Collaborate!'}
-                  >
-                    <Mail className="mr-2" size={20} />
-                    Send Email
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="btn-ghost px-8 py-6 text-lg font-semibold"
-                    onClick={() => window.location.href = 'tel:+6285880789045'}
-                  >
-                    <Phone className="mr-2" size={20} />
-                    Call Now
-                  </Button>
-                </div>
-
-                <div className="mt-8 p-6 bg-primary/5 rounded-lg border border-primary/20">
-                  <p className="text-sm text-muted-foreground">
-                    💡 <span className="text-primary font-medium">Fun Fact:</span> 
-                    I usually respond to emails within 24 hours and am always enthusiastic 
-                    about discussing challenging projects!
-                  </p>
-                </div>
               </div>
             </Card>
           </div>
