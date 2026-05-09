@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toriq As Syarif | Portfolio</title>
+    
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Header -->
-    <header id="header">
+    <!-- Header / Navigation -->
+    <header>
         <div class="container nav-container">
             <h1 class="logo">TAS<span>.</span></h1>
             <nav>
@@ -32,11 +35,12 @@
     <section id="home" class="hero">
         <div class="container hero-flex">
             <div class="hero-img">
-                <img id="display-profile-pic" src="img/default-profile.png" alt="Toriq As Syarif">
+                <!-- Foto Profil Bulat -->
+                <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
             </div>
             <div class="hero-text">
-                <h1 id="display-name">Memuat Nama...</h1>
-                <p id="display-headline" class="subtitle">IT Specialist & Software Developer</p>
+                <h1>Halo, Saya <span class="highlight">Toriq As Syarif</span></h1>
+                <p class="subtitle">IT Specialist & Software Developer</p>
                 <div class="hero-btns">
                     <a href="#projects" class="btn-primary">My Project</a>
                     <a href="#experience" class="btn-primary">Work Experience</a>
@@ -50,39 +54,47 @@
     <section id="about" class="section">
         <div class="container">
             <h2 class="section-title">About Me</h2>
-            <p id="display-about" class="personal-summary">Memuat summary...</p>
-            
+            <div class="summary-box">
+                <p>Saya adalah seorang spesialis teknologi informasi dengan latar belakang teknik informatika yang kuat. Fokus saya adalah pengembangan perangkat lunak, optimalisasi algoritma, dan Machine Learning. Saya senang memecahkan masalah kompleks melalui kode yang efisien dan skalabel.</p>
+            </div>
+
             <div class="about-grid">
-                <!-- Education -->
-                <div class="about-item">
-                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-                    <p><strong>UIN Syarif Hidayatullah Jakarta</strong><br>Informatics Engineering (GPA: 3.84)</p>
+                <!-- Educations -->
+                <div class="about-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Educations</h3>
+                    <p><strong>UIN Syarif Hidayatullah Jakarta</strong></p>
+                    <p>S1 Teknik Informatika (GPA: 3.84)</p>
                 </div>
+
                 <!-- Achievement -->
-                <div class="about-item">
+                <div class="about-card">
                     <h3><i class="fas fa-trophy"></i> Achievement</h3>
-                    <ul id="achievement-list">
-                        <li>IEEE Xplore Publication (2026)</li>
-                        <li>Vibecoding Competition 2026</li>
+                    <ul>
+                        <li>Publikasi IEEE Xplore - Outlier Handling Optimization (2026)</li>
+                        <li>Finalis Vibecoding Competition Ramadhan (2026)</li>
                     </ul>
                 </div>
+
                 <!-- Skills -->
-                <div class="about-item">
+                <div class="about-card">
                     <h3><i class="fas fa-tools"></i> Skills</h3>
                     <div class="skill-icons">
                         <i class="devicon-python-plain colored" title="Python"></i>
+                        <i class="devicon-php-plain colored" title="PHP"></i>
                         <i class="devicon-laravel-original colored" title="Laravel"></i>
                         <i class="devicon-docker-plain colored" title="Docker"></i>
                         <i class="devicon-kubernetes-plain colored" title="Kubernetes"></i>
                         <i class="devicon-kotlin-plain colored" title="Kotlin"></i>
                     </div>
                 </div>
+
                 <!-- Social Media -->
-                <div class="about-item">
+                <div class="about-card">
                     <h3><i class="fas fa-share-alt"></i> Social Media</h3>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="mailto:toriqnain@gmail.com"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
@@ -93,7 +105,9 @@
     <section id="projects" class="section bg-light">
         <div class="container">
             <h2 class="section-title">My Project</h2>
-            <div id="project-list" class="project-grid"></div>
+            <div id="project-list" class="project-grid">
+                <!-- Data akan ditarik dinamis dari Supabase melalui JS -->
+            </div>
         </div>
     </section>
 
@@ -101,16 +115,16 @@
     <section id="experience" class="section">
         <div class="container">
             <h2 class="section-title">Work Experience</h2>
-            <div class="experience-box">
+            <div class="experience-timeline">
                 <div class="exp-item">
-                    <h4>IT Specialist</h4>
-                    <span>Government Correctional Institution (2025 - Present)</span>
-                    <p>Bertanggung jawab atas pengelolaan infrastruktur IT dan pengembangan sistem internal.</p>
+                    <h4>Information Technology Specialist</h4>
+                    <p class="exp-meta">Government Correctional Institution | 2025 - Present</p>
+                    <p>Bertanggung jawab dalam pengelolaan infrastruktur IT dan pengembangan sistem internal instansi.</p>
                 </div>
                 <div class="exp-item">
-                    <h4>Internship Innovation</h4>
-                    <span>MagangHub Batch II (2026)</span>
-                    <p>Implementasi sistem informasi tata usaha SI-TAU.</p>
+                    <h4>Internship Innovation (SI-TAU)</h4>
+                    <p class="exp-meta">MagangHub Batch II | 2026</p>
+                    <p>Mengembangkan dan mengimplementasikan inovasi sistem informasi tata usaha (SI-TAU).</p>
                 </div>
             </div>
         </div>
@@ -120,7 +134,9 @@
     <section id="certificates" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Certifications</h2>
-            <div id="cert-list" class="cert-grid"></div>
+            <div id="cert-list" class="cert-grid">
+                <!-- Data akan ditarik dinamis dari Supabase melalui JS -->
+            </div>
         </div>
     </section>
 
@@ -128,11 +144,37 @@
     <footer>
         <div class="container">
             <p>&copy; 2026 Toriq As Syarif</p>
-            <p><a href="mailto:toriqnain@gmail.com" class="footer-email"><i class="fas fa-envelope"></i> toriqnain@gmail.com</a></p>
-            <div id="quote-container" class="quote-text"></div>
+            <p><a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a></p>
+            <div id="quote-display" class="quote-box"></div>
         </div>
     </footer>
 
-    <script type="module" src="js/main.js"></script>
+    <!-- Scripts -->
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        // 1. Logika Quotes Random (1 dari 10)
+        const workQuotes = [
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+            "Quality is not an act, it is a habit. - Aristotle",
+            "The future depends on what you do today. - Mahatma Gandhi",
+            "Pleasure in the job puts perfection in the work. - Aristotle",
+            "Opportunity is missed by most people because it is dressed in overalls and looks like work. - Thomas Edison",
+            "Hard work beats talent when talent doesn't work hard. - Tim Notke",
+            "Work to become, not to acquire. - Elbert Hubbard",
+            "Your talent determines what you can do. Your motivation determines how much you are willing to do. - Lou Holtz",
+            "Success is the sum of small efforts, repeated day-in and day-out. - Robert Collier"
+        ];
+
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * workQuotes.length);
+            document.getElementById('quote-display').innerText = `"${workQuotes[randomIndex]}"`;
+        }
+        showRandomQuote();
+
+        // 2. Logika Fetch Data (Supabase)
+        // [Tambahkan logika fetch projects & certificates Anda di sini]
+    </script>
 </body>
 </html>
