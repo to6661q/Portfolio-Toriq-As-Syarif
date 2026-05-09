@@ -64,6 +64,15 @@ async function refreshLists() {
     const { data: certs } = await supabase.from('certificates').select('*').order('id', { ascending: false });
     document.getElementById('total-certs').innerText = certs?.length || 0;
     render('list-sertifikat', certs, 'certificates', 'title');
+
+    async function refreshLists() {
+    // ... (logic projects, experience, certs tetap ada) ...
+
+    // Volunteer
+    const { data: vols } = await supabase.from('volunteer').select('*').order('id', { ascending: false });
+    document.getElementById('total-volunteer').innerText = vols?.length || 0;
+    render('list-volunteer', vols, 'volunteer', 'role');
+}
 }
 
 function render(id, data, table, key) {
@@ -133,6 +142,32 @@ document.getElementById('cert-form').onsubmit = async (e) => {
         image_url: img
     }]);
     e.target.reset(); refreshLists(); alert("Certificate Added!");
+};
+
+document.getElementById('volunteer-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.innerText = 'Uploading...';
+
+    try {
+        const img = await handleUpload(document.getElementById('v-img').files[0], 'volunteer');
+        const { error } = await supabase.from('volunteer').insert([{
+            role: document.getElementById('v-title').value,
+            organization: document.getElementById('v-org').value,
+            duration: document.getElementById('v-duration').value,
+            description: document.getElementById('v-desc').value,
+            image_url: img
+        }]);
+
+        if (error) throw error;
+        alert("Volunteer Experience Added!");
+        e.target.reset();
+        refreshLists();
+    } catch (err) {
+        alert(err.message);
+    } finally {
+        btn.innerText = 'Add Volunteer';
+    }
 };
 
 window.onload = refreshLists;
