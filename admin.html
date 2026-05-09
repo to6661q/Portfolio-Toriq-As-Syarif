@@ -10,57 +10,87 @@
 </head>
 <body class="admin-body">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sidebar-content">
-            <h2 class="brand">TAS<span>.</span></h2>
-            <nav class="nav-menu">
-                <a href="#profil" class="nav-item active"><i class="fas fa-user"></i> Profil</a>
-                <a href="#projek" class="nav-item"><i class="fas fa-code"></i> Projek</a>
-                <a href="#sertifikat" class="nav-item"><i class="fas fa-award"></i> Sertifikat</a>
-                <a href="index.html" class="nav-item" target="_blank"><i class="fas fa-external-link-alt"></i> Web Utama</a>
-            </nav>
-            <div class="sidebar-user">
-                <p><i class="fas fa-user-circle"></i> Toriq As Syarif</p>
-                <button id="logout-btn" class="logout-link">
-                    <i class="fas fa-sign-out-alt"></i> Keluar
-                </button>
-            </div>
+        <div class="sidebar-brand">
+            <h2>TAS<span>.</span></h2>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#profil"><i class="fas fa-user-edit"></i> Profil</a></li>
+                <li><a href="#projek"><i class="fas fa-project-diagram"></i> My Project</a></li>
+                <li><a href="#pengalaman"><i class="fas fa-briefcase"></i> Work Experience</a></li>
+                <li><a href="#sertifikat"><i class="fas fa-award"></i> Certifications</a></li>
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> Lihat Web</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logout-btn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
         </div>
     </aside>
 
-    <!-- KONTEN UTAMA -->
-    <main class="main-panel">
-        <div class="panel-header">
-            <h1>Dashboard Management</h1>
-            <p>Kelola data profil, projek, dan sertifikasi Anda.</p>
-        </div>
+    <main class="main-content">
+        <header class="content-header">
+            <h1>Portfolio Management</h1>
+            <p>Dashboard kontrol untuk IT Specialist & Software Developer.</p>
+        </header>
 
-        <div class="content-wrapper">
-            <!-- Form Profil -->
-            <section id="profil" class="admin-card">
-                <div class="card-title">Update Profil</div>
-                <form id="profile-form">
-                    <div class="field">
-                        <label>Nama Lengkap</label>
-                        <input type="text" id="full_name" value="Toriq As Syarif" required>
-                    </div>
-                    <div class="field">
-                        <label>Headline</label>
-                        <input type="text" id="headline" placeholder="Software Developer & IT Specialist">
-                    </div>
-                    <div class="field">
-                        <label>Tentang Saya</label>
-                        <textarea id="about_text" rows="4"></textarea>
-                    </div>
-                    <div class="field">
-                        <label>Foto Profil</label>
-                        <input type="file" id="profile_img" accept="image/*">
-                    </div>
-                    <button type="submit" id="save-profile" class="btn-primary">Update Profil</button>
-                </form>
-            </section>
-        </div>
+        <!-- SECTION PROFIL -->
+        <section id="profil" class="card">
+            <div class="card-title"><i class="fas fa-id-card"></i> Personal Summary</div>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label>Headline</label>
+                    <input type="text" id="headline" placeholder="Contoh: Software Developer | IT Specialist">
+                </div>
+                <div class="form-group">
+                    <label>Tentang Saya</label>
+                    <textarea id="about_text" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Update Profil</button>
+            </form>
+        </section>
+
+        <!-- SECTION PROJECT -->
+        <section id="projek" class="card">
+            <div class="card-title"><i class="fas fa-folder-plus"></i> My Project Management</div>
+            <form id="project-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Judul Projek</label><input type="text" id="p-title" required></div>
+                    <div class="form-group"><label>Tech Stack (koma)</label><input type="text" id="p-tech" placeholder="Python, Laravel"></div>
+                </div>
+                <div class="form-group"><label>Link GitHub</label><input type="url" id="p-link"></div>
+                <div class="form-group"><label>Gambar Projek</label><input type="file" id="p-img" accept="image/*"></div>
+                <button type="submit" class="btn-primary">Tambah Projek</button>
+            </form>
+            <div class="list-container" id="list-projek"></div>
+        </section>
+
+        <!-- SECTION EXPERIENCE -->
+        <section id="pengalaman" class="card">
+            <div class="card-title"><i class="fas fa-briefcase"></i> Work Experience Management</div>
+            <form id="exp-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Posisi</label><input type="text" id="e-title" required></div>
+                    <div class="form-group"><label>Instansi</label><input type="text" id="e-company"></div>
+                </div>
+                <div class="form-group"><label>Durasi (e.g. 2025 - Present)</label><input type="text" id="e-duration"></div>
+                <div class="form-group"><label>Deskripsi Kerja</label><textarea id="e-desc" rows="3"></textarea></div>
+                <button type="submit" class="btn-primary">Tambah Pengalaman</button>
+            </form>
+            <div class="list-container" id="list-pengalaman"></div>
+        </section>
+
+        <!-- SECTION CERTIFICATE -->
+        <section id="sertifikat" class="card">
+            <div class="card-title"><i class="fas fa-certificate"></i> Certifications Management</div>
+            <form id="cert-form">
+                <div class="form-group"><label>Nama Sertifikat</label><input type="text" id="c-title" required></div>
+                <div class="form-group"><label>Penerbit</label><input type="text" id="c-issuer"></div>
+                <div class="form-group"><label>Scan Sertifikat</label><input type="file" id="c-img" accept="image/*"></div>
+                <button type="submit" class="btn-primary">Simpan Sertifikat</button>
+            </form>
+            <div class="list-container" id="list-sertifikat"></div>
+        </section>
     </main>
 
     <script type="module" src="js/admin-editor.js"></script>
