@@ -14,22 +14,22 @@
 </head>
 <body>
 
-    <!-- Header / Navigation -->
-    <header>
-        <div class="container nav-container">
-            <h1 class="logo">TAS<span>.</span></h1>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About Me</a></li>
-                    <li><a href="#projects">My Project</a></li>
-                    <li><a href="#experience">Work Experience</a></li>
-                    <li><a href="#certificates">Certifications</a></li>
-                    <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<!-- Header -->
+<header>
+    <div class="container nav-container">
+        <h1 class="logo">TAS<span>.</span></h1>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#projects">My Project</a></li>
+                <li><a href="#experience">Work Experience</a></li>
+                <li><a href="#certificates">Certifications</a></li>
+                <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
     <!-- Home Section -->
     <section id="home" class="hero">
@@ -147,34 +147,29 @@
             <p><a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a></p>
             <div id="quote-display" class="quote-box"></div>
         </div>
-    </footer>
+    <footer>
+    <div class="container footer-content">
+        <p>&copy; 2026 Toriq As Syarif</p>
+        <p><a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a></p>
+        <div id="quote-display" class="quote-box"></div>
+    </div>
+</footer>
 
-    <!-- Scripts -->
-    <script type="module">
-        import { supabase } from './js/supabase-config.js';
-
-        // 1. Logika Quotes Random (1 dari 10)
-        const workQuotes = [
-            "The only way to do great work is to love what you do. - Steve Jobs",
-            "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
-            "Quality is not an act, it is a habit. - Aristotle",
-            "The future depends on what you do today. - Mahatma Gandhi",
-            "Pleasure in the job puts perfection in the work. - Aristotle",
-            "Opportunity is missed by most people because it is dressed in overalls and looks like work. - Thomas Edison",
-            "Hard work beats talent when talent doesn't work hard. - Tim Notke",
-            "Work to become, not to acquire. - Elbert Hubbard",
-            "Your talent determines what you can do. Your motivation determines how much you are willing to do. - Lou Holtz",
-            "Success is the sum of small efforts, repeated day-in and day-out. - Robert Collier"
-        ];
-
-        function showRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * workQuotes.length);
-            document.getElementById('quote-display').innerText = `"${workQuotes[randomIndex]}"`;
-        }
-        showRandomQuote();
-
-        // 2. Logika Fetch Data (Supabase)
-        // [Tambahkan logika fetch projects & certificates Anda di sini]
-    </script>
+<script>
+    // Logika Quote Tetap Sama
+    const workQuotes = [
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+        "Quality is not an act, it is a habit. - Aristotle",
+        "The future depends on what you do today. - Mahatma Gandhi",
+        "Pleasure in the job puts perfection in the work. - Aristotle",
+        "Opportunity is missed by most people because it is dressed in overalls and looks like work. - Thomas Edison",
+        "Hard work beats talent when talent doesn't work hard. - Tim Notke",
+        "Work to become, not to acquire. - Elbert Hubbard",
+        "Your talent determines what you can do. Your motivation determines how much you are willing to do. - Lou Holtz",
+        "Success is the sum of small efforts, repeated day-in and day-out. - Robert Collier"
+    ];
+    document.getElementById('quote-display').innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
+</script>
 </body>
 </html>
