@@ -1,99 +1,122 @@
 import { supabase } from './supabase-config.js';
 
-// 1. CEK AUTENTIKASI (Wajib di atas)
-async function checkAccess() {
+// --- 1. PROTEKSI & LOGOUT ---
+async function checkUser() {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        window.location.href = 'login.html';
-    } else {
-        console.log("Login sebagai:", user.email);
-    }
+    if (!user) window.location.href = 'login.html';
 }
-checkAccess();
+checkUser();
 
-// 2. FUNGSI LOGOUT (Pasti Jalan)
-const setupLogout = () => {
-    const btn = document.getElementById('logout-btn');
-    if (btn) {
-        btn.onclick = async (e) => {
-            e.preventDefault();
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                alert("Gagal keluar: " + error.message);
-            } else {
-                alert("Berhasil keluar!");
-                window.location.href = 'login.html';
-            }
-        };
-    }
+document.getElementById('logout-btn').onclick = async () => {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
 };
 
-// 3. LOAD DATA PROFIL
-async function loadData() {
+// --- 2. HELPER: UPLOAD GAMBAR ---
+async function handleUpload(file, folder) {
+    if (!file) return null;
+    const path = `${folder}/${Date.now()}_${file.name}`;
+    const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
+    if (error) throw error;
+    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
+    return data.publicUrl;
+}
+
+// --- 3. FUNGSI FETCH & RENDER (MANAGE DATA) ---
+async function refreshLists() {
+    // Projek
+    const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
+    renderList('list-projek', projs, 'projects', 'title');
+
+    // Pengalaman
+    const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
+    renderList('list-pengalaman', exps, 'work_experience', 'job_title');
+
+    // Sertifikat
+    const { data: certs } = await supabase.from('certificates').select('*').order('id', { ascending: false });
+    renderList('list-sertifikat', certs, 'certificates', 'title');
+}
+
+function renderList(containerId, data, table, displayKey) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = `<h4 class="list-head">Daftar Terinput:</h4>`;
+    data?.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'manage-item';
+        div.innerHTML = `
+            <span>${item[displayKey]}</span>
+            <button class="btn-delete" data-id="${item.id}" data-table="${table}">Hapus</button>
+        `;
+        container.appendChild(div);
+    });
+
+    // Event Listener Hapus
+    container.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.onclick = async () => {
+            if (confirm('Hapus data ini?')) {
+                const { error } = await supabase.from(btn.dataset.table).delete().eq('id', btn.dataset.id);
+                if (!error) refreshLists();
+            }
+        };
+    });
+}
+
+// --- 4. EVENT LISTENERS FORM ---
+
+// Profil
+document.getElementById('profile-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.from('profiles').upsert({
+        id: 1,
+        headline: document.getElementById('headline').value,
+        about_text: document.getElementById('about_text').value,
+        updated_at: new Date()
+    });
+    alert(error ? error.message : "Profil diperbarui!");
+};
+
+// Projek
+document.getElementById('project-form').onsubmit = async (e) => {
+    e.preventDefault();
     try {
-        const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
-        if (data) {
-            if(document.getElementById('full_name')) document.getElementById('full_name').value = data.full_name || '';
-            if(document.getElementById('headline')) document.getElementById('headline').value = data.headline || '';
-            if(document.getElementById('about_text')) document.getElementById('about_text').value = data.about_text || '';
-        }
-    } catch (e) { console.log("Profil belum ada atau gagal dimuat."); }
-}
-
-// 4. HANDLE UPLOAD & UPDATE PROFIL
-const profileForm = document.getElementById('profile-form');
-if (profileForm) {
-    profileForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const saveBtn = document.getElementById('save-profile');
-        saveBtn.innerText = 'Saving...';
-
-        const updates = {
-            id: 1,
-            full_name: document.getElementById('full_name').value,
-            headline: document.getElementById('headline').value,
-            about_text: document.getElementById('about_text').value,
-            updated_at: new Date(),
-        };
-
-        const { error } = await supabase.from('profiles').upsert(updates);
-        if (error) alert("Error: " + error.message);
-        else alert("Profil diperbarui!");
-        saveBtn.innerText = 'Update Profil';
-    };
-}
-
-// Inisialisasi Fungsi
-setupLogout();
-loadData();
-import { supabase } from './supabase-config.js';
-
-// Fungsi utama untuk menangani semua interaksi admin
-window.onload = async () => {
-    // 1. Cek User
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // 2. Logika Logout (PASTI JALAN)
-    const btnLogout = document.getElementById('logout-btn');
-    if (btnLogout) {
-        btnLogout.addEventListener('click', async (e) => {
-            e.preventDefault();
-            console.log("Mencoba Keluar..."); // Cek di F12
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                alert("Error saat keluar: " + error.message);
-            } else {
-                alert("Berhasil keluar!");
-                window.location.href = 'login.html';
-            }
-        });
-    } else {
-        console.error("Elemen 'logout-btn' tidak ditemukan!");
-    }
-
-    // 3. Panggil fungsi load profil di sini jika ada...
+        const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
+        const techs = document.getElementById('p-tech').value.split(',').map(t => t.trim());
+        await supabase.from('projects').insert([{
+            title: document.getElementById('p-title').value,
+            description: document.getElementById('p-tech').value,
+            tech_stack: techs,
+            link_github: document.getElementById('p-link').value,
+            image_url: img
+        }]);
+        e.target.reset(); refreshLists(); alert("Projek ditambah!");
+    } catch (err) { alert(err.message); }
 };
+
+// Pengalaman
+document.getElementById('exp-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.from('work_experience').insert([{
+        job_title: document.getElementById('e-title').value,
+        company: document.getElementById('e-company').value,
+        duration: document.getElementById('e-duration').value,
+        description: document.getElementById('e-desc').value
+    }]);
+    if (!error) { e.target.reset(); refreshLists(); alert("Pengalaman ditambah!"); }
+};
+
+// Sertifikat
+document.getElementById('cert-form').onsubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const img = await handleUpload(document.getElementById('c-img').files[0], 'certificates');
+        await supabase.from('certificates').insert([{
+            title: document.getElementById('c-title').value,
+            issuer: document.getElementById('c-issuer').value,
+            image_url: img
+        }]);
+        e.target.reset(); refreshLists(); alert("Sertifikat ditambah!");
+    } catch (err) { alert(err.message); }
+};
+
+// Start
+window.onload = refreshLists;
