@@ -1,25 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Toriq As Syarif - Informatics Engineer Portfolio</title>
-    <meta name="description" content="Portfolio website of Toriq As Syarif, an experienced Informatics Engineer specializing in cybersecurity, data science, machine learning, and web development." />
-    <meta name="author" content="Toriq As Syarif" />
-    <meta name="keywords" content="Informatics Engineer, Cybersecurity, Data Science, Machine Learning, Web Development, Jakarta, Indonesia" />
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio | Toriq As Syarif</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Tambahkan library icon jika diperlukan -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
 
-    <meta property="og:title" content="Toriq As Syarif - Informatics Engineer Portfolio" />
-    <meta property="og:description" content="Portfolio website showcasing expertise in cybersecurity, data science, machine learning, and web development." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <!-- Header / Navigasi -->
+    <nav id="navbar">
+        <div class="container">
+            <h1 class="logo">TAS.</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="pages/about.html">About</a></li>
+                <li><a href="pages/projects.html">Projects</a></li>
+                <li><a href="pages/contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <img src="img/profile.jpg" alt="Toriq As Syarif" class="profile-img">
+            <h1>Halo, Saya Toriq As Syarif</h1>
+            <p>Software Developer & IT Specialist</p>
+            <a href="#work" class="btn">Lihat Projek</a>
+        </div>
+    </header>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <!-- Project Preview Section -->
+    <section id="work" class="container">
+        <h2 class="section-title">Projek Terbaru</h2>
+        <div class="grid">
+            <!-- Contoh item projek -->
+            <div class="card">
+                <img src="img/project1.jpg" alt="SI-TAU">
+                <h3>SI-TAU System</h3>
+                <p>Inovasi sistem informasi tata usaha untuk efisiensi administrasi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer akan dipanggil via includes/footer.html (atau manual jika statis) -->
+    <div id="footer-placeholder"></div>
+
+    <script src="js/script.js"></script>
+</body>
 </html>
