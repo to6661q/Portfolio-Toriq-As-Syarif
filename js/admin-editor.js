@@ -67,3 +67,31 @@ document.getElementById('profile-form').addEventListener('submit', async (e) => 
     }
     btn.innerText = 'Simpan Perubahan';
 });
+
+import { supabase } from './supabase-config.js';
+
+// 1. CEK AUTENTIKASI (Pastikan user tidak masuk tanpa login)
+async function checkUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        window.location.href = 'login.html';
+    }
+}
+checkUser();
+
+// ... (Kode loadData dan event listener submit form yang sudah dibuat sebelumnya) ...
+
+// 2. LOGIKA LOGOUT (Tambahkan di sini)
+const logoutBtn = document.getElementById('logout-btn');
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            alert("Gagal keluar: " + error.message);
+        } else {
+            // Arahkan kembali ke halaman login setelah berhasil logout
+            window.location.href = 'login.html';
+        }
+    });
+}
