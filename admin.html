@@ -2,40 +2,124 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel | Portofolio Toriq</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | TAS Portfolio</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-    <div class="admin-container">
-        <h2>🛠️ Edit Profil Portofolio</h2>
-        <button id="logout-btn">Keluar</button>
 
-        <form id="profile-form">
-            <div class="form-group">
-                <label>Nama Lengkap</label>
-                <input type="text" id="full_name" placeholder="Contoh: Toriq As Syarif">
+    <!-- Header / Navbar Admin -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-user-shield"></i> <span>TAS Admin</span>
             </div>
+            <button id="logout-btn" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
+        </div>
+    </header>
 
-            <div class="form-group">
-                <label>Headline (Sub-judul)</label>
-                <input type="text" id="headline" placeholder="Contoh: Machine Learning Enthusiast">
-            </div>
+    <main class="admin-main">
+        <div class="container">
+            
+            <!-- SECTION 1: PROFIL UTAMA -->
+            <section class="admin-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-id-card"></i> Edit Profil Utama</h3>
+                </div>
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label for="full_name">Nama Lengkap</label>
+                        <input type="text" id="full_name" placeholder="Contoh: Toriq As Syarif" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="headline">Headline / Role</label>
+                        <input type="text" id="headline" placeholder="Contoh: Software Developer | IT Specialist">
+                    </div>
+                    <div class="form-group">
+                        <label for="about_text">Tentang Saya</label>
+                        <textarea id="about_text" rows="5" placeholder="Ceritakan pengalaman singkat Anda..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_img">Foto Profil Baru</label>
+                        <input type="file" id="profile_img" accept="image/*">
+                        <small class="hint">Kosongkan jika tidak ingin mengubah foto profil.</small>
+                    </div>
+                    <button type="submit" id="save-profile" class="btn-primary">Update Profil</button>
+                </form>
+            </section>
 
-            <div class="form-group">
-                <label>Tentang Saya (About)</label>
-                <textarea id="about_text" rows="4"></textarea>
-            </div>
+            <!-- SECTION 2: TAMBAH PROJEK -->
+            <section class="admin-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-code-branch"></i> Tambah Projek Baru</h3>
+                </div>
+                <form id="project-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="p-title">Judul Projek</label>
+                            <input type="text" id="p-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="p-tech">Tech Stack (pisahkan dengan koma)</label>
+                            <input type="text" id="p-tech" placeholder="PHP, Laravel, Docker">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-desc">Deskripsi Projek</label>
+                        <textarea id="p-desc" rows="3"></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="p-link">Link GitHub/Demo</label>
+                            <input type="url" id="p-link">
+                        </div>
+                        <div class="form-group">
+                            <label for="p-img">Gambar Projek</label>
+                            <input type="file" id="p-img" accept="image/*">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-success">Tambah Projek</button>
+                </form>
+            </section>
 
-            <div class="form-group">
-                <label>Foto Profil</label>
-                <input type="file" id="profile_img" accept="image/*">
-                <p id="upload-status" style="font-size: 12px; color: gray;"></p>
-            </div>
+            <!-- SECTION 3: TAMBAH SERTIFIKAT -->
+            <section class="admin-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-certificate"></i> Tambah Sertifikat</h3>
+                </div>
+                <form id="cert-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="c-title">Nama Sertifikat</label>
+                            <input type="text" id="c-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="c-issuer">Penerbit (Issuer)</label>
+                            <input type="text" id="c-issuer" placeholder="AWS, Coursera, UIN Jakarta">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="c-img">Scan/Gambar Sertifikat</label>
+                        <input type="file" id="c-img" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn-success">Tambah Sertifikat</button>
+                </form>
+            </section>
 
-            <button type="submit" id="save-btn">Simpan Perubahan</button>
-        </form>
-    </div>
+        </div>
+    </main>
 
+    <!-- Footer Status -->
+    <footer class="admin-footer">
+        <p>&copy; 2026 TAS Dashboard System. Terhubung ke Supabase.</p>
+    </footer>
+
+    <!-- Script Utama -->
     <script type="module" src="js/admin-editor.js"></script>
 </body>
 </html>
