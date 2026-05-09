@@ -126,8 +126,29 @@ document.getElementById('cert-form').addEventListener('submit', async (e) => {
     }
 });
 
-// --- 7. LOGIKA LOGOUT ---
-document.getElementById('logout-btn').addEventListener('click', async () => {
-    await supabase.auth.signOut();
-    window.location.href = 'login.html';
-});
+import { supabase } from './supabase-config.js';
+
+// Cek User Saat Halaman Dimuat
+async function checkAccess() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        window.location.href = 'login.html';
+    }
+}
+checkAccess();
+
+// LOGIKA LOGOUT
+const btnLogout = document.getElementById('logout-btn');
+if (btnLogout) {
+    btnLogout.addEventListener('click', async (e) => {
+        e.preventDefault(); // Mencegah reload halaman
+        console.log("Mencoba logout...");
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            alert("Error: " + error.message);
+        } else {
+            alert("Berhasil keluar!");
+            window.location.href = 'login.html';
+        }
+    });
+}
