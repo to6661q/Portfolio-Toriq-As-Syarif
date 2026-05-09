@@ -1,52 +1,143 @@
 :root {
     --primary: #006661;
     --primary-dark: #004d49;
+    --accent: #80cbc4;
     --bg: #f4f7f6;
     --white: #ffffff;
 }
 
+/* Reset Dasar */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body.admin-body { font-family: 'Inter', sans-serif; background: var(--bg); display: flex; }
 
-/* Sidebar */
-.sidebar {
-    width: 260px; height: 100vh; background: var(--primary); color: white;
-    position: fixed; padding: 2rem 1.5rem; display: flex; flex-direction: column;
+body.admin-body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    display: flex;
 }
-.sidebar-brand h2 { font-size: 2rem; margin-bottom: 2rem; }
-.sidebar-brand span { color: #80cbc4; }
-.sidebar-nav ul { list-style: none; flex-grow: 1; }
-.sidebar-nav li { margin-bottom: 0.8rem; }
-.sidebar-nav a { color: rgba(255,255,255,0.7); text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; transition: 0.3s; }
-.sidebar-nav a:hover { background: rgba(255,255,255,0.1); color: white; }
 
-.btn-logout { background: transparent; border: 1px solid #ff9f94; color: #ff9f94; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+/* Sidebar Fix */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: var(--primary);
+    color: var(--white);
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.sidebar-brand h2 { font-size: 2rem; margin-bottom: 2.5rem; }
+.sidebar-brand span { color: var(--accent); }
+
+.sidebar-nav .nav-list { list-style: none; flex-grow: 1; }
+
+.sidebar-nav li { margin-bottom: 1rem; }
+
+.sidebar-nav a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar-nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+}
+
+.btn-logout {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #ff9f94;
+    color: #ff9f94;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
 .btn-logout:hover { background: #ff9f94; color: white; }
 
-/* Main Content */
-.main-content { margin-left: 260px; width: calc(100% - 260px); padding: 3rem; }
-.content-header { margin-bottom: 2rem; }
-.content-header h1 { color: var(--primary); }
+/* Main Content Area */
+.main-content {
+    margin-left: 260px; /* Jarak agar tidak tertutup sidebar */
+    width: calc(100% - 260px);
+    padding: 3rem;
+}
 
-.card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem; }
-.card-title { font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+.content-header { margin-bottom: 2.5rem; }
+.content-header h1 { color: var(--primary); font-size: 2rem; }
 
-/* Forms */
+.card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 2.5rem;
+}
+
+.card-title {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Form Styles */
 .form-group { margin-bottom: 1.2rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem; }
-input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
-.btn-primary { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-.btn-primary:hover { background: var(--primary-dark); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+input:focus, textarea:focus { border-color: var(--primary); outline: none; }
 
-/* Manage Lists */
-.list-container { margin-top: 2rem; border-top: 1px dashed #ddd; padding-top: 1rem; }
-.list-head { font-size: 0.8rem; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; }
-.manage-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #fafafa; border-radius: 6px; margin-bottom: 8px; border: 1px solid #eee; }
-.manage-item span { font-size: 0.9rem; font-weight: 600; }
-.btn-delete { background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; }
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+/* List Management */
+.list-container { margin-top: 2rem; border-top: 1px dashed #ddd; padding-top: 1.5rem; }
+.list-head { font-size: 0.8rem; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; }
+.manage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+.btn-delete { background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
 
 @media (max-width: 992px) {
-    .sidebar { width: 70px; } .sidebar span, .sidebar h2, .sidebar-nav span { display: none; }
-    .main-content { margin-left: 70px; width: calc(100% - 70px); }
+    .sidebar { width: 80px; padding: 2rem 0.5rem; }
+    .sidebar span, .sidebar h2, .sidebar-nav span { display: none; }
+    .main-content { margin-left: 80px; width: calc(100% - 80px); }
+    .form-row { grid-template-columns: 1fr; }
 }
