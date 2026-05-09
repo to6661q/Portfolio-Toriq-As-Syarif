@@ -1,39 +1,37 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Toriq As Syarif</title>
+    <title>Admin Panel | Toriq As Syarif</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body class="admin-body">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
             <h2>TAS<span>.</span></h2>
         </div>
         <nav class="sidebar-nav">
             <ul class="nav-list">
-                <li><a href="#profil"><i class="fas fa-user-edit"></i> <span>Profil</span></a></li>
-                <li><a href="#projek"><i class="fas fa-project-diagram"></i> <span>My Project</span></a></li>
+                <li><a href="#profil"><i class="fas fa-user-edit"></i> <span>Profile</span></a></li>
+                <li><a href="#projek"><i class="fas fa-project-diagram"></i> <span>My Projects</span></a></li>
                 <li><a href="#pengalaman"><i class="fas fa-briefcase"></i> <span>Work Experience</span></a></li>
                 <li><a href="#sertifikat"><i class="fas fa-award"></i> <span>Certifications</span></a></li>
-                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> <span>Lihat Web</span></a></li>
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> <span>View Site</span></a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
-            <button id="logout-btn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            <button id="logout-btn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
         <header class="content-header">
             <h1>Portfolio Management</h1>
-            <p>Dashboard kontrol untuk IT Specialist & Software Developer.</p>
+            <p>Full control over your professional digital presence.</p>
         </header>
 
         <section id="profil" class="card">
@@ -41,51 +39,70 @@
             <form id="profile-form">
                 <div class="form-group">
                     <label>Headline</label>
-                    <input type="text" id="headline" placeholder="Software Developer | IT Specialist">
+                    <input type="text" id="headline" placeholder="e.g. Software Developer | IT Specialist">
                 </div>
                 <div class="form-group">
-                    <label>Tentang Saya</label>
-                    <textarea id="about_text" rows="4"></textarea>
+                    <label>Description Personal Summary</label>
+                    <textarea id="about_text" rows="4" placeholder="Briefly describe your professional background..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary">Update Profil</button>
+                <button type="submit" class="btn-primary">Update Personal Summary</button>
             </form>
         </section>
 
         <section id="projek" class="card">
-            <div class="card-title"><i class="fas fa-folder-plus"></i> My Project Management</div>
+            <div class="card-title">
+                <span><i class="fas fa-folder-plus"></i> My Project Management</span>
+                <span class="badge-total">Total Projects: <span id="total-projects">0</span></span>
+            </div>
             <form id="project-form">
                 <div class="form-row">
-                    <div class="form-group"><label>Judul Projek</label><input type="text" id="p-title" required></div>
-                    <div class="form-group"><label>Tech Stack (koma)</label><input type="text" id="p-tech" placeholder="Python, Laravel"></div>
+                    <div class="form-group"><label>Project Title</label><input type="text" id="p-title" required></div>
+                    <div class="form-group"><label>Tech Stack</label><input type="text" id="p-tech" placeholder="Python, Laravel, Docker"></div>
                 </div>
-                <div class="form-group"><label>Link GitHub</label><input type="url" id="p-link"></div>
-                <div class="form-group"><label>Gambar Projek</label><input type="file" id="p-img" accept="image/*"></div>
-                <button type="submit" class="btn-primary">Tambah Projek</button>
+                <div class="form-group"><label>Description Project</label><textarea id="p-desc" rows="3"></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Link GitHub</label><input type="url" id="p-link"></div>
+                    <div class="form-group"><label>Image Project</label><input type="file" id="p-img" accept="image/*"></div>
+                </div>
+                <button type="submit" class="btn-primary">Add Project</button>
             </form>
             <div class="list-container" id="list-projek"></div>
         </section>
 
         <section id="pengalaman" class="card">
-            <div class="card-title"><i class="fas fa-briefcase"></i> Work Experience Management</div>
+            <div class="card-title">
+                <span><i class="fas fa-briefcase"></i> Work Experience Management</span>
+                <div class="stats-group">
+                    <span class="badge-total">Experiences: <span id="total-exp">0</span></span>
+                    <span class="badge-total">Total Duration: <span id="total-duration">0</span> Years</span>
+                </div>
+            </div>
             <form id="exp-form">
                 <div class="form-row">
-                    <div class="form-group"><label>Posisi</label><input type="text" id="e-title" required></div>
-                    <div class="form-group"><label>Instansi</label><input type="text" id="e-company"></div>
+                    <div class="form-group"><label>Job Position</label><input type="text" id="e-title" required></div>
+                    <div class="form-group"><label>Company</label><input type="text" id="e-company"></div>
                 </div>
-                <div class="form-group"><label>Durasi (e.g. 2025 - Present)</label><input type="text" id="e-duration"></div>
-                <div class="form-group"><label>Deskripsi Kerja</label><textarea id="e-desc" rows="3"></textarea></div>
-                <button type="submit" class="btn-primary">Tambah Pengalaman</button>
+                <div class="form-group"><label>Duration (e.g. 2025 - Present)</label><input type="text" id="e-duration" placeholder="e.g. 2024 - 2026"></div>
+                <div class="form-group"><label>Description Work Experience</label><textarea id="e-desc" rows="3"></textarea></div>
+                <div class="form-group"><label>Image Work Experience</label><input type="file" id="e-img" accept="image/*"></div>
+                <button type="submit" class="btn-primary">Add Work Experience</button>
             </form>
             <div class="list-container" id="list-pengalaman"></div>
         </section>
 
         <section id="sertifikat" class="card">
-            <div class="card-title"><i class="fas fa-certificate"></i> Certifications Management</div>
+            <div class="card-title">
+                <span><i class="fas fa-award"></i> Certifications Management</span>
+                <span class="badge-total">Total Certificates: <span id="total-certs">0</span></span>
+            </div>
             <form id="cert-form">
-                <div class="form-group"><label>Nama Sertifikat</label><input type="text" id="c-title" required></div>
-                <div class="form-group"><label>Penerbit</label><input type="text" id="c-issuer"></div>
-                <div class="form-group"><label>Scan Sertifikat</label><input type="file" id="c-img" accept="image/*"></div>
-                <button type="submit" class="btn-primary">Simpan Sertifikat</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Certificate Name</label><input type="text" id="c-title" required></div>
+                    <div class="form-group"><label>Publisher</label><input type="text" id="c-issuer"></div>
+                </div>
+                <div class="form-group"><label>Description Certificate</label><textarea id="c-desc" rows="2"></textarea></div>
+                <div class="form-group"><label>Image Certificate</label><input type="file" id="c-img" accept="image/*"></div>
+                <button type="submit" class="btn-primary">Add Certificate</button>
             </form>
             <div class="list-container" id="list-sertifikat"></div>
         </section>
