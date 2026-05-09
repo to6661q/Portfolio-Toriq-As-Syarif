@@ -1,7 +1,7 @@
 // Gunakan CDN Supabase agar tidak perlu install npm (cocok untuk GitHub Pages)
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-const supabaseUrl = 'URL_SUPABASE_ANDA'
-const supabaseKey = 'ANON_KEY_SUPABASE_ANDA'
+const supabaseUrl = 'https://relosxezemvjiilnhrrp.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbG9zeGV6ZW12amlpbG5ocnJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNDI1NDIsImV4cCI6MjA5MzkxODU0Mn0.RRTm3L9J9JpBCT123-vN3MU8ju0FgUnqNGIFf7dbrEM'
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
