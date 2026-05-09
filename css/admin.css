@@ -1,0 +1,51 @@
+:root {
+    --primary: #2c3e50;
+    --accent: #3498db;
+}
+
+body {
+    background: #f0f2f5;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-box, .admin-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-group { margin-bottom: 1.5rem; }
+
+label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary); }
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Penting agar padding tidak merusak lebar */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+button:hover { background: var(--accent); }
+
+.error-msg { color: #e74c3c; margin-top: 1rem; text-align: center; font-size: 14px; }
