@@ -95,15 +95,29 @@ function render(id, data, table, key) {
     });
 }
 
-// --- SUBMIT HANDLERS ---
+// Update bagian Profile Form di js/admin-editor.js
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
-    await supabase.from('profiles').upsert({
-        id: 1,
-        headline: document.getElementById('headline').value,
-        about_text: document.getElementById('about_text').value
+    const btn = e.target.querySelector('button');
+    btn.innerText = 'Updating...';
+
+    const headlineValue = document.getElementById('headline').value;
+    const aboutValue = document.getElementById('about_text').value;
+
+    const { error } = await supabase.from('profiles').upsert({
+        id: 1, // Pastikan ID selalu 1
+        full_name: "Toriq As Syarif", // Tetapkan nama agar tidak hilang
+        headline: headlineValue,
+        about_text: aboutValue,
+        updated_at: new Date()
     });
-    alert("Profile Updated Successfully!");
+
+    if (error) {
+        alert("Update Failed: " + error.message);
+    } else {
+        alert("Personal Summary Updated!");
+    }
+    btn.innerText = 'Update Personal Summary';
 };
 
 document.getElementById('project-form').onsubmit = async (e) => {
