@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | Portofolio Toriq</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <h2>🛠️ Edit Profil Portofolio</h2>
+        <button id="logout-btn">Keluar</button>
+
+        <form id="profile-form">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="full_name" placeholder="Contoh: Toriq As Syarif">
+            </div>
+
+            <div class="form-group">
+                <label>Headline (Sub-judul)</label>
+                <input type="text" id="headline" placeholder="Contoh: Machine Learning Enthusiast">
+            </div>
+
+            <div class="form-group">
+                <label>Tentang Saya (About)</label>
+                <textarea id="about_text" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Foto Profil</label>
+                <input type="file" id="profile_img" accept="image/*">
+                <p id="upload-status" style="font-size: 12px; color: gray;"></p>
+            </div>
+
+            <button type="submit" id="save-btn">Simpan Perubahan</button>
+        </form>
+    </div>
+
+    <script type="module" src="js/admin-editor.js"></script>
+</body>
+</html>
