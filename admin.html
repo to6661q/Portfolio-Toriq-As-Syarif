@@ -106,6 +106,26 @@
             </form>
             <div class="list-container" id="list-sertifikat"></div>
         </section>
+
+        <li><a href="#volunteer"><i class="fas fa-hand-holding-heart"></i> <span>Volunteer</span></a></li>
+
+<section id="volunteer" class="card">
+    <div class="card-title">
+        <span><i class="fas fa-hand-holding-heart"></i> Volunteer Experience Management</span>
+        <span class="badge-total">Total Volunteer: <span id="total-volunteer">0</span></span>
+    </div>
+    <form id="volunteer-form">
+        <div class="form-row">
+            <div class="form-group"><label>Position</label><input type="text" id="v-title" required></div>
+            <div class="form-group"><label>Organization</label><input type="text" id="v-org"></div>
+        </div>
+        <div class="form-group"><label>Duration (e.g. 2024 - 2025)</label><input type="text" id="v-duration"></div>
+        <div class="form-group"><label>Description Volunteer</label><textarea id="v-desc" rows="3"></textarea></div>
+        <div class="form-group"><label>Image Volunteer</label><input type="file" id="v-img" accept="image/*"></div>
+        <button type="submit" class="btn-primary">Add Volunteer Experience</button>
+    </form>
+    <div class="list-container" id="list-volunteer"></div>
+</section>
     </main>
 
     <script type="module" src="js/admin-editor.js"></script>
