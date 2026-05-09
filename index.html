@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toriq As Syarif | Portofolio</title>
+    <title>Toriq As Syarif | Portfolio</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -14,55 +14,81 @@
 </head>
 <body>
 
-    <!-- Navigasi -->
-    <nav id="navbar">
-        <div class="container">
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container header-flex">
             <h1 class="logo">TAS<span>.</span></h1>
-            <ul>
-                <li><a href="#home">Beranda</a></li>
-                <li><a href="#about">Tentang</a></li>
-                <li><a href="#projects">Projek</a></li>
-                <li><a href="#certificates">Sertifikat</a></li>
-                <li><a href="login.html" class="nav-admin"><i class="fas fa-lock"></i></a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header id="home" class="hero">
-        <div class="container">
-            <div class="hero-flex">
-                <div class="hero-text">
-                    <h1 id="display-name">Memuat nama...</h1>
-                    <p id="display-headline" class="subtitle">Memuat informasi...</p>
-                    <div class="hero-btns">
-                        <a href="#projects" class="btn-primary">Lihat Karya</a>
-                        <a href="#about" class="btn-outline">Tentang Saya</a>
-                    </div>
-                </div>
-                <div class="hero-img">
-                    <img id="display-profile-pic" src="img/default-avatar.png" alt="Profile">
-                </div>
-            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Me</a></li>
+                    <li><a href="#projects">My Project</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#certifications">Certifications</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- About Section -->
+    <!-- Home Section -->
+    <section id="home" class="hero-section">
+        <div class="container hero-container">
+            <div class="profile-area">
+                <img id="display-profile-pic" src="img/default-avatar.png" alt="Toriq As Syarif" class="profile-round">
+            </div>
+            <div class="intro-area">
+                <h1 id="display-name">Toriq As Syarif</h1>
+                <p id="display-headline" class="subtitle">Software Developer & IT Specialist</p>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn">My Project</a>
+                    <a href="#experience" class="btn">Work Experience</a>
+                    <a href="#certifications" class="btn">Certifications</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title">Tentang Saya</h2>
-            <div class="about-box">
-                <p id="display-about">Memuat cerita tentang saya...</p>
+            <h2 class="section-title">About Me</h2>
+            <div class="personal-summary">
+                <p id="display-about">Software Developer yang berfokus pada Machine Learning dan sistem informasi.</p>
             </div>
-            
-            <!-- Tech Stack Dinamis (Disesuaikan dengan keahlian Anda) -->
-            <div class="tech-stack">
-                <i class="devicon-python-plain colored"></i>
-                <i class="devicon-laravel-original colored"></i>
-                <i class="devicon-docker-plain colored"></i>
-                <i class="devicon-kubernetes-plain colored"></i>
-                <i class="devicon-kotlin-plain colored"></i>
-                <i class="devicon-flask-original colored"></i>
+
+            <div class="about-grid">
+                <!-- Education -->
+                <div class="about-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <p>S1 Teknik Informatika - UIN Syarif Hidayatullah Jakarta (GPA 3.84)</p>
+                </div>
+                <!-- Achievements -->
+                <div class="about-card">
+                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
+                    <ul>
+                        <li>Publikasi IEEE Xplore 2026</li>
+                        <li>Finalis Vibecoding 2026</li>
+                    </ul>
+                </div>
+                <!-- Skills -->
+                <div class="about-card">
+                    <h3><i class="fas fa-tools"></i> Skills</h3>
+                    <div class="skills-icons">
+                        <i class="devicon-python-plain colored"></i>
+                        <i class="devicon-laravel-original colored"></i>
+                        <i class="devicon-docker-plain colored"></i>
+                        <i class="devicon-kubernetes-plain colored"></i>
+                        <i class="devicon-kotlin-plain colored"></i>
+                    </div>
+                </div>
+                <!-- Social Media -->
+                <div class="about-card">
+                    <h3><i class="fas fa-share-alt"></i> Social Media</h3>
+                    <div class="social-links">
+                        <a href="https://linkedin.com/in/toriq-as-syarif" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/toriq" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -70,99 +96,65 @@
     <!-- Projects Section -->
     <section id="projects" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">Projek Unggulan</h2>
-            <div id="project-list" class="project-grid">
-                <!-- Data dari Supabase akan muncul di sini -->
-                <p class="loading-text">Sedang mengambil data projek...</p>
+            <h2 class="section-title">My Project</h2>
+            <div id="project-list" class="grid-container">
+                <!-- Supabase Data -->
             </div>
         </div>
     </section>
 
-    <!-- Certificates Section -->
-    <section id="certificates" class="section">
+    <!-- Work Experience Section -->
+    <section id="experience" class="section">
         <div class="container">
-            <h2 class="section-title">Sertifikasi</h2>
-            <div id="cert-list" class="cert-grid">
-                <!-- Data dari Supabase akan muncul di sini -->
-                <p class="loading-text">Sedang mengambil data sertifikat...</p>
+            <h2 class="section-title">Work Experience</h2>
+            <div class="experience-list">
+                <div class="exp-item">
+                    <h4>IT Specialist</h4>
+                    <p>Lembaga Pemasyarakatan (Instansi Pemerintah)</p>
+                </div>
+                <div class="exp-item">
+                    <h4>Internship Innovation</h4>
+                    <p>Pengembangan SI-TAU (Sistem Informasi Tata Usaha)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Certifications</h2>
+            <div id="cert-list" class="grid-container">
+                <!-- Supabase Data -->
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Toriq As Syarif. Dibangun dengan Supabase & GitHub Pages.</p>
+    <footer id="main-footer">
+        <div class="container footer-content">
+            <p>© 2026 Toriq As Syarif</p>
+            <p><i class="fas fa-envelope"></i> <a href="mailto:toriqnain@gmail.com">toriqnain@gmail.com</a></p>
+            <div id="quote-container" class="quote-text"></div>
         </div>
     </footer>
 
-    <!-- Script Utama (Data Fetching) -->
-    <script type="module">
-        import { supabase } from './js/supabase-config.js';
-
-        // 1. Ambil Data Profil
-        async function getProfile() {
-            const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
-            if (data) {
-                document.getElementById('display-name').innerText = data.full_name;
-                document.getElementById('display-headline').innerText = data.headline;
-                document.getElementById('display-about').innerText = data.about_text;
-                if(data.profile_img_url) {
-                    document.getElementById('display-profile-pic').src = data.profile_img_url;
-                }
-            }
-        }
-
-        // 2. Ambil Data Projek
-        async function getProjects() {
-            const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
-            const list = document.getElementById('project-list');
-            list.innerHTML = ''; // Hapus loading text
-
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'project-card';
-                
-                // Render tech stack badges
-                const techBadges = item.tech_stack.map(tech => `<span class="badge">${tech}</span>`).join('');
-
-                card.innerHTML = `
-                    <div class="p-img" style="background-image: url('${item.image_url || 'img/project-default.jpg'}')"></div>
-                    <div class="p-content">
-                        <h3>${item.title}</h3>
-                        <p>${item.description}</p>
-                        <div class="badges">${techBadges}</div>
-                        <a href="${item.link_github}" target="_blank" class="p-link"><i class="fab fa-github"></i> Lihat</a>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        // 3. Ambil Data Sertifikat
-        async function getCertificates() {
-            const { data } = await supabase.from('certificates').select('*').order('date_issued', { ascending: false });
-            const list = document.getElementById('cert-list');
-            list.innerHTML = '';
-
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'cert-card';
-                card.innerHTML = `
-                    <img src="${item.image_url || 'img/cert-default.jpg'}" alt="${item.title}">
-                    <div class="c-content">
-                        <h4>${item.title}</h4>
-                        <p>${item.issuer}</p>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        // Jalankan semua fungsi
-        getProfile();
-        getProjects();
-        getCertificates();
+    <script type="module" src="js/main.js"></script>
+    <script>
+        // Quotes Logic
+        const quotes = [
+            "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.",
+            "Choose a job you love, and you will never have to work a day in your life.",
+            "Opportunities don't happen, you create them.",
+            "The only way to do great work is to love what you do.",
+            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+            "Hard work beats talent when talent doesn't work hard.",
+            "Don't stay in bed, unless you can make money in bed.",
+            "Dream big, work hard, stay focused, and surround yourself with good people.",
+            "Intelligence is the ability to adapt to change.",
+            "The future depends on what you do today."
+        ];
+        document.getElementById('quote-container').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
     </script>
 </body>
 </html>
