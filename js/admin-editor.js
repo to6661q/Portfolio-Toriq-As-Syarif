@@ -1,6 +1,6 @@
 import { supabase } from './supabase-config.js';
 
-// --- 1. PROTEKSI & LOGOUT ---
+// --- 1. PROTEKSI ---
 async function checkUser() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) window.location.href = 'login.html';
@@ -12,7 +12,7 @@ document.getElementById('logout-btn').onclick = async () => {
     window.location.href = 'login.html';
 };
 
-// --- 2. HELPER: UPLOAD GAMBAR ---
+// --- 2. HELPER UPLOAD ---
 async function handleUpload(file, folder) {
     if (!file) return null;
     const path = `${folder}/${Date.now()}_${file.name}`;
@@ -22,101 +22,82 @@ async function handleUpload(file, folder) {
     return data.publicUrl;
 }
 
-// --- 3. FUNGSI FETCH & RENDER (MANAGE DATA) ---
+// --- 3. REFRESH DATA ---
 async function refreshLists() {
-    // Projek
     const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    renderList('list-projek', projs, 'projects', 'title');
+    render('list-projek', projs, 'projects', 'title');
 
-    // Pengalaman
     const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
-    renderList('list-pengalaman', exps, 'work_experience', 'job_title');
+    render('list-pengalaman', exps, 'work_experience', 'job_title');
 
-    // Sertifikat
     const { data: certs } = await supabase.from('certificates').select('*').order('id', { ascending: false });
-    renderList('list-sertifikat', certs, 'certificates', 'title');
+    render('list-sertifikat', certs, 'certificates', 'title');
 }
 
-function renderList(containerId, data, table, displayKey) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = `<h4 class="list-head">Daftar Terinput:</h4>`;
+function render(id, data, table, key) {
+    const el = document.getElementById(id);
+    el.innerHTML = `<h4 class="list-head">Daftar Terinput:</h4>`;
     data?.forEach(item => {
         const div = document.createElement('div');
         div.className = 'manage-item';
-        div.innerHTML = `
-            <span>${item[displayKey]}</span>
-            <button class="btn-delete" data-id="${item.id}" data-table="${table}">Hapus</button>
-        `;
-        container.appendChild(div);
+        div.innerHTML = `<span>${item[key]}</span> <button class="btn-delete" data-id="${item.id}" data-table="${table}">Hapus</button>`;
+        el.appendChild(div);
     });
 
-    // Event Listener Hapus
-    container.querySelectorAll('.btn-delete').forEach(btn => {
+    el.querySelectorAll('.btn-delete').forEach(btn => {
         btn.onclick = async () => {
-            if (confirm('Hapus data ini?')) {
-                const { error } = await supabase.from(btn.dataset.table).delete().eq('id', btn.dataset.id);
-                if (!error) refreshLists();
+            if (confirm('Hapus data?')) {
+                await supabase.from(btn.dataset.table).delete().eq('id', btn.dataset.id);
+                refreshLists();
             }
         };
     });
 }
 
-// --- 4. EVENT LISTENERS FORM ---
-
-// Profil
+// --- 4. SUBMIT HANDLERS ---
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from('profiles').upsert({
+    await supabase.from('profiles').upsert({
         id: 1,
         headline: document.getElementById('headline').value,
         about_text: document.getElementById('about_text').value,
         updated_at: new Date()
     });
-    alert(error ? error.message : "Profil diperbarui!");
+    alert("Profil diperbarui!");
 };
 
-// Projek
 document.getElementById('project-form').onsubmit = async (e) => {
     e.preventDefault();
-    try {
-        const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
-        const techs = document.getElementById('p-tech').value.split(',').map(t => t.trim());
-        await supabase.from('projects').insert([{
-            title: document.getElementById('p-title').value,
-            description: document.getElementById('p-tech').value,
-            tech_stack: techs,
-            link_github: document.getElementById('p-link').value,
-            image_url: img
-        }]);
-        e.target.reset(); refreshLists(); alert("Projek ditambah!");
-    } catch (err) { alert(err.message); }
+    const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
+    await supabase.from('projects').insert([{
+        title: document.getElementById('p-title').value,
+        tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
+        image_url: img,
+        link_github: document.getElementById('p-link').value
+    }]);
+    e.target.reset(); refreshLists(); alert("Sukses!");
 };
 
-// Pengalaman
 document.getElementById('exp-form').onsubmit = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from('work_experience').insert([{
+    await supabase.from('work_experience').insert([{
         job_title: document.getElementById('e-title').value,
         company: document.getElementById('e-company').value,
         duration: document.getElementById('e-duration').value,
         description: document.getElementById('e-desc').value
     }]);
-    if (!error) { e.target.reset(); refreshLists(); alert("Pengalaman ditambah!"); }
+    e.target.reset(); refreshLists(); alert("Sukses!");
 };
 
-// Sertifikat
 document.getElementById('cert-form').onsubmit = async (e) => {
     e.preventDefault();
-    try {
-        const img = await handleUpload(document.getElementById('c-img').files[0], 'certificates');
-        await supabase.from('certificates').insert([{
-            title: document.getElementById('c-title').value,
-            issuer: document.getElementById('c-issuer').value,
-            image_url: img
-        }]);
-        e.target.reset(); refreshLists(); alert("Sertifikat ditambah!");
-    } catch (err) { alert(err.message); }
+    const img = await handleUpload(document.getElementById('c-img').files[0], 'certificates');
+    await supabase.from('certificates').insert([{
+        title: document.getElementById('c-title').value,
+        issuer: document.getElementById('c-issuer').value,
+        image_url: img
+    }]);
+    e.target.reset(); refreshLists(); alert("Sukses!");
 };
 
-// Start
 window.onload = refreshLists;
