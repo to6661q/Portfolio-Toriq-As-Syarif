@@ -1,54 +1,19 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio | Toriq As Syarif</title>
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Tambahkan library icon jika diperlukan -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+<section class="hero">
+    <h1 id="display-name">Loading...</h1>
+    <p id="display-subtitle">Sabar ya...</p>
+    <img id="display-profile-pic" src="" alt="Profile">
+</section>
 
-    <!-- Header / Navigasi -->
-    <nav id="navbar">
-        <div class="container">
-            <h1 class="logo">TAS.</h1>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="pages/about.html">About</a></li>
-                <li><a href="pages/projects.html">Projects</a></li>
-                <li><a href="pages/contact.html">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+<script type="module">
+    import { supabase } from './js/supabase-config.js';
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <div class="hero-content">
-            <img src="img/profile.jpg" alt="Toriq As Syarif" class="profile-img">
-            <h1>Halo, Saya Toriq As Syarif</h1>
-            <p>Software Developer & IT Specialist</p>
-            <a href="#work" class="btn">Lihat Projek</a>
-        </div>
-    </header>
-
-    <!-- Project Preview Section -->
-    <section id="work" class="container">
-        <h2 class="section-title">Projek Terbaru</h2>
-        <div class="grid">
-            <!-- Contoh item projek -->
-            <div class="card">
-                <img src="img/project1.jpg" alt="SI-TAU">
-                <h3>SI-TAU System</h3>
-                <p>Inovasi sistem informasi tata usaha untuk efisiensi administrasi.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer akan dipanggil via includes/footer.html (atau manual jika statis) -->
-    <div id="footer-placeholder"></div>
-
-    <script src="js/script.js"></script>
-</body>
-</html>
+    async function loadProfile() {
+        const { data, error } = await supabase.from('profiles').select('*').single();
+        if (data) {
+            document.getElementById('display-name').innerText = data.full_name;
+            document.getElementById('display-subtitle').innerText = data.hero_subtitle;
+            document.getElementById('display-profile-pic').src = data.profile_pic_url;
+        }
+    }
+    loadProfile();
+</script>
