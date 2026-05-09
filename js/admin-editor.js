@@ -101,3 +101,28 @@ document.getElementById('cert-form').onsubmit = async (e) => {
 };
 
 window.onload = refreshLists;
+
+// --- JAVASCRIPT SMOOTH SCROLL FALLBACK ---
+document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+            // Menghitung posisi dengan offset agar tidak tertutup header jika ada
+            const offset = 30; 
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // Update class active pada menu
+            document.querySelectorAll('.sidebar-nav a').forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+        }
+    });
+});
