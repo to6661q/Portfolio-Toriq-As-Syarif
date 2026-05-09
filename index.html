@@ -35,6 +35,7 @@
     <section id="home" class="hero">
         <div class="container hero-flex">
             <div class="hero-img">
+                <!-- Foto Profil Bulat -->
                 <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
             </div>
             <div class="hero-text">
@@ -54,7 +55,7 @@
         <div class="container">
             <h2 class="section-title">About Me</h2>
             <div class="summary-box">
-                <p>Saya adalah lulusan Teknik Informatika dari UIN Syarif Hidayatullah Jakarta dengan IPK 3.84. Saat ini saya bekerja sebagai Information Technology Specialist di instansi pemerintah, dengan keahlian utama dalam pengembangan perangkat lunak dan optimasi data.</p>
+                <p>Saya adalah seorang spesialis teknologi informasi dengan latar belakang teknik informatika yang kuat. Fokus saya adalah pengembangan perangkat lunak, optimalisasi algoritma, dan Machine Learning. Saya senang memecahkan masalah kompleks melalui kode yang efisien dan skalabel.</p>
             </div>
 
             <div class="about-grid">
@@ -69,8 +70,8 @@
                 <div class="about-card">
                     <h3><i class="fas fa-trophy"></i> Achievement</h3>
                     <ul>
-                        <li>Publikasi IEEE Xplore - Outlier Handling</li>
-                        <li>Vibecoding Competition - MayTurn Platform</li>
+                        <li>Publikasi IEEE Xplore - Outlier Handling Optimization (2026)</li>
+                        <li>Finalis Vibecoding Competition Ramadhan (2026)</li>
                     </ul>
                 </div>
 
@@ -78,12 +79,12 @@
                 <div class="about-card">
                     <h3><i class="fas fa-tools"></i> Skills</h3>
                     <div class="skill-icons">
-                        <i class="devicon-python-plain colored"></i>
-                        <i class="devicon-php-plain colored"></i>
-                        <i class="devicon-laravel-original colored"></i>
-                        <i class="devicon-docker-plain colored"></i>
-                        <i class="devicon-kubernetes-plain colored"></i>
-                        <i class="devicon-kotlin-plain colored"></i>
+                        <i class="devicon-python-plain colored" title="Python"></i>
+                        <i class="devicon-php-plain colored" title="PHP"></i>
+                        <i class="devicon-laravel-original colored" title="Laravel"></i>
+                        <i class="devicon-docker-plain colored" title="Docker"></i>
+                        <i class="devicon-kubernetes-plain colored" title="Kubernetes"></i>
+                        <i class="devicon-kotlin-plain colored" title="Kotlin"></i>
                     </div>
                 </div>
 
@@ -91,8 +92,8 @@
                 <div class="about-card">
                     <h3><i class="fas fa-share-alt"></i> Social Media</h3>
                     <div class="social-links">
-                        <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
                         <a href="mailto:toriqnain@gmail.com"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
@@ -100,11 +101,13 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
+    <!-- My Project Section -->
     <section id="projects" class="section bg-light">
         <div class="container">
             <h2 class="section-title">My Project</h2>
-            <div id="project-list" class="project-grid"></div>
+            <div id="project-list" class="project-grid">
+                <!-- Data akan ditarik dinamis dari Supabase melalui JS -->
+            </div>
         </div>
     </section>
 
@@ -115,13 +118,13 @@
             <div class="experience-timeline">
                 <div class="exp-item">
                     <h4>Information Technology Specialist</h4>
-                    <p class="exp-meta">Instansi Pemerintah | 2025 - Present</p>
-                    <p>Bertanggung jawab atas pengelolaan infrastruktur IT dan pengembangan sistem internal.</p>
+                    <p class="exp-meta">Government Correctional Institution | 2025 - Present</p>
+                    <p>Bertanggung jawab dalam pengelolaan infrastruktur IT dan pengembangan sistem internal instansi.</p>
                 </div>
                 <div class="exp-item">
                     <h4>Internship Innovation (SI-TAU)</h4>
                     <p class="exp-meta">MagangHub Batch II | 2026</p>
-                    <p>Implementasi sistem informasi tata usaha untuk efisiensi administrasi.</p>
+                    <p>Mengembangkan dan mengimplementasikan inovasi sistem informasi tata usaha (SI-TAU).</p>
                 </div>
             </div>
         </div>
@@ -131,20 +134,20 @@
     <section id="certificates" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Certifications</h2>
-            <div id="cert-list" class="cert-grid"></div>
+            <div id="cert-list" class="cert-grid">
+                <!-- Data akan ditarik dinamis dari Supabase melalui JS -->
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-line-layout">
-                <span>&copy; 2026 Toriq As Syarif</span>
-                <span class="footer-divider">|</span>
+        <div class="container footer-nav">
+            <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
+            <div class="footer-item">
                 <a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a>
-                <span class="footer-divider">|</span>
-                <div id="quote-display" class="quote-text"></div>
             </div>
+            <div id="quote-display" class="footer-item quote-style"></div>
         </div>
     </footer>
 
@@ -152,21 +155,28 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // Logika Quotes Random
+        // 1. Logika Quotes Random (1 dari 10)
         const workQuotes = [
-            "The only way to do great work is to love what you do.",
-            "Quality is not an act, it is a habit.",
-            "Hard work beats talent when talent doesn't work hard.",
-            "The future depends on what you do today.",
-            "Pleasure in the job puts perfection in the work.",
-            "Believe you can and you're halfway there.",
-            "Opportunity is missed by most because it looks like work.",
-            "Your talent determines what you can do.",
-            "Success is the sum of small efforts repeated daily.",
-            "Work to become, not to acquire."
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+            "Quality is not an act, it is a habit. - Aristotle",
+            "The future depends on what you do today. - Mahatma Gandhi",
+            "Pleasure in the job puts perfection in the work. - Aristotle",
+            "Opportunity is missed by most people because it is dressed in overalls and looks like work. - Thomas Edison",
+            "Hard work beats talent when talent doesn't work hard. - Tim Notke",
+            "Work to become, not to acquire. - Elbert Hubbard",
+            "Your talent determines what you can do. Your motivation determines how much you are willing to do. - Lou Holtz",
+            "Success is the sum of small efforts, repeated day-in and day-out. - Robert Collier"
         ];
 
-        document.getElementById('quote-display').innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * workQuotes.length);
+            const quoteEl = document.getElementById('quote-display');
+            if(quoteEl) quoteEl.innerText = `"${workQuotes[randomIndex]}"`;
+        }
+        showRandomQuote();
+
+        // 2. Tambahkan logika fetch projects & certificates Anda di sini jika diperlukan secara inline
     </script>
 </body>
 </html>
