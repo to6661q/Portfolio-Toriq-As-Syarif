@@ -1,51 +1,168 @@
 :root {
-    --primary: #2c3e50;
-    --accent: #3498db;
+    --primary: #006661;
+    --primary-dark: #004d49;
+    --bg-body: #f4f7f6;
+    --white: #ffffff;
+    --text-dark: #2d3436;
+    --text-light: #636e72;
+    --danger: #e74c3c;
+    --success: #27ae60;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    background: #f0f2f5;
     font-family: 'Inter', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-dark);
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
 }
 
-.login-box, .admin-container {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+/* --- Sidebar --- */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: var(--primary);
+    color: white;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.logo span { color: #80cbc4; }
+
+.nav-links {
+    list-style: none;
+    flex-grow: 1;
+}
+
+.nav-links li { margin-bottom: 1rem; }
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.btn-logout {
+    background: transparent;
+    color: #ff9f94;
+    border: 1px solid #ff9f94;
     width: 100%;
-    max-width: 400px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-logout:hover { background: #ff9f94; color: white; }
+
+/* --- Main Content --- */
+.content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 2rem 3rem;
+}
+
+.top-bar { margin-bottom: 3rem; }
+.top-bar h1 { color: var(--primary); font-size: 2rem; }
+.top-bar p { color: var(--text-light); }
+
+/* --- Cards & Forms --- */
+.admin-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    border-bottom: 2px solid #f1f1f1;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    color: var(--primary);
 }
 
 .form-group { margin-bottom: 1.5rem; }
 
-label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary); }
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
 
 input, textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box; /* Penting agar padding tidak merusak lebar */
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background: var(--primary);
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 102, 97, 0.1);
+}
+
+/* --- Buttons --- */
+.btn-save, .btn-add {
+    background-color: var(--primary);
     color: white;
     border: none;
-    border-radius: 6px;
+    padding: 12px 25px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
-button:hover { background: var(--accent); }
+.btn-add { background-color: var(--success); }
 
-.error-msg { color: #e74c3c; margin-top: 1rem; text-align: center; font-size: 14px; }
+.btn-save:hover, .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+    .sidebar { width: 80px; padding: 2rem 0.5rem; }
+    .logo, .nav-links span, .sidebar-footer span { display: none; }
+    .nav-links a { justify-content: center; font-size: 1.2rem; }
+    .content { margin-left: 80px; width: calc(100% - 80px); }
+    .form-row { grid-template-columns: 1fr; }
+}
