@@ -66,3 +66,34 @@ if (profileForm) {
 // Inisialisasi Fungsi
 setupLogout();
 loadData();
+import { supabase } from './supabase-config.js';
+
+// Fungsi utama untuk menangani semua interaksi admin
+window.onload = async () => {
+    // 1. Cek User
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // 2. Logika Logout (PASTI JALAN)
+    const btnLogout = document.getElementById('logout-btn');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', async (e) => {
+            e.preventDefault();
+            console.log("Mencoba Keluar..."); // Cek di F12
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                alert("Error saat keluar: " + error.message);
+            } else {
+                alert("Berhasil keluar!");
+                window.location.href = 'login.html';
+            }
+        });
+    } else {
+        console.error("Elemen 'logout-btn' tidak ditemukan!");
+    }
+
+    // 3. Panggil fungsi load profil di sini jika ada...
+};
