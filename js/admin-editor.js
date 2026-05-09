@@ -33,39 +33,20 @@ async function handleUpload(file, folder) {
     return data.publicUrl;
 }
 
-// --- CALCULATION HELPER ---
-function calculateTotalYears(durations) {
-    let total = 0;
-    durations.forEach(str => {
-        const years = str.match(/\d{4}/g);
-        if (years && years.length === 2) {
-            total += (parseInt(years[1]) - parseInt(years[0]));
-        } else if (years && str.toLowerCase().includes('present')) {
-            total += (new Date().getFullYear() - parseInt(years[0]));
-        }
-    });
-    return total;
-}
-
 // --- FETCH & REFRESH ---
 async function refreshLists() {
-    // Projects
     const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
     if (document.getElementById('total-project')) document.getElementById('total-project').innerText = projs?.length || 0;
     render('list-project', projs, 'projects', 'title');
 
-    // Work Experience
     const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
     if (document.getElementById('total-work')) document.getElementById('total-work').innerText = exps?.length || 0;
-    if (document.getElementById('total-duration')) document.getElementById('total-duration').innerText = calculateTotalYears(exps?.map(e => e.duration) || []);
-    render('list-work', exps, 'work_experience', 'job_title');
+    render('list-work', exps, 'work_experience', 'job_position');
 
-    // Certifications
     const { data: certs } = await supabase.from('certifications').select('*').order('id', { ascending: false });
     if (document.getElementById('total-certification')) document.getElementById('total-certification').innerText = certs?.length || 0;
-    render('list-certification', certs, 'certifications', 'title');
+    render('list-certification', certs, 'certifications', 'name');
 
-    // Volunteer
     const { data: vols } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
     if (document.getElementById('total-volunteer')) document.getElementById('total-volunteer').innerText = vols?.length || 0;
     render('list-volunteer', vols, 'volunteers', 'role');
@@ -92,7 +73,7 @@ function render(id, data, table, key) {
     });
 }
 
-// Profile Submit
+// --- SUBMIT HANDLERS ---
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
@@ -102,17 +83,15 @@ document.getElementById('profile-form').onsubmit = async (e) => {
         id: 1,
         full_name: "Toriq As Syarif",
         headline: document.getElementById('headline').value,
-        about_text: document.getElementById('about_text').value,
-        updated_at: new Date()
+        about_text: document.getElementById('about_text').value
     });
 
     if (error) alert("Update Failed: " + error.message);
     else alert("Personal Summary Updated!");
-    
     btn.innerText = 'Update Personal Summary';
 };
 
-// Project Submit
+// Insert Project
 document.getElementById('project-form').onsubmit = async (e) => {
     e.preventDefault();
     const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
@@ -124,60 +103,6 @@ document.getElementById('project-form').onsubmit = async (e) => {
         link_github: document.getElementById('p-link').value
     }]);
     e.target.reset(); refreshLists(); alert("Project Added!");
-};
-
-// Work Submit
-document.getElementById('exp-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const img = await handleUpload(document.getElementById('e-img').files[0], 'experience');
-    await supabase.from('work_experience').insert([{
-        job_title: document.getElementById('e-title').value,
-        company: document.getElementById('e-company').value,
-        duration: document.getElementById('e-duration').value,
-        description: document.getElementById('e-desc').value,
-        image_url: img
-    }]);
-    e.target.reset(); refreshLists(); alert("Experience Added!");
-};
-
-// Certification Submit
-document.getElementById('cert-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const img = await handleUpload(document.getElementById('c-img').files[0], 'certificates');
-    await supabase.from('certifications').insert([{
-        title: document.getElementById('c-title').value,
-        publisher: document.getElementById('c-issuer').value,
-        description: document.getElementById('c-desc').value,
-        image_url: img
-    }]);
-    e.target.reset(); refreshLists(); alert("Certificate Added!");
-};
-
-// Volunteer Submit
-document.getElementById('volunteer-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Uploading...';
-
-    try {
-        const img = await handleUpload(document.getElementById('v-img').files[0], 'volunteer');
-        const { error } = await supabase.from('volunteers').insert([{
-            role: document.getElementById('v-title').value,
-            organization: document.getElementById('v-org').value,
-            duration: document.getElementById('v-duration').value,
-            description: document.getElementById('v-desc').value,
-            image_url: img
-        }]);
-
-        if (error) throw error;
-        alert("Volunteer Experience Added!");
-        e.target.reset();
-        refreshLists();
-    } catch (err) {
-        alert(err.message);
-    } finally {
-        btn.innerText = 'Add Volunteer';
-    }
 };
 
 window.onload = refreshLists;
