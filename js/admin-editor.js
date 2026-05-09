@@ -51,32 +51,29 @@ function calculateTotalYears(durations) {
 async function refreshLists() {
     // Projects
     const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    document.getElementById('total-projects').innerText = projs?.length || 0;
-    render('list-projek', projs, 'projects', 'title');
+    if (document.getElementById('total-project')) document.getElementById('total-project').innerText = projs?.length || 0;
+    render('list-project', projs, 'projects', 'title');
 
-    // Experience
+    // Work Experience
     const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
-    document.getElementById('total-exp').innerText = exps?.length || 0;
-    document.getElementById('total-duration').innerText = calculateTotalYears(exps?.map(e => e.duration) || []);
-    render('list-pengalaman', exps, 'work_experience', 'job_title');
+    if (document.getElementById('total-work')) document.getElementById('total-work').innerText = exps?.length || 0;
+    if (document.getElementById('total-duration')) document.getElementById('total-duration').innerText = calculateTotalYears(exps?.map(e => e.duration) || []);
+    render('list-work', exps, 'work_experience', 'job_title');
 
-    // Certificates
-    const { data: certs } = await supabase.from('certificates').select('*').order('id', { ascending: false });
-    document.getElementById('total-certs').innerText = certs?.length || 0;
-    render('list-sertifikat', certs, 'certificates', 'title');
-
-    async function refreshLists() {
-    // ... (logic projects, experience, certs tetap ada) ...
+    // Certifications
+    const { data: certs } = await supabase.from('certifications').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-certification')) document.getElementById('total-certification').innerText = certs?.length || 0;
+    render('list-certification', certs, 'certifications', 'title');
 
     // Volunteer
-    const { data: vols } = await supabase.from('volunteer').select('*').order('id', { ascending: false });
-    document.getElementById('total-volunteer').innerText = vols?.length || 0;
-    render('list-volunteer', vols, 'volunteer', 'role');
-}
+    const { data: vols } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-volunteer')) document.getElementById('total-volunteer').innerText = vols?.length || 0;
+    render('list-volunteer', vols, 'volunteers', 'role');
 }
 
 function render(id, data, table, key) {
     const el = document.getElementById(id);
+    if (!el) return;
     el.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
     data?.forEach(item => {
         const div = document.createElement('div');
@@ -95,31 +92,27 @@ function render(id, data, table, key) {
     });
 }
 
-// Update bagian Profile Form di js/admin-editor.js
+// Profile Submit
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
     btn.innerText = 'Updating...';
 
-    const headlineValue = document.getElementById('headline').value;
-    const aboutValue = document.getElementById('about_text').value;
-
     const { error } = await supabase.from('profiles').upsert({
-        id: 1, // Pastikan ID selalu 1
-        full_name: "Toriq As Syarif", // Tetapkan nama agar tidak hilang
-        headline: headlineValue,
-        about_text: aboutValue,
+        id: 1,
+        full_name: "Toriq As Syarif",
+        headline: document.getElementById('headline').value,
+        about_text: document.getElementById('about_text').value,
         updated_at: new Date()
     });
 
-    if (error) {
-        alert("Update Failed: " + error.message);
-    } else {
-        alert("Personal Summary Updated!");
-    }
+    if (error) alert("Update Failed: " + error.message);
+    else alert("Personal Summary Updated!");
+    
     btn.innerText = 'Update Personal Summary';
 };
 
+// Project Submit
 document.getElementById('project-form').onsubmit = async (e) => {
     e.preventDefault();
     const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
@@ -133,6 +126,7 @@ document.getElementById('project-form').onsubmit = async (e) => {
     e.target.reset(); refreshLists(); alert("Project Added!");
 };
 
+// Work Submit
 document.getElementById('exp-form').onsubmit = async (e) => {
     e.preventDefault();
     const img = await handleUpload(document.getElementById('e-img').files[0], 'experience');
@@ -146,18 +140,20 @@ document.getElementById('exp-form').onsubmit = async (e) => {
     e.target.reset(); refreshLists(); alert("Experience Added!");
 };
 
+// Certification Submit
 document.getElementById('cert-form').onsubmit = async (e) => {
     e.preventDefault();
     const img = await handleUpload(document.getElementById('c-img').files[0], 'certificates');
-    await supabase.from('certificates').insert([{
+    await supabase.from('certifications').insert([{
         title: document.getElementById('c-title').value,
-        issuer: document.getElementById('c-issuer').value,
+        publisher: document.getElementById('c-issuer').value,
         description: document.getElementById('c-desc').value,
         image_url: img
     }]);
     e.target.reset(); refreshLists(); alert("Certificate Added!");
 };
 
+// Volunteer Submit
 document.getElementById('volunteer-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
@@ -165,7 +161,7 @@ document.getElementById('volunteer-form').onsubmit = async (e) => {
 
     try {
         const img = await handleUpload(document.getElementById('v-img').files[0], 'volunteer');
-        const { error } = await supabase.from('volunteer').insert([{
+        const { error } = await supabase.from('volunteers').insert([{
             role: document.getElementById('v-title').value,
             organization: document.getElementById('v-org').value,
             duration: document.getElementById('v-duration').value,
