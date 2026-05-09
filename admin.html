@@ -8,104 +8,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/admin.css">
 </head>
-<body>
+<body class="admin-body">
 
-    <!-- Sidebar Statis di Kiri -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <h2>TAS<span>.</span></h2>
-        </div>
-        <nav class="sidebar-nav">
-            <ul>
-                <li><a href="#profil" class="active"><i class="fas fa-user-edit"></i> <span>Profil</span></a></li>
-                <li><a href="#projek"><i class="fas fa-project-diagram"></i> <span>Projek</span></a></li>
-                <li><a href="#sertifikat"><i class="fas fa-award"></i> <span>Sertifikat</span></a></li>
-                <li><a href="index.html" target="_blank"><i class="fas fa-globe"></i> <span>Lihat Web</span></a></li>
-            </ul>
-        </nav>
-        <div class="sidebar-user">
-            <div class="user-info">
-                <i class="fas fa-user-shield"></i>
-                <span>Toriq As Syarif</span>
+        <div class="sidebar-content">
+            <h2 class="brand">TAS<span>.</span></h2>
+            <nav class="nav-menu">
+                <a href="#profil" class="nav-item active"><i class="fas fa-user"></i> Profil</a>
+                <a href="#projek" class="nav-item"><i class="fas fa-code"></i> Projek</a>
+                <a href="#sertifikat" class="nav-item"><i class="fas fa-award"></i> Sertifikat</a>
+                <a href="index.html" class="nav-item" target="_blank"><i class="fas fa-external-link-alt"></i> Web Utama</a>
+            </nav>
+            <div class="sidebar-user">
+                <p><i class="fas fa-user-circle"></i> Toriq As Syarif</p>
+                <button id="logout-btn" class="logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
             </div>
-            <button id="logout-btn" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Keluar
-            </button>
         </div>
     </aside>
 
-    <!-- Konten Utama di Kanan -->
-    <main class="main-content">
-        <header class="content-header">
+    <!-- KONTEN UTAMA -->
+    <main class="main-panel">
+        <div class="panel-header">
             <h1>Dashboard Management</h1>
-            <p>Kelola data portofolio Anda secara real-time.</p>
-        </header>
+            <p>Kelola data profil, projek, dan sertifikasi Anda.</p>
+        </div>
 
-        <div class="admin-grid">
+        <div class="content-wrapper">
             <!-- Form Profil -->
-            <section id="profil" class="card">
-                <div class="card-title">
-                    <i class="fas fa-id-card"></i> Update Profil Utama
-                </div>
+            <section id="profil" class="admin-card">
+                <div class="card-title">Update Profil</div>
                 <form id="profile-form">
-                    <div class="form-group">
+                    <div class="field">
                         <label>Nama Lengkap</label>
-                        <input type="text" id="full_name" required>
+                        <input type="text" id="full_name" value="Toriq As Syarif" required>
                     </div>
-                    <div class="form-group">
+                    <div class="field">
                         <label>Headline</label>
-                        <input type="text" id="headline">
+                        <input type="text" id="headline" placeholder="Software Developer & IT Specialist">
                     </div>
-                    <div class="form-group">
+                    <div class="field">
                         <label>Tentang Saya</label>
                         <textarea id="about_text" rows="4"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>Foto Profil Baru</label>
+                    <div class="field">
+                        <label>Foto Profil</label>
                         <input type="file" id="profile_img" accept="image/*">
                     </div>
                     <button type="submit" id="save-profile" class="btn-primary">Update Profil</button>
                 </form>
             </section>
-
-            <!-- Form Projek -->
-            <section id="projek" class="card">
-                <div class="card-title">
-                    <i class="fas fa-folder-plus"></i> Tambah Projek Baru
-                </div>
-                <form id="project-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Judul Projek</label>
-                            <input type="text" id="p-title" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Tech Stack</label>
-                            <input type="text" id="p-tech" placeholder="Contoh: PHP, Laravel, Docker">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Deskripsi Projek</label>
-                        <textarea id="p-desc" rows="3"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Link GitHub</label>
-                            <input type="url" id="p-link">
-                        </div>
-                        <div class="form-group">
-                            <label>Gambar Projek</label>
-                            <input type="file" id="p-img" accept="image/*">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-primary">Tambah Projek</button>
-                </form>
-            </section>
         </div>
-
-        <footer class="footer-admin">
-            &copy; 2026 TAS Dashboard System. Terhubung ke Supabase.
-        </footer>
     </main>
 
     <script type="module" src="js/admin-editor.js"></script>
