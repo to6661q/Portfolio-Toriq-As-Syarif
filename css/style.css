@@ -1,13 +1,13 @@
-/* --- CSS Reset & Variables --- */
+/* --- Reset & Variables --- */
 :root {
-    --primary: #006661;
+    --primary: #006661; /* Warna tema utama Anda */
     --primary-dark: #004d49;
-    --primary-light: #008a83;
+    --accent: #80cbc4;
     --white: #ffffff;
+    --bg-light: #f4f9f8;
     --text-dark: #2d3436;
     --text-muted: #636e72;
-    --bg-light: #f8f9fa;
-    --transition: all 0.3s ease;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 * {
@@ -21,45 +21,46 @@ body {
     line-height: 1.6;
     color: var(--text-dark);
     scroll-behavior: smooth;
+    background-color: #fff;
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* --- Header & Navigation --- */
+/* --- Header & Navigation (Pojok Kanan) --- */
 header {
     background-color: var(--primary);
-    padding: 1rem 0;
-    position: fixed;
-    width: 100%;
+    padding: 15px 0;
+    position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .nav-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Memisahkan Logo (Kiri) & Menu (Kanan) */
     align-items: center;
 }
 
 .logo {
     color: var(--white);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
+    text-decoration: none;
 }
 
 .logo span {
-    color: #80cbc4;
+    color: var(--accent);
 }
 
 .nav-menu {
-    display: flex;
+    display: flex; /* Menu menyamping horizontal */
     list-style: none;
-    gap: 1.5rem;
+    gap: 25px;
     align-items: center;
 }
 
@@ -67,43 +68,46 @@ header {
     color: var(--white);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    font-size: 0.95rem;
+    transition: 0.3s;
 }
 
 .nav-menu a:hover {
-    opacity: 0.8;
+    color: var(--accent);
 }
 
 .lock-icon {
-    font-size: 0.8rem;
-    opacity: 0.7;
+    font-size: 0.85rem;
+    padding: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
 }
 
-/* --- Hero Section --- */
+/* --- Hero Section (Foto Bulat di Kiri) --- */
 .hero {
-    padding: 150px 0 100px;
-    background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
 }
 
 .hero-flex {
-    display: flex;
+    display: flex; /* Memposisikan Foto (Kiri) & Teks (Kanan) */
     align-items: center;
-    gap: 3rem;
+    gap: 60px;
 }
 
 .hero-img img {
     width: 280px;
     height: 280px;
-    border-radius: 50%; /* Foto Profil Bulat */
+    border-radius: 50%; /* Foto Bulat Sempurna */
     object-fit: cover;
     border: 8px solid var(--primary);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 35px rgba(0, 102, 97, 0.15);
 }
 
 .hero-text h1 {
-    font-size: 2.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: var(--text-dark);
 }
 
 .highlight {
@@ -111,179 +115,95 @@ header {
 }
 
 .subtitle {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: var(--text-muted);
-    margin-bottom: 2rem;
+    margin-bottom: 30px;
 }
 
 .hero-btns {
     display: flex;
-    gap: 1rem;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
 .btn-primary {
     display: inline-block;
-    padding: 0.7rem 1.5rem;
+    padding: 12px 24px;
     background-color: var(--primary);
     color: var(--white);
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 600;
-    transition: var(--transition);
+    transition: 0.3s;
 }
 
 .btn-primary:hover {
     background-color: var(--primary-dark);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 102, 97, 0.2);
 }
 
-/* --- Sections --- */
-.section {
-    padding: 80px 0;
-}
-
-.section-title {
-    font-size: 2rem;
-    color: var(--primary);
-    margin-bottom: 3rem;
-    text-align: center;
-    position: relative;
-}
-
-.section-title::after {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 4px;
-    background: var(--primary);
-    margin: 10px auto 0;
-}
-
-.bg-light {
-    background-color: var(--bg-light);
-}
-
-/* --- About Me Grid --- */
-.summary-box {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 3rem;
-}
+/* --- Sections & About Grid --- */
+.section { padding: 90px 0; }
+.bg-light { background-color: var(--bg-light); }
+.section-title { font-size: 2.2rem; text-align: center; margin-bottom: 50px; color: var(--primary); }
 
 .about-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
 }
 
 .about-card {
-    background: var(--white);
-    padding: 2rem;
-    border-radius: 12px;
-    border-top: 4px solid var(--primary);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-.about-card h3 {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    color: var(--primary);
-}
-
-.about-card ul {
-    list-style: none;
-}
-
-.about-card li {
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    border-bottom: 5px solid var(--primary);
 }
 
 .skill-icons {
-    font-size: 1.8rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.social-links {
+    font-size: 2rem;
     display: flex;
     gap: 15px;
-    font-size: 1.5rem;
+    margin-top: 15px;
 }
 
-.social-links a {
-    color: var(--primary);
-    transition: var(--transition);
-}
-
-.social-links a:hover {
-    color: var(--primary-dark);
-}
-
-/* --- Experience Timeline --- */
-.experience-timeline {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.exp-item {
-    border-left: 3px solid var(--primary);
-    padding-left: 20px;
-    margin-bottom: 2rem;
-    position: relative;
-}
-
-.exp-item::before {
-    content: '';
-    position: absolute;
-    left: -9px;
-    top: 0;
-    width: 15px;
-    height: 15px;
-    background: var(--primary);
-    border-radius: 50%;
-}
-
-.exp-meta {
-    font-size: 0.85rem;
-    color: var(--primary);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-/* --- Footer --- */
+/* --- Footer (Tengah) --- */
 footer {
-    background-color: var(--primary);
-    color: var(--white);
-    padding: 3rem 0;
-    text-align: center;
+    background-color: var(--primary); /* Latar #006661 */
+    color: var(--white); /* Teks Putih */
+    padding: 60px 0;
+    text-align: center; /* Konten di Tengah */
+}
+
+.footer-content p {
+    margin-bottom: 15px;
 }
 
 .email-link {
-    color: #80cbc4;
+    color: var(--accent);
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 .quote-box {
-    margin-top: 2rem;
+    margin-top: 30px;
+    padding: 20px;
     font-style: italic;
-    font-size: 0.9rem;
-    opacity: 0.8;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 1px solid rgba(255,255,255,0.2);
 }
 
-/* --- Responsive --- */
+/* --- Responsivitas Mobile --- */
 @media (max-width: 768px) {
-    .hero-flex {
-        flex-direction: column;
-        text-align: center;
-    }
-    .hero-btns {
-        justify-content: center;
-    }
-    .nav-menu {
-        display: none; /* Sederhananya untuk mobile */
-    }
+    .nav-container { flex-direction: column; gap: 15px; }
+    .nav-menu { gap: 15px; font-size: 0.85rem; }
+    .hero-flex { flex-direction: column; text-align: center; }
+    .hero-img img { width: 200px; height: 200px; }
 }
