@@ -4,45 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toriq As Syarif | Portfolio</title>
-    
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <!-- Header -->
-    <header id="main-header">
-        <div class="container header-flex">
+    <header id="header">
+        <div class="container nav-container">
             <h1 class="logo">TAS<span>.</span></h1>
             <nav>
-                <ul>
+                <ul class="nav-menu">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About Me</a></li>
                     <li><a href="#projects">My Project</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#certifications">Certifications</a></li>
+                    <li><a href="#experience">Work Experience</a></li>
+                    <li><a href="#certificates">Certifications</a></li>
+                    <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <!-- Home Section -->
-    <section id="home" class="hero-section">
-        <div class="container hero-container">
-            <div class="profile-area">
-                <img id="display-profile-pic" src="img/default-avatar.png" alt="Toriq As Syarif" class="profile-round">
+    <section id="home" class="hero">
+        <div class="container hero-flex">
+            <div class="hero-img">
+                <img id="display-profile-pic" src="img/default-profile.png" alt="Toriq As Syarif">
             </div>
-            <div class="intro-area">
-                <h1 id="display-name">Toriq As Syarif</h1>
-                <p id="display-headline" class="subtitle">Software Developer & IT Specialist</p>
-                <div class="hero-actions">
-                    <a href="#projects" class="btn">My Project</a>
-                    <a href="#experience" class="btn">Work Experience</a>
-                    <a href="#certifications" class="btn">Certifications</a>
+            <div class="hero-text">
+                <h1 id="display-name">Memuat Nama...</h1>
+                <p id="display-headline" class="subtitle">IT Specialist & Software Developer</p>
+                <div class="hero-btns">
+                    <a href="#projects" class="btn-primary">My Project</a>
+                    <a href="#experience" class="btn-primary">Work Experience</a>
+                    <a href="#certificates" class="btn-primary">Certifications</a>
                 </div>
             </div>
         </div>
@@ -52,54 +50,50 @@
     <section id="about" class="section">
         <div class="container">
             <h2 class="section-title">About Me</h2>
-            <div class="personal-summary">
-                <p id="display-about">Software Developer yang berfokus pada Machine Learning dan sistem informasi.</p>
-            </div>
-
+            <p id="display-about" class="personal-summary">Memuat summary...</p>
+            
             <div class="about-grid">
                 <!-- Education -->
-                <div class="about-card">
+                <div class="about-item">
                     <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-                    <p>S1 Teknik Informatika - UIN Syarif Hidayatullah Jakarta (GPA 3.84)</p>
+                    <p><strong>UIN Syarif Hidayatullah Jakarta</strong><br>Informatics Engineering (GPA: 3.84)</p>
                 </div>
-                <!-- Achievements -->
-                <div class="about-card">
+                <!-- Achievement -->
+                <div class="about-item">
                     <h3><i class="fas fa-trophy"></i> Achievement</h3>
-                    <ul>
-                        <li>Publikasi IEEE Xplore 2026</li>
-                        <li>Finalis Vibecoding 2026</li>
+                    <ul id="achievement-list">
+                        <li>IEEE Xplore Publication (2026)</li>
+                        <li>Vibecoding Competition 2026</li>
                     </ul>
                 </div>
                 <!-- Skills -->
-                <div class="about-card">
+                <div class="about-item">
                     <h3><i class="fas fa-tools"></i> Skills</h3>
-                    <div class="skills-icons">
-                        <i class="devicon-python-plain colored"></i>
-                        <i class="devicon-laravel-original colored"></i>
-                        <i class="devicon-docker-plain colored"></i>
-                        <i class="devicon-kubernetes-plain colored"></i>
-                        <i class="devicon-kotlin-plain colored"></i>
+                    <div class="skill-icons">
+                        <i class="devicon-python-plain colored" title="Python"></i>
+                        <i class="devicon-laravel-original colored" title="Laravel"></i>
+                        <i class="devicon-docker-plain colored" title="Docker"></i>
+                        <i class="devicon-kubernetes-plain colored" title="Kubernetes"></i>
+                        <i class="devicon-kotlin-plain colored" title="Kotlin"></i>
                     </div>
                 </div>
                 <!-- Social Media -->
-                <div class="about-card">
+                <div class="about-item">
                     <h3><i class="fas fa-share-alt"></i> Social Media</h3>
                     <div class="social-links">
-                        <a href="https://linkedin.com/in/toriq-as-syarif" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/toriq" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
+    <!-- My Project Section -->
     <section id="projects" class="section bg-light">
         <div class="container">
             <h2 class="section-title">My Project</h2>
-            <div id="project-list" class="grid-container">
-                <!-- Supabase Data -->
-            </div>
+            <div id="project-list" class="project-grid"></div>
         </div>
     </section>
 
@@ -107,54 +101,38 @@
     <section id="experience" class="section">
         <div class="container">
             <h2 class="section-title">Work Experience</h2>
-            <div class="experience-list">
+            <div class="experience-box">
                 <div class="exp-item">
                     <h4>IT Specialist</h4>
-                    <p>Lembaga Pemasyarakatan (Instansi Pemerintah)</p>
+                    <span>Government Correctional Institution (2025 - Present)</span>
+                    <p>Bertanggung jawab atas pengelolaan infrastruktur IT dan pengembangan sistem internal.</p>
                 </div>
                 <div class="exp-item">
                     <h4>Internship Innovation</h4>
-                    <p>Pengembangan SI-TAU (Sistem Informasi Tata Usaha)</p>
+                    <span>MagangHub Batch II (2026)</span>
+                    <p>Implementasi sistem informasi tata usaha SI-TAU.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Certifications Section -->
-    <section id="certifications" class="section bg-light">
+    <section id="certificates" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Certifications</h2>
-            <div id="cert-list" class="grid-container">
-                <!-- Supabase Data -->
-            </div>
+            <div id="cert-list" class="cert-grid"></div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="main-footer">
-        <div class="container footer-content">
-            <p>© 2026 Toriq As Syarif</p>
-            <p><i class="fas fa-envelope"></i> <a href="mailto:toriqnain@gmail.com">toriqnain@gmail.com</a></p>
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Toriq As Syarif</p>
+            <p><a href="mailto:toriqnain@gmail.com" class="footer-email"><i class="fas fa-envelope"></i> toriqnain@gmail.com</a></p>
             <div id="quote-container" class="quote-text"></div>
         </div>
     </footer>
 
     <script type="module" src="js/main.js"></script>
-    <script>
-        // Quotes Logic
-        const quotes = [
-            "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.",
-            "Choose a job you love, and you will never have to work a day in your life.",
-            "Opportunities don't happen, you create them.",
-            "The only way to do great work is to love what you do.",
-            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-            "Hard work beats talent when talent doesn't work hard.",
-            "Don't stay in bed, unless you can make money in bed.",
-            "Dream big, work hard, stay focused, and surround yourself with good people.",
-            "Intelligence is the ability to adapt to change.",
-            "The future depends on what you do today."
-        ];
-        document.getElementById('quote-container').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-    </script>
 </body>
 </html>
