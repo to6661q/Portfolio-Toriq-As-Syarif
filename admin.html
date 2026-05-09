@@ -20,6 +20,7 @@
                 <li><a href="#projek"><i class="fas fa-project-diagram"></i> <span>My Projects</span></a></li>
                 <li><a href="#pengalaman"><i class="fas fa-briefcase"></i> <span>Work Experience</span></a></li>
                 <li><a href="#sertifikat"><i class="fas fa-award"></i> <span>Certifications</span></a></li>
+                <li><a href="#volunteer"><i class="fas fa-award"></i> <span>Volunteer</span></a></li>
                 <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> <span>View Site</span></a></li>
             </ul>
         </nav>
@@ -109,23 +110,26 @@
 
         <li><a href="#volunteer"><i class="fas fa-hand-holding-heart"></i> <span>Volunteer</span></a></li>
 
+<!-- Volunteer Management Section -->
 <section id="volunteer" class="card">
     <div class="card-title">
-        <span><i class="fas fa-hand-holding-heart"></i> Volunteer Experience Management</span>
+        <span><i class="fas fa-hand-holding-heart"></i> Volunteer Management</span>
         <span class="badge-total">Total Volunteer: <span id="total-volunteer">0</span></span>
     </div>
     <form id="volunteer-form">
         <div class="form-row">
-            <div class="form-group"><label>Position</label><input type="text" id="v-title" required></div>
+            <div class="form-group"><label>Role / Position</label><input type="text" id="v-title" required></div>
             <div class="form-group"><label>Organization</label><input type="text" id="v-org"></div>
         </div>
         <div class="form-group"><label>Duration (e.g. 2024 - 2025)</label><input type="text" id="v-duration"></div>
         <div class="form-group"><label>Description Volunteer</label><textarea id="v-desc" rows="3"></textarea></div>
         <div class="form-group"><label>Image Volunteer</label><input type="file" id="v-img" accept="image/*"></div>
-        <button type="submit" class="btn-primary">Add Volunteer Experience</button>
+        <button type="submit" class="btn-primary">Add Volunteer</button>
     </form>
     <div class="list-container" id="list-volunteer"></div>
 </section>
+
+        
     </main>
 
     <script type="module" src="js/admin-editor.js"></script>
