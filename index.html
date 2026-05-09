@@ -60,13 +60,19 @@
                     <p>S1 Teknik Informatika (GPA: 3.84)</p>
                 </div>
                 <div class="about-card">
+                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
+                    <ul>
+                        <li>Publikasi IEEE Xplore (2026)</li>
+                        <li>Finalis Vibecoding Competition (2026)</li>
+                    </ul>
+                </div>
+                <div class="about-card">
                     <h3><i class="fas fa-tools"></i> Skills</h3>
                     <div class="skill-icons">
-                        <i class="devicon-python-plain colored" title="Python"></i>
-                        <i class="devicon-php-plain colored" title="PHP"></i>
-                        <i class="devicon-laravel-original colored" title="Laravel"></i>
-                        <i class="devicon-docker-plain colored" title="Docker"></i>
-                        <i class="devicon-kubernetes-plain colored" title="Kubernetes"></i>
+                        <i class="devicon-python-plain colored"></i>
+                        <i class="devicon-php-plain colored"></i>
+                        <i class="devicon-laravel-original colored"></i>
+                        <i class="devicon-docker-plain colored"></i>
                     </div>
                 </div>
                 <div class="about-card">
@@ -74,7 +80,6 @@
                     <div class="social-links">
                         <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
                         <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="mailto:toriqnain@gmail.com"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
@@ -122,7 +127,7 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. Load Profile (Headline & About)
+        // 1. Load Profile
         async function loadProfile() {
             const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
             if (data) {
@@ -131,7 +136,7 @@
             }
         }
 
-        // 2. Load Timeline Data (Work, Cert, Volunteer)
+        // 2. Load Timeline (Work, Cert, Vol)
         async function loadTimeline(table, elementId, titleKey, orgKey) {
             const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
             const container = document.getElementById(elementId);
@@ -164,19 +169,13 @@
             }
         }
 
-        // 4. RANDOM QUOTES LOGIC RESTORED
+        // 4. QUOTES FIXED
         const workQuotes = [
             "The only way to do great work is to love what you do. - Steve Jobs",
             "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
             "The future depends on what you do today. - Mahatma Gandhi",
-            "Pleasure in the job puts perfection in the work. - Aristotle",
             "Hard work beats talent when talent doesn't work hard. - Tim Notke"
         ];
-
-        function showQuote() {
-            const quoteEl = document.getElementById('quote-display');
-            if(quoteEl) quoteEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
-        }
 
         window.addEventListener('DOMContentLoaded', () => {
             loadProfile();
@@ -184,7 +183,9 @@
             loadTimeline('work_experience', 'work-list', 'job_position', 'company');
             loadTimeline('certifications', 'certification-list', 'name', 'publisher');
             loadTimeline('volunteers', 'volunteer-list', 'role', 'organization');
-            showQuote();
+            
+            const qEl = document.getElementById('quote-display');
+            if(qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
         });
     </script>
 </body>
