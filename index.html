@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toriq As Syarif | Portfolio</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -52,38 +50,7 @@
             <div class="summary-box">
                 <p id="display-about">Loading summary...</p>
             </div>
-
-            <div class="about-grid">
-                <div class="about-card">
-                    <h3><i class="fas fa-graduation-cap"></i> Educations</h3>
-                    <p><strong>UIN Syarif Hidayatullah Jakarta</strong></p>
-                    <p>S1 Teknik Informatika (GPA: 3.84)</p>
-                </div>
-                <div class="about-card">
-                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
-                    <ul>
-                        <li>Publikasi IEEE Xplore (2026)</li>
-                        <li>Finalis Vibecoding Competition (2026)</li>
-                    </ul>
-                </div>
-                <div class="about-card">
-                    <h3><i class="fas fa-tools"></i> Skills</h3>
-                    <div class="skill-icons">
-                        <i class="devicon-python-plain colored"></i>
-                        <i class="devicon-php-plain colored"></i>
-                        <i class="devicon-laravel-original colored"></i>
-                        <i class="devicon-docker-plain colored"></i>
-                    </div>
-                </div>
-                <div class="about-card">
-                    <h3><i class="fas fa-share-alt"></i> Social Media</h3>
-                    <div class="social-links">
-                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
             </div>
-        </div>
     </section>
 
     <section id="project" class="section bg-light">
@@ -115,78 +82,50 @@
     </section>
 
     <footer>
-        <div class="container footer-nav">
+        <div class="container footer-nav" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;">
             <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
-            <div class="footer-item">
-                <a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a>
-            </div>
-            <div id="quote-display" class="footer-item quote-style"></div>
+            <div class="footer-item"><a href="mailto:toriqnain@gmail.com" style="color: #80cbc4; text-decoration: none;">toriqnain@gmail.com</a></div>
+            <div id="quote-display" class="footer-item" style="font-style: italic; opacity: 0.8; font-size: 0.9rem;"></div>
         </div>
     </footer>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. Load Profile
-        async function loadProfile() {
-            const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
-            if (data) {
-                document.getElementById('display-headline').innerText = data.headline;
-                document.getElementById('display-about').innerText = data.about_text;
-            }
-        }
-
-        // 2. Load Timeline (Work, Cert, Vol)
-        async function loadTimeline(table, elementId, titleKey, orgKey) {
-            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-            const container = document.getElementById(elementId);
-            if (data && container) {
-                container.innerHTML = data.map(item => `
-                    <div class="exp-item">
-                        <h4>${item[titleKey]}</h4>
-                        <p class="exp-meta">${item[orgKey] || ''} | ${item.duration || ''}</p>
-                        <p>${item.description || ''}</p>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // 3. Load Projects
-        async function loadProjects() {
-            const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
-            const list = document.getElementById('project-list');
-            if (data && list) {
-                list.innerHTML = data.map(item => `
-                    <div class="project-card">
-                        <div class="p-img" style="background-image: url('${item.image_url || 'img/default.jpg'}')"></div>
-                        <div class="p-content">
-                            <h3>${item.title}</h3>
-                            <p>${item.description || ''}</p>
-                            <a href="${item.link_github}" target="_blank" class="btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">GitHub</a>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // 4. QUOTES FIXED
         const workQuotes = [
             "The only way to do great work is to love what you do. - Steve Jobs",
-            "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+            "Success is not final; failure is not fatal. - Winston Churchill",
             "The future depends on what you do today. - Mahatma Gandhi",
             "Hard work beats talent when talent doesn't work hard. - Tim Notke"
         ];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadProfile();
-            loadProjects();
-            loadTimeline('work_experience', 'work-list', 'job_position', 'company');
-            loadTimeline('certifications', 'certification-list', 'name', 'publisher');
-            loadTimeline('volunteers', 'volunteer-list', 'role', 'organization');
-            
+        async function loadContent() {
+            // Profile
+            const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
+            if (prof) {
+                document.getElementById('display-headline').innerText = prof.headline;
+                document.getElementById('display-about').innerText = prof.about_text;
+            }
+
+            // Projects
+            const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
+            if (projs) document.getElementById('project-list').innerHTML = projs.map(p => `<div class="project-card"><h3>${p.title}</h3><p>${p.description || ''}</p></div>`).join('');
+
+            // Timelines
+            const loadTimeline = async (table, id, key) => {
+                const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+                if (data) document.getElementById(id).innerHTML = data.map(i => `<div class="exp-item"><h4>${i[key]}</h4><p>${i.description || ''}</p></div>`).join('');
+            };
+
+            loadTimeline('work_experience', 'work-list', 'job_position');
+            loadTimeline('certifications', 'certification-list', 'name');
+            loadTimeline('volunteers', 'volunteer-list', 'role');
+
             const qEl = document.getElementById('quote-display');
-            if(qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
-        });
+            if (qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
+        }
+
+        window.addEventListener('DOMContentLoaded', loadContent);
     </script>
 </body>
 </html>
