@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toriq As Syarif | Portfolio</title>
     
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
@@ -14,60 +13,52 @@
 </head>
 <body>
 
-    <!-- Header / Navigation -->
     <header>
         <div class="container nav-container">
             <h1 class="logo">TAS<span>.</span></h1>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About Me</a></li>
-                    <li><a href="#projects">My Project</a></li>
-                    <li><a href="#experience">Work Experience</a></li>
-                    <li><a href="#certificates">Certifications</a></li>
-                    <li><a href="#volunteer">Volunteer</a></li> <!-- Tambahan -->
-                    <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
+                    <li><a href="#profile">Home</a></li>
+                    <li><a href="#project">My Project</a></li>
+                    <li><a href="#work">Work Experience</a></li>
+                    <li><a href="#certification">Certifications</a></li>
+                    <li><a href="#volunteer">Volunteer</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <!-- Home Section -->
-    <section id="home" class="hero">
+    <section id="profile" class="hero">
         <div class="container hero-flex">
             <div class="hero-img">
-                <!-- Foto Profil Bulat -->
                 <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
             </div>
             <div class="hero-text">
                 <h1>Halo, Saya <span class="highlight">Toriq As Syarif</span></h1>
-                <p class="subtitle">IT Specialist & Software Developer</p>
+                <p id="display-headline" class="subtitle">IT Specialist & Software Developer</p>
                 <div class="hero-btns">
-                    <a href="#projects" class="btn-primary">My Project</a>
-                    <a href="#experience" class="btn-primary">Work Experience</a>
-                    <a href="#certificates" class="btn-primary">Certifications</a>
+                    <a href="#project" class="btn-primary">My Project</a>
+                    <a href="#work" class="btn-primary">Work Experience</a>
+                    <a href="#certification" class="btn-primary">Certifications</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Me Section -->
-    <section id="about" class="section">
+    <section class="section">
         <div class="container">
             <h2 class="section-title">About Me</h2>
             <div class="summary-box">
-                <p>Saya adalah seorang spesialis teknologi informasi dengan latar belakang teknik informatika yang kuat. Fokus saya adalah pengembangan perangkat lunak, optimalisasi algoritma, dan Machine Learning. Saya senang memecahkan masalah kompleks melalui kode yang efisien dan skalabel.</p>
+                <p id="display-about">Loading summary...</p>
             </div>
 
             <div class="about-grid">
-                <!-- Educations -->
                 <div class="about-card">
                     <h3><i class="fas fa-graduation-cap"></i> Educations</h3>
                     <p><strong>UIN Syarif Hidayatullah Jakarta</strong></p>
                     <p>S1 Teknik Informatika (GPA: 3.84)</p>
                 </div>
 
-                <!-- Achievement -->
                 <div class="about-card">
                     <h3><i class="fas fa-trophy"></i> Achievement</h3>
                     <ul>
@@ -76,7 +67,6 @@
                     </ul>
                 </div>
 
-                <!-- Skills -->
                 <div class="about-card">
                     <h3><i class="fas fa-tools"></i> Skills</h3>
                     <div class="skill-icons">
@@ -89,7 +79,6 @@
                     </div>
                 </div>
 
-                <!-- Social Media -->
                 <div class="about-card">
                     <h3><i class="fas fa-share-alt"></i> Social Media</h3>
                     <div class="social-links">
@@ -102,55 +91,38 @@
         </div>
     </section>
 
-    <!-- My Project Section -->
-    <section id="projects" class="section bg-light">
+    <section id="project" class="section bg-light">
         <div class="container">
             <h2 class="section-title">My Project</h2>
             <div id="project-list" class="project-grid">
-                <!-- Data akan ditarik dinamis dari Supabase melalui JS -->
-            </div>
+                </div>
         </div>
     </section>
 
-    <!-- Work Experience Section -->
-    <section id="experience" class="section">
+    <section id="work" class="section">
         <div class="container">
             <h2 class="section-title">Work Experience</h2>
-            <div class="experience-timeline">
-                <div class="exp-item">
-                    <h4>Information Technology Specialist</h4>
-                    <p class="exp-meta">Government Correctional Institution | 2025 - Present</p>
-                    <p>Bertanggung jawab dalam pengelolaan infrastruktur IT dan pengembangan sistem internal instansi.</p>
+            <div id="work-list" class="experience-timeline">
                 </div>
-                <div class="exp-item">
-                    <h4>Internship Innovation (SI-TAU)</h4>
-                    <p class="exp-meta">MagangHub Batch II | 2026</p>
-                    <p>Mengembangkan dan mengimplementasikan inovasi sistem informasi tata usaha (SI-TAU).</p>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Certifications Section -->
-    <section id="certificates" class="section bg-light">
+    <section id="certification" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Certifications</h2>
-            <div id="cert-list" class="cert-grid">
-                <!-- Data akan ditarik dinamis dari Supabase melalui JS -->
-            </div>
+            <div id="certification-list" class="cert-grid">
+                </div>
         </div>
     </section>
 
-<section id="volunteer" class="section">
-    <div class="container">
-        <h2 class="section-title">Volunteer Experience</h2>
-        <div id="volunteer-list" class="experience-timeline">
-            <!-- Data ditarik dinamis dari Supabase -->
+    <section id="volunteer" class="section">
+        <div class="container">
+            <h2 class="section-title">Volunteer Experience</h2>
+            <div id="volunteer-list" class="experience-timeline">
+                </div>
         </div>
-    </div>
-</section>
+    </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container footer-nav">
             <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
@@ -161,74 +133,56 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script type="module">
         import { supabase } from './js/supabase-config.js';
-        import { supabase } from './js/supabase-config.js';
 
-    // 1. Ambil Data Profil (Headline & Summary)
-    async function loadProfile() {
-        const { data, error } = await supabase.from('profiles').select('*').eq('id', 1).single();
-        if (data) {
-            // Mengisi Headline
-            const headlineEl = document.querySelector('.hero-text .subtitle');
-            if (headlineEl) headlineEl.innerText = data.headline;
-
-            // Mengisi Personal Summary
-            const aboutEl = document.querySelector('.summary-box p');
-            if (aboutEl) aboutEl.innerText = data.about_text;
-        } else if (error) {
-            console.error("Profile Error:", error.message);
+        // 1. Ambil Data Profil (Headline & Summary)
+        async function loadProfile() {
+            const { data, error } = await supabase.from('profiles').select('*').eq('id', 1).single();
+            if (data) {
+                const headlineEl = document.getElementById('display-headline');
+                const aboutEl = document.getElementById('display-about');
+                if (headlineEl) headlineEl.innerText = data.headline;
+                if (aboutEl) aboutEl.innerText = data.about_text;
+            }
         }
-    }
 
-    // 2. Ambil Data Projects
-    async function loadProjects() {
-        const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        const list = document.getElementById('project-list');
-        if (data && list) {
-            list.innerHTML = data.map(item => `
-                <div class="project-card">
-                    <div class="p-img" style="background-image: url('${item.image_url || 'img/default.jpg'}')"></div>
-                    <div class="p-content">
-                        <h3>${item.title}</h3>
-                        <p>${item.description || ''}</p>
-                        <div class="badges">${item.tech_stack ? item.tech_stack.map(t => `<span class="badge">${t}</span>`).join('') : ''}</div>
-                        <a href="${item.link_github}" target="_blank" class="btn-primary" style="padding: 5px 15px; font-size: 0.8rem;">GitHub</a>
+        // 2. Ambil Data Projects (Tabel: projects)
+        async function loadProjects() {
+            const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
+            const list = document.getElementById('project-list');
+            if (data && list) {
+                list.innerHTML = data.map(item => `
+                    <div class="project-card">
+                        <div class="p-img" style="background-image: url('${item.image_url || 'img/default.jpg'}')"></div>
+                        <div class="p-content">
+                            <h3>${item.title}</h3>
+                            <p>${item.description || ''}</p>
+                            <div class="badges">${item.tech_stack ? item.tech_stack.map(t => `<span class="badge">${t}</span>`).join('') : ''}</div>
+                            <a href="${item.link_github}" target="_blank" class="btn-primary" style="padding: 5px 15px; font-size: 0.8rem;">GitHub</a>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
         }
-    }
 
-    // 3. Ambil Data Experience, Certificates, & Volunteer (Gaya Timeline)
-    async function loadTimelineData(table, elementId) {
-        const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-        const container = document.getElementById(elementId);
-        if (data && container) {
-            container.innerHTML = data.map(item => `
-                <div class="exp-item">
-                    <h4>${item.job_title || item.title || item.role}</h4>
-                    <p class="exp-meta">${item.company || item.issuer || item.organization} | ${item.duration || ''}</p>
-                    <p>${item.description || ''}</p>
-                </div>
-            `).join('');
+        // 3. Ambil Data Timeline (Work, Cert, Volunteer)
+        // Disesuaikan dengan nama tabel di SQL kita (work_experience, certifications, volunteers)
+        async function loadTimelineData(table, elementId, titleField, orgField) {
+            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(elementId);
+            if (data && container) {
+                container.innerHTML = data.map(item => `
+                    <div class="exp-item">
+                        <h4>${item[titleField]}</h4>
+                        <p class="exp-meta">${item[orgField] || ''} | ${item.duration || ''}</p>
+                        <p>${item.description || ''}</p>
+                    </div>
+                `).join('');
+            }
         }
-    }
 
-    // Jalankan Semua Fungsi saat halaman dimuat
-    window.addEventListener('DOMContentLoaded', () => {
-        loadProfile();
-        loadProjects();
-        loadTimelineData('work_experience', 'experience-list');
-        loadTimelineData('certificates', 'cert-list');
-        loadTimelineData('volunteer', 'volunteer-list');
-    });
-
-    // Jalankan fungsi
-    loadPublicProfile();
-
-        // 1. Logika Quotes Random (1 dari 10)
+        // 4. Logika Quotes Random
         const workQuotes = [
             "The only way to do great work is to love what you do. - Steve Jobs",
             "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
@@ -243,13 +197,24 @@
         ];
 
         function showRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * workQuotes.length);
             const quoteEl = document.getElementById('quote-display');
-            if(quoteEl) quoteEl.innerText = `"${workQuotes[randomIndex]}"`;
+            if(quoteEl) {
+                const randomIndex = Math.floor(Math.random() * workQuotes.length);
+                quoteEl.innerText = `"${workQuotes[randomIndex]}"`;
+            }
         }
-        showRandomQuote();
 
-        // 2. Tambahkan logika fetch projects & certificates Anda di sini jika diperlukan secara inline
+        // JALANKAN SEMUA FUNGSI
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            loadProjects();
+            // Sesuaikan parameter: table_name, element_id, title_column, org_column
+            loadTimelineData('work_experience', 'work-list', 'job_position', 'company');
+            loadTimelineData('certifications', 'certification-list', 'name', 'publisher');
+            loadTimelineData('volunteers', 'volunteer-list', 'role', 'organization');
+            showRandomQuote();
+        });
+
     </script>
 </body>
 </html>
