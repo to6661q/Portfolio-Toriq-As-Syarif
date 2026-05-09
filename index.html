@@ -1,19 +1,168 @@
-<section class="hero">
-    <h1 id="display-name">Loading...</h1>
-    <p id="display-subtitle">Sabar ya...</p>
-    <img id="display-profile-pic" src="" alt="Profile">
-</section>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toriq As Syarif | Portofolio</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-<script type="module">
-    import { supabase } from './js/supabase-config.js';
+    <!-- Navigasi -->
+    <nav id="navbar">
+        <div class="container">
+            <h1 class="logo">TAS<span>.</span></h1>
+            <ul>
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#projects">Projek</a></li>
+                <li><a href="#certificates">Sertifikat</a></li>
+                <li><a href="login.html" class="nav-admin"><i class="fas fa-lock"></i></a></li>
+            </ul>
+        </div>
+    </nav>
 
-    async function loadProfile() {
-        const { data, error } = await supabase.from('profiles').select('*').single();
-        if (data) {
-            document.getElementById('display-name').innerText = data.full_name;
-            document.getElementById('display-subtitle').innerText = data.hero_subtitle;
-            document.getElementById('display-profile-pic').src = data.profile_pic_url;
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="container">
+            <div class="hero-flex">
+                <div class="hero-text">
+                    <h1 id="display-name">Memuat nama...</h1>
+                    <p id="display-headline" class="subtitle">Memuat informasi...</p>
+                    <div class="hero-btns">
+                        <a href="#projects" class="btn-primary">Lihat Karya</a>
+                        <a href="#about" class="btn-outline">Tentang Saya</a>
+                    </div>
+                </div>
+                <div class="hero-img">
+                    <img id="display-profile-pic" src="img/default-avatar.png" alt="Profile">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">Tentang Saya</h2>
+            <div class="about-box">
+                <p id="display-about">Memuat cerita tentang saya...</p>
+            </div>
+            
+            <!-- Tech Stack Dinamis (Disesuaikan dengan keahlian Anda) -->
+            <div class="tech-stack">
+                <i class="devicon-python-plain colored"></i>
+                <i class="devicon-laravel-original colored"></i>
+                <i class="devicon-docker-plain colored"></i>
+                <i class="devicon-kubernetes-plain colored"></i>
+                <i class="devicon-kotlin-plain colored"></i>
+                <i class="devicon-flask-original colored"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Projek Unggulan</h2>
+            <div id="project-list" class="project-grid">
+                <!-- Data dari Supabase akan muncul di sini -->
+                <p class="loading-text">Sedang mengambil data projek...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="section">
+        <div class="container">
+            <h2 class="section-title">Sertifikasi</h2>
+            <div id="cert-list" class="cert-grid">
+                <!-- Data dari Supabase akan muncul di sini -->
+                <p class="loading-text">Sedang mengambil data sertifikat...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Toriq As Syarif. Dibangun dengan Supabase & GitHub Pages.</p>
+        </div>
+    </footer>
+
+    <!-- Script Utama (Data Fetching) -->
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        // 1. Ambil Data Profil
+        async function getProfile() {
+            const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
+            if (data) {
+                document.getElementById('display-name').innerText = data.full_name;
+                document.getElementById('display-headline').innerText = data.headline;
+                document.getElementById('display-about').innerText = data.about_text;
+                if(data.profile_img_url) {
+                    document.getElementById('display-profile-pic').src = data.profile_img_url;
+                }
+            }
         }
-    }
-    loadProfile();
-</script>
+
+        // 2. Ambil Data Projek
+        async function getProjects() {
+            const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
+            const list = document.getElementById('project-list');
+            list.innerHTML = ''; // Hapus loading text
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                
+                // Render tech stack badges
+                const techBadges = item.tech_stack.map(tech => `<span class="badge">${tech}</span>`).join('');
+
+                card.innerHTML = `
+                    <div class="p-img" style="background-image: url('${item.image_url || 'img/project-default.jpg'}')"></div>
+                    <div class="p-content">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="badges">${techBadges}</div>
+                        <a href="${item.link_github}" target="_blank" class="p-link"><i class="fab fa-github"></i> Lihat</a>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // 3. Ambil Data Sertifikat
+        async function getCertificates() {
+            const { data } = await supabase.from('certificates').select('*').order('date_issued', { ascending: false });
+            const list = document.getElementById('cert-list');
+            list.innerHTML = '';
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'cert-card';
+                card.innerHTML = `
+                    <img src="${item.image_url || 'img/cert-default.jpg'}" alt="${item.title}">
+                    <div class="c-content">
+                        <h4>${item.title}</h4>
+                        <p>${item.issuer}</p>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // Jalankan semua fungsi
+        getProfile();
+        getProjects();
+        getCertificates();
+    </script>
+</body>
+</html>
