@@ -138,9 +138,8 @@ header {
 /* 2. PROFILE HERO */
 /* --- PROFILE ROW SECTION --- */
 .hero-section {
-    padding: 30px 0 15px; /* Padding atas sedang, bawah kecil sesuai permintaan */
-    background: #ffffff; /* Latar belakang bersih */
-    border-bottom: 1px solid #f0f0f0; /* Garis tipis pemisah yang elegan */
+    padding: 40px 0 20px;   /* Atas 40px, Bawah 20px */
+    background: #ffffff;
 }
 
 /* Flexbox Container */
@@ -163,10 +162,11 @@ header {
 }
 
 /* Wadah Teks (Nama & Headline) */
+/* Pastikan teks tidak ikut center-align secara internal agar tetap rapi di samping foto */
 .profile-text-container {
     display: flex;
-    flex-direction: column; /* Nama di atas, Headline di bawah */
-    justify-content: center;
+    flex-direction: column;
+    text-align: left;       /* Teks tetap rata kiri terhadap wadahnya sendiri */
 }
 
 .name-text {
@@ -190,15 +190,12 @@ header {
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 768px) {
     .profile-row {
-        gap: 15px;
-    }
-    .name-text {
-        font-size: 1.5rem;
-    }
-    .profile-img {
-        width: 80px;
-        height: 80px;
-    }
+    display: flex;
+    align-items: center;    /* Tetap sejajar secara vertikal */
+    justify-content: center; /* INI YANG DIUBAH: Memindahkan seluruh konten ke tengah */
+    gap: 30px;              /* Jarak antara foto dan teks */
+    width: 100%;            /* Memastikan container mengambil ruang penuh */
+}
 }
 
 /* 3. BIODATA */
