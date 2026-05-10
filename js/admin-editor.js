@@ -1,111 +1,103 @@
 import { supabase } from './supabase-config.js';
 
-let editingIds = { project: null, work: null, certification: null, volunteer: null };
+let editingId = { project: null, work: null, certification: null, volunteer: null };
 
-// Refresh Semua Data di Panel Admin
-async function refreshAll() {
-    try {
-        console.log("Memulai refresh data...");
-        await Promise.all([
-            loadTable('projects', 'list-project', 'title', 'project'),
-            loadTable('work_experience', 'list-work', 'job_position', 'work'),
-            loadTable('certifications', 'list-certification', 'name', 'certification'),
-            loadTable('volunteers', 'list-volunteer', 'role', 'volunteer')
-        ]);
-    } catch (err) {
-        console.error("Gagal memuat data admin:", err);
-    }
+// --- FUNGSI REFRESH LIST ---
+async function refreshLists() {
+    console.log("Memulai Refresh...");
+    await renderList('projects', 'list-project', 'title', 'project');
+    await renderList('work_experience', 'list-work', 'job_position', 'work');
+    await renderList('certifications', 'list-certification', 'name', 'certification');
+    await renderList('volunteers', 'list-volunteer', 'role', 'volunteer');
 }
 
-async function loadTable(table, elId, key, type) {
+async function renderList(table, elId, titleKey, type) {
     const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
     const el = document.getElementById(elId);
-    if (!el) return;
+    if (!el || error) return;
 
-    // Update Counter
-    const counter = document.getElementById(`total-${type}`);
-    if (counter) counter.innerText = data?.length || 0;
-
-    if (error) {
-        el.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
-        return;
-    }
+    if (document.getElementById(`total-${type}`)) document.getElementById(`total-${type}`).innerText = data.length;
 
     el.innerHTML = data.map(item => `
-        <div class="manage-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ddd;">
-            <span>${item[key]}</span>
+        <div class="manage-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+            <span>${item[titleKey]}</span>
             <div>
-                <button onclick="window.editData('${type}', ${item.id})">Edit</button>
-                <button onclick="window.deleteData('${table}', ${item.id})" style="background:red; color:white">Del</button>
+                <button type="button" onclick="window.prepareEdit('${type}', ${item.id})">Edit</button>
+                <button type="button" onclick="window.deleteItem('${table}', ${item.id})" style="background:red;color:white">Del</button>
             </div>
         </div>
     `).join('');
 }
 
-// Global Actions (Wajib window agar bisa diklik)
-window.deleteData = async (table, id) => {
-    if (confirm('Hapus data ini?')) {
-        const { error } = await supabase.from(table).delete().eq('id', id);
-        if (error) alert(error.message);
-        refreshAll();
+// --- AKSI GLOBAL ---
+window.deleteItem = async (table, id) => {
+    if (confirm('Hapus data?')) {
+        await supabase.from(table).delete().eq('id', id);
+        refreshLists();
     }
 };
 
-window.editData = async (type, id) => {
+window.prepareEdit = async (type, id) => {
     const tableMap = { project: 'projects', work: 'work_experience', certification: 'certifications', volunteer: 'volunteers' };
     const { data } = await supabase.from(tableMap[type]).select('*').eq('id', id).single();
     if (data) {
-        editingIds[type] = data.id;
+        editingId[type] = data.id;
         if (type === 'project') {
             document.getElementById('p-title').value = data.title;
-            document.getElementById('p-desc').value = data.description;
             document.getElementById('p-tech').value = data.tech_stack?.join(', ') || '';
+            document.getElementById('p-desc').value = data.description;
             document.getElementById('p-link').value = data.link_github;
-        } else if (type === 'work') {
-            document.getElementById('e-title').value = data.job_position;
-            document.getElementById('e-company').value = data.company;
-            document.getElementById('e-duration').value = data.duration;
-            document.getElementById('e-desc').value = data.description;
+            document.querySelector('#project-form button').innerText = "Update Project";
         }
-        // ... (Tambahkan untuk cert & volunteer jika perlu)
+        // ... Logika edit untuk work, cert, volunteer bisa ditambahkan polanya sama ...
         document.getElementById(type).scrollIntoView({ behavior: 'smooth' });
-        alert("Data masuk ke form. Silakan ubah dan klik 'Add/Update'");
     }
 };
 
-// Form Submit Handling (CONTOH UNTUK PROJECT)
+// --- SUBMIT HANDLING (PROJECT) ---
 const projectForm = document.getElementById('project-form');
 if (projectForm) {
-    projectForm.onsubmit = async (e) => {
+    projectForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        console.log("Submit Project Dimulai...");
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Processing...";
+
         const payload = {
             title: document.getElementById('p-title').value,
-            description: document.getElementById('p-desc').value,
             tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
+            description: document.getElementById('p-desc').value,
             link_github: document.getElementById('p-link').value
         };
 
-        let result;
-        if (editingIds.project) {
-            result = await supabase.from('projects').update(payload).eq('id', editingIds.project);
-            editingIds.project = null;
-        } else {
-            result = await supabase.from('projects').insert([payload]);
-        }
+        try {
+            let error;
+            if (editingId.project) {
+                const res = await supabase.from('projects').update(payload).eq('id', editingId.project);
+                error = res.error;
+            } else {
+                const res = await supabase.from('projects').insert([payload]);
+                error = res.error;
+            }
 
-        if (result.error) alert("Gagal: " + result.error.message);
-        else {
+            if (error) throw error;
+
             alert("Berhasil!");
+            editingId.project = null;
+            btn.innerText = "Add Project";
             e.target.reset();
-            refreshAll();
+            refreshLists();
+        } catch (err) {
+            console.error("Gagal Simpan:", err);
+            alert("Error: " + err.message);
         }
-    };
+    });
 }
 
-// Profile Submit
+// --- SUBMIT HANDLING (PROFILE) ---
 const profileForm = document.getElementById('profile-form');
 if (profileForm) {
-    profileForm.onsubmit = async (e) => {
+    profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const { error } = await supabase.from('profiles').upsert({
             id: 1,
@@ -114,7 +106,7 @@ if (profileForm) {
         });
         if (error) alert(error.message);
         else alert("Profile Updated!");
-    };
+    });
 }
 
-window.onload = refreshAll;
+window.onload = refreshLists;
