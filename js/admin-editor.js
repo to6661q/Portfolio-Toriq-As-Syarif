@@ -101,91 +101,74 @@ document.getElementById('project-form').onsubmit = async (e) => {
     refreshLists();
 };
 
-    // --- LOGIKA KALKULASI TOTAL TAHUN ---
-function calculateTotalYears(durations) {
-    let total = 0;
-    const currentYear = new Date().getFullYear();
-
-    durations.forEach(str => {
-        if (!str) return;
-        const years = str.match(/\d{4}/g); // Mencari angka 4 digit (tahun)
-        
-        if (years) {
-            const start = parseInt(years[0]);
-            let end = years[1] ? parseInt(years[1]) : null;
-
-            if (str.toLowerCase().includes('present')) {
-                end = currentYear;
-            }
-
-            if (start && end) {
-                total += (end - start);
-            } else if (start && !end && str.toLowerCase().includes('present')) {
-                 total += (currentYear - start);
-            }
-        }
-    });
-    return total;
+// --- FUNGSI FORMAT TANGGAL ---
+function formatDuration(start, end) {
+    const options = { month: 'short', year: 'numeric' };
+    const startDate = new Date(start).toLocaleDateString('en-US', options);
+    const endDate = end ? new Date(end).toLocaleDateString('en-US', options) : 'Present';
+    return `${startDate} - ${endDate}`;
 }
 
 // --- REFRESH LIST WORK ---
 async function refreshWorkList() {
     const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
-    
-    // Update Stats
     if (document.getElementById('total-work')) document.getElementById('total-work').innerText = exps?.length || 0;
-    if (document.getElementById('total-duration')) {
-        const durationArray = exps?.map(e => e.duration) || [];
-        document.getElementById('total-duration').innerText = calculateTotalYears(durationArray);
-    }
-
-    // Render List
-    const el = document.getElementById('list-work');
-    if (el) {
-        el.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
+    
+    const listEl = document.getElementById('list-work');
+    if (listEl) {
+        listEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
         exps?.forEach(item => {
             const div = document.createElement('div');
             div.className = 'manage-item';
-            div.innerHTML = `<span>${item.job_position} at ${item.company}</span> 
-                             <button class="btn-delete" onclick="deleteWork(${item.id})">Delete</button>`;
-            el.appendChild(div);
+            div.innerHTML = `
+                <span><strong>${item.job_title}</strong> at ${item.company}</span>
+                <div class="actions">
+                    <button type="button" class="btn-delete" onclick="deleteWork(${item.id})">Delete</button>
+                </div>`;
+            listEl.appendChild(div);
         });
     }
 }
 
-// --- SUBMIT WORK ---
-document.getElementById('work-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Adding...';
-
-    const imgFile = document.getElementById('w-img').files[0];
-    const imgUrl = await handleUpload(imgFile, 'experience');
-
-    const { error } = await supabase.from('work_experience').insert([{
-        job_position: document.getElementById('w-position').value,
-        company: document.getElementById('w-company').value,
-        duration: document.getElementById('w-duration').value,
-        description: document.getElementById('w-desc').value,
-        image_url: imgUrl
-    }]);
-
-    if (error) alert(error.message);
-    else {
-        alert("Work Experience Added!");
-        e.target.reset();
-        refreshWorkList();
-    }
-    btn.innerText = 'Add Work Experience';
-};
-
-// Global delete function
 window.deleteWork = async (id) => {
-    if (confirm('Delete this experience?')) {
+    if (confirm('Hapus pengalaman kerja ini?')) {
         await supabase.from('work_experience').delete().eq('id', id);
         refreshWorkList();
     }
 };
+
+// --- SUBMIT WORK FORM ---
+const workForm = document.getElementById('work-form');
+if (workForm) {
+    workForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = 'Processing...';
+
+        const start = document.getElementById('w-start-date').value;
+        const end = document.getElementById('w-end-date').value;
+        const durationText = formatDuration(start, end);
+
+        const imgFile = document.getElementById('w-img').files[0];
+        const imgUrl = await handleUpload(imgFile, 'experience');
+
+        const { error } = await supabase.from('work_experience').insert([{
+            job_title: document.getElementById('w-title').value,
+            company: document.getElementById('w-company').value,
+            duration: durationText, // Menyimpan teks "Month Year - Month Year/Present"
+            description: document.getElementById('w-desc').value,
+            image_url: imgUrl
+        }]);
+
+        if (error) alert(error.message);
+        else {
+            alert("Work Experience Added!");
+            e.target.reset();
+            refreshWorkList();
+        }
+        btn.innerText = 'Add Work Experience';
+    };
+}
 
     
 window.onload = refreshLists;
