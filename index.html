@@ -2,13 +2,16 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Portofolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toriq As Syarif | Portfolio</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <header>
         <div class="container nav-flex">
-            <h2 style="color:var(--primary); margin:0;">TAS.</h2>
+            <a href="#" class="logo">TAS<span>.</span></a>
             <nav class="nav-links">
                 <a href="#project">Projects</a>
                 <a href="#work">Work</a>
@@ -18,16 +21,16 @@
         </div>
     </header>
 
-    <section id="profile" class="section">
-        <div class="container" style="text-align:center;">
-            <h1 id="display-headline" style="font-size:3rem; margin-bottom:10px;">Loading...</h1>
-            <p id="display-about" style="max-width:700px; margin: 0 auto; line-height:1.6;"></p>
+    <section id="profile" class="hero">
+        <div class="container">
+            <h1 id="display-headline">...</h1>
+            <p id="display-about">...</p>
         </div>
     </section>
 
     <section id="project" class="section bg-light">
         <div class="container">
-            <h2 class="section-title">Projects</h2>
+            <h2 class="section-title">Featured Projects</h2>
             <div id="project-list" class="grid"></div>
         </div>
     </section>
@@ -35,60 +38,77 @@
     <section class="section">
         <div class="container">
             <h2 class="section-title">Experience & Activities</h2>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
+            <div class="exp-grid">
                 <div>
-                    <h3>Work Experience</h3>
+                    <h3 style="margin-bottom: 30px;"><i class="fas fa-briefcase"></i> Work History</h3>
                     <div id="work-list"></div>
                 </div>
                 <div>
-                    <h3>Certifications & Volunteer</h3>
+                    <h3 style="margin-bottom: 30px;"><i class="fas fa-award"></i> Achievement & Contributions</h3>
                     <div id="cert-list"></div>
-                    <div id="volunteer-list" style="margin-top:40px;"></div>
+                    <div id="volunteer-list" style="margin-top: 50px;"></div>
                 </div>
             </div>
         </div>
     </section>
 
+    <footer style="padding: 50px 0; text-align: center; border-top: 1px solid #eee; color: #999; font-size: 0.9rem;">
+        &copy; 2026 Toriq As Syarif. Built with Supabase.
+    </footer>
+
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
         async function init() {
+            // Load Profile
             const { data: p } = await supabase.from('profile').select('*').eq('id', 1).single();
             if (p) {
                 document.getElementById('display-headline').innerText = p.headline;
                 document.getElementById('display-about').innerText = p.about_text;
             }
 
-            const load = async (table, elId, htmlFn) => {
+            // Fungsi Load Data universal agar rapi
+            const fetchData = async (table, elId, templateFn) => {
                 const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-                if (data) document.getElementById(elId).innerHTML = data.map(htmlFn).join('');
+                if (data) document.getElementById(elId).innerHTML = data.map(templateFn).join('');
             };
 
-            load('project', 'project-list', d => `
+            // Template Project Card
+            fetchData('project', 'project-list', d => `
                 <div class="card">
                     <h3>${d.title}</h3>
-                    <p>${d.description}</p>
-                    <a href="${d.link_github}" target="_blank" style="color:var(--primary); font-weight:bold;">View Github</a>
-                </div>`);
+                    <p>${d.description || 'No description available.'}</p>
+                    <a href="${d.link_github || '#'}" target="_blank" class="github-link">
+                        View Project Repository &rarr;
+                    </a>
+                </div>
+            `);
 
-            load('work', 'work-list', d => `
+            // Template Work Item
+            fetchData('work', 'work-list', d => `
                 <div class="exp-item">
                     <h4>${d.job_position}</h4>
-                    <p><b>${d.company}</b> | ${d.duration}</p>
-                    <p>${d.description}</p>
-                </div>`);
+                    <div class="meta">${d.company} | ${d.duration}</div>
+                    <p class="desc">${d.description || ''}</p>
+                </div>
+            `);
 
-            load('cert', 'cert-list', d => `
+            // Template Cert Item
+            fetchData('cert', 'cert-list', d => `
                 <div class="exp-item">
                     <h4>${d.name}</h4>
-                    <p>${d.publisher}</p>
-                </div>`);
+                    <div class="meta">${d.publisher}</div>
+                </div>
+            `);
 
-            load('volunteer', 'volunteer-list', d => `
+            // Template Volunteer Item
+            fetchData('volunteer', 'volunteer-list', d => `
                 <div class="exp-item">
                     <h4>${d.role}</h4>
-                    <p><b>${d.organization}</b> | ${d.duration}</p>
-                </div>`);
+                    <div class="meta">${d.organization} | ${d.duration}</div>
+                    <p class="desc">${d.description || ''}</p>
+                </div>
+            `);
         }
         window.onload = init;
     </script>
