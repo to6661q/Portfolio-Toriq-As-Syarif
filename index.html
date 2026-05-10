@@ -30,7 +30,7 @@
     <section id="profile" class="hero" style="background: linear-gradient(135deg, #f4f9f8 0%, #ffffff 100%);">
         <div class="container hero-flex">
             <div class="hero-img">
-                <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
+                <img src="img/profile.jpg" alt="Toriq As Syarif">
             </div>
             <div class="hero-text">
                 <h1>Halo, Saya <span class="highlight">Toriq As Syarif</span></h1>
@@ -50,7 +50,7 @@
             <div class="summary-box">
                 <p id="display-about">Loading summary...</p>
             </div>
-            </div>
+        </div>
     </section>
 
     <section id="project" class="section bg-light">
@@ -70,7 +70,7 @@
     <section id="certification" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Certifications</h2>
-            <div id="certification-list" class="cert-grid"></div>
+            <div id="certification-list" class="experience-timeline"></div>
         </div>
     </section>
 
@@ -82,63 +82,70 @@
     </section>
 
     <footer>
-        <div class="container footer-nav" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;">
+        <div class="container footer-nav">
             <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
-            <div class="footer-item"><a href="mailto:toriqnain@gmail.com" style="color: #80cbc4; text-decoration: none;">toriqnain@gmail.com</a></div>
-            <div id="quote-display" class="footer-item" style="font-style: italic; opacity: 0.8; font-size: 0.9rem;"></div>
+            <div class="footer-item">
+                <a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a>
+            </div>
+            <div id="quote-display" class="footer-item quote-style"></div>
         </div>
     </footer>
+
     <script type="module">
-    import { supabase } from './js/supabase-config.js';
+        import { supabase } from './js/supabase-config.js';
 
-    async function init() {
-        // Load Profile
-        const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
-        if (prof) {
-            document.getElementById('display-headline').innerText = prof.headline;
-            document.getElementById('display-about').innerText = prof.about_text;
-        }
+        async function loadAllData() {
+            // 1. Load Profile
+            const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
+            if (prof) {
+                document.getElementById('display-headline').innerText = prof.headline;
+                document.getElementById('display-about').innerText = prof.about_text;
+            }
 
-        // Load Projects
-        const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        const pList = document.getElementById('project-list');
-        if (projs && pList) {
-            pList.innerHTML = projs.map(p => `
-                <div class="project-card">
-                    <img src="${p.image_url || 'img/default-proj.jpg'}" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='img/default-proj.jpg'">
-                    <div style="padding:15px;">
-                        <h3>${p.title}</h3>
-                        <p>${p.description || ''}</p>
-                        <a href="${p.link_github}" target="_blank" class="btn-primary">GitHub</a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Load Timelines (Work, Certification, Volunteer)
-        const timelineData = [
-            { table: 'work_experience', id: 'work-list', title: 'job_position', sub: 'company' },
-            { table: 'certifications', id: 'certification-list', title: 'name', sub: 'publisher' },
-            { table: 'volunteers', id: 'volunteer-list', title: 'role', sub: 'organization' }
-        ];
-
-        for (const item of timelineData) {
-            const { data } = await supabase.from(item.table).select('*').order('id', { ascending: false });
-            const container = document.getElementById(item.id);
-            if (data && container) {
-                container.innerHTML = data.map(d => `
-                    <div class="exp-item" style="border-left: 2px solid #006661; padding-left: 15px; margin-bottom: 20px;">
-                        <h4 style="color:#006661;">${d[item.title]}</h4>
-                        <p><strong>${d[item.sub]}</strong> | ${d.duration || ''}</p>
-                        <p>${d.description || ''}</p>
+            // 2. Load Projects
+            const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
+            const pList = document.getElementById('project-list');
+            if (projs && pList) {
+                pList.innerHTML = projs.map(p => `
+                    <div class="project-card">
+                        <img src="${p.image_url || 'img/default-proj.jpg'}" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='img/default-proj.jpg'">
+                        <div style="padding:15px;">
+                            <h3>${p.title}</h3>
+                            <p>${p.description || ''}</p>
+                            <a href="${p.link_github}" target="_blank" class="btn-primary" style="font-size:0.8rem; padding:5px 10px;">GitHub</a>
+                        </div>
                     </div>
                 `).join('');
             }
-        }
-    }
 
-    window.addEventListener('DOMContentLoaded', init);
-</script>
-    
+            // 3. Load Timelines (Work, Certification, Volunteer)
+            const configs = [
+                { table: 'work_experience', id: 'work-list', t: 'job_position', o: 'company' },
+                { table: 'certifications', id: 'certification-list', t: 'name', o: 'publisher' },
+                { table: 'volunteers', id: 'volunteer-list', t: 'role', o: 'organization' }
+            ];
+
+            for (const conf of configs) {
+                const { data } = await supabase.from(conf.table).select('*').order('id', { ascending: false });
+                const container = document.getElementById(conf.id);
+                if (data && container) {
+                    container.innerHTML = data.map(d => `
+                        <div class="exp-item" style="border-left:2px solid #006661; padding-left:15px; margin-bottom:20px;">
+                            <h4 style="color:#006661;">${d[conf.t]}</h4>
+                            <p><strong>${d[conf.o]}</strong> | ${d.duration || ''}</p>
+                            <p>${d.description || ''}</p>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // 4. Quotes Logic
+            const quotes = ["Quality is not an act, it is a habit.", "The future depends on what you do today.", "Work to become, not to acquire."];
+            const qEl = document.getElementById('quote-display');
+            if(qEl) qEl.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+        }
+
+        window.addEventListener('DOMContentLoaded', loadAllData);
+    </script>
 </body>
 </html>
