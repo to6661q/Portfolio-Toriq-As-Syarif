@@ -2,7 +2,7 @@ import { supabase } from './supabase-config.js';
 
 let editingProjectId = null;
 
-// --- 1. CORE FUNCTIONS ---
+// --- 1. UPLOAD HELPER ---
 async function handleUpload(file, folder) {
     if (!file) return null;
     const fileExt = file.name.split('.').pop();
@@ -13,37 +13,39 @@ async function handleUpload(file, folder) {
         .from('portfolio_assets')
         .upload(filePath, file);
 
-    if (uploadError) return null;
+    if (uploadError) {
+        console.error("Upload failed:", uploadError);
+        return null;
+    }
 
+    // Ambil URL Publik
     const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(filePath);
     return data.publicUrl;
 }
 
+// --- 2. REFRESH & RENDER ---
 async function refreshLists() {
-    // Projects
     const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    if (document.getElementById('total-project')) document.getElementById('total-project').innerText = projs?.length || 0;
-    
-    const projEl = document.getElementById('list-project');
-    if (projEl) {
-        projEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
+    const listEl = document.getElementById('list-project');
+    if (listEl) {
+        listEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
         projs?.forEach(item => {
             const div = document.createElement('div');
             div.className = 'manage-item';
             div.innerHTML = `
                 <span>${item.title}</span>
                 <div class="actions">
-                    <button class="btn-edit" onclick="editProject(${item.id})">Edit</button>
-                    <button class="btn-delete" onclick="deleteItem('projects', ${item.id})">Delete</button>
+                    <button type="button" class="btn-edit" onclick="editProject(${item.id})">Edit</button>
+                    <button type="button" class="btn-delete" onclick="deleteItem('projects', ${item.id})">Delete</button>
                 </div>`;
-            projEl.appendChild(div);
+            listEl.appendChild(div);
         });
     }
 }
 
-// Global functions for buttons
+// Global functions agar bisa dipanggil dari HTML
 window.deleteItem = async (table, id) => {
-    if (confirm('Delete this record?')) {
+    if (confirm('Delete?')) {
         await supabase.from(table).delete().eq('id', id);
         refreshLists();
     }
@@ -65,7 +67,7 @@ window.editProject = async (id) => {
     }
 };
 
-// --- 2. FORM SUBMITS ---
+// --- 3. SUBMIT HANDLER ---
 document.getElementById('project-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
@@ -80,6 +82,8 @@ document.getElementById('project-form').onsubmit = async (e) => {
         description: document.getElementById('p-desc').value,
         link_github: document.getElementById('p-link').value
     };
+    
+    // Hanya update image_url jika ada file baru yang diupload
     if (imgUrl) payload.image_url = imgUrl;
 
     if (editingProjectId) {
@@ -94,18 +98,6 @@ document.getElementById('project-form').onsubmit = async (e) => {
     btn.style.background = "#006661";
     e.target.reset();
     refreshLists();
-};
-
-// Profile Update
-document.getElementById('profile-form').onsubmit = async (e) => {
-    e.preventDefault();
-    await supabase.from('profiles').upsert({
-        id: 1,
-        full_name: "Toriq As Syarif",
-        headline: document.getElementById('headline').value,
-        about_text: document.getElementById('about_text').value
-    });
-    alert("Profile Updated!");
 };
 
 window.onload = refreshLists;
