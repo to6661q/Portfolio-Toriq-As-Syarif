@@ -14,61 +14,53 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: var(--tex
 .text-center { text-align: center; }
 
 /* 1. HEADER */
+
 /* --- HEADER STYLING --- */
 header {
-    background: rgba(255, 255, 255, 0.98);
+    background-color: #006661; /* Warna hijau sesuai permintaan */
     padding: 15px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border-bottom: 2px solid var(--primary-light);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow lebih gelap agar kontras */
+    border-bottom: none; /* Hilangkan border bawah jika ada */
 }
 
-.nav-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
+/* --- LOGO --- */
 .logo {
     font-size: 1.8rem;
     font-weight: 800;
-    color: var(--primary);
+    color: #ffffff; /* Ubah logo jadi putih */
     text-decoration: none;
-    letter-spacing: -1px;
 }
 
 .logo span {
-    color: #333;
+    color: #f4f9f8; /* Warna TAS. bagian titik dibuat putih tulang/terang */
 }
 
-/* Menu Navigation */
+/* --- NAV LINKS (Menu Button) --- */
 .nav-links {
     display: flex;
     align-items: center;
     gap: 30px;
 }
 
-.menu-items {
-    display: flex;
-    gap: 20px;
-}
-
 .menu-items a {
     text-decoration: none;
-    color: #555;
+    color: #ffffff; /* Ubah warna teks menu jadi putih */
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    position: relative;
+    opacity: 0.9;
 }
 
 .menu-items a:hover {
-    color: var(--primary);
+    color: #ffffff;
+    opacity: 1;
+    transform: translateY(-2px); /* Efek sedikit naik saat dihover */
 }
 
-/* Efek garis bawah saat hover */
+/* Efek garis bawah saat hover (disesuaikan jadi putih) */
 .menu-items a::after {
     content: '';
     position: absolute;
@@ -76,18 +68,14 @@ header {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: var(--primary);
+    background-color: #ffffff; /* Garis hover jadi putih */
     transition: width 0.3s;
 }
 
-.menu-items a:hover::after {
-    width: 100%;
-}
-
-/* Admin Lock Button */
+/* --- ADMIN LOCK BUTTON (Gembok) --- */
 .admin-lock {
-    background: var(--primary-light);
-    color: var(--primary);
+    background: rgba(255, 255, 255, 0.2); /* Background putih transparan */
+    color: #ffffff; /* Warna icon gembok jadi putih */
     width: 40px;
     height: 40px;
     display: flex;
@@ -96,23 +84,13 @@ header {
     border-radius: 50%;
     text-decoration: none;
     transition: 0.3s;
-    border: 1px solid transparent;
 }
 
 .admin-lock:hover {
-    background: var(--primary);
-    color: white;
+    background: #ffffff; /* Saat dihover gembok jadi putih terang */
+    color: #006661; /* Icon gembok jadi hijau kembali */
     transform: rotate(15deg);
-    box-shadow: 0 5px 15px rgba(0, 102, 97, 0.3);
 }
-
-/* Responsive: Sembunyikan menu di HP (Bisa ditambah Hamburger Menu nanti) */
-@media (max-width: 900px) {
-    .menu-items {
-        display: none; /* Kamu bisa ganti dengan toggle menu jika perlu */
-    }
-}
-
 /* 2. PROFILE HERO */
 .hero-section { padding: 100px 0; background: linear-gradient(to bottom, var(--light), var(--white)); }
 .profile-img { width: 180px; height: 180px; border-radius: 50%; border: 6px solid var(--primary); object-fit: cover; margin-bottom: 25px; }
