@@ -223,7 +223,7 @@ header {
 
 /* SECTIONS */
 
-.section { padding: 100px 0;
+.section { padding: 0px 0;
           scroll-margin-top: 90px; /* Nilai ini harus sedikit lebih besar dari tinggi header */
          }
 .bg-light { background: var(--light); }
