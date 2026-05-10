@@ -168,18 +168,21 @@
             </form>
             <div id="list-volunteer"></div>
         </section>
-
-        <section id="section-project" class="admin-card">
-            <h3>Section 7: Projects</h3>
-            <form id="project-form">
-                <input type="text" id="p-title" placeholder="Project Title">
-                <textarea id="p-desc" placeholder="Description"></textarea>
-                <input type="text" id="p-tech" placeholder="Tech Stack (comma separated)">
-                <input type="url" id="p-link" placeholder="GitHub Link">
-                <button type="submit" class="btn-save" style="margin-top:10px;">Save Project</button>
-            </form>
-            <div id="list-project"></div>
-        </section>
+<section id="section-project" class="admin-card">
+    <h3>Section 7: Projects</h3>
+    <form id="project-form">
+        <input type="text" id="p-title" placeholder="Project Title" required>
+        <textarea id="p-desc" placeholder="Description"></textarea>
+        <input type="text" id="p-tech" placeholder="Tech Stack (contoh: PHP, Laravel, Docker)">
+        <input type="url" id="p-link" placeholder="GitHub Link">
+        
+        <label style="display:block; margin-top:10px; font-size:0.8rem; font-weight:bold;">Project Image</label>
+        <input type="file" id="p-img" accept="image/*">
+        
+        <button type="submit" class="btn-save" style="margin-top:15px;">Save Project</button>
+    </form>
+    <div id="list-project"></div>
+</section>
 
         <section id="section-contact" class="admin-card">
             <h3>Section 8: Contact & Maps</h3>
