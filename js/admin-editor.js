@@ -1,94 +1,74 @@
 import { supabase } from './supabase-config.js';
 
-// 1. Cek Login
-async function checkAuth() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) window.location.href = 'login.html';
-    else refreshAll();
+// 1. FUNGSI UPLOAD GAMBAR
+async function uploadFile(file, folder) {
+    if (!file) return null;
+    const path = `${folder}/${Date.now()}_${file.name}`;
+    const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
+    if (error) return null;
+    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
+    return data.publicUrl;
 }
 
-// 2. Fungsi Refresh Data (Mengambil data dari Supabase dan tampilkan di List Admin)
-async function refreshAll() {
-    console.log("Menyinkronkan data...");
-    renderTable('projects', 'list-project', 'title', 'project');
-    renderTable('work_experience', 'list-work', 'job_position', 'work');
-    renderTable('certifications', 'list-certification', 'name', 'cert');
-    renderTable('volunteers', 'list-volunteer', 'role', 'vol');
+// 2. FUNGSI REFRESH DATA (TAMPILKAN LIST)
+async function refreshLists() {
+    await renderTable('projects', 'list-project', 'title');
+    await renderTable('work_experience', 'list-work', 'job_position');
+    await renderTable('certifications', 'list-certification', 'name');
+    await renderTable('volunteers', 'list-volunteer', 'role');
 }
 
-async function renderTable(table, elId, key, type) {
-    const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
+async function renderTable(table, elId, key) {
+    const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
     const el = document.getElementById(elId);
-    if (!el || error) return;
-
+    if (!el) return;
     el.innerHTML = data.map(item => `
-        <div class="manage-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ddd; background:#fff;">
+        <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ddd;">
             <span>${item[key]}</span>
-            <button onclick="window.delItem('${table}', ${item.id})" style="color:red; cursor:pointer;">Hapus</button>
-        </div>`).join('');
+            <button onclick="deleteData('${table}', ${item.id})" style="color:red">Hapus</button>
+        </div>
+    `).join('');
 }
 
-// 3. Fungsi Hapus Global
-window.delItem = async (table, id) => {
-    if (confirm('Hapus data ini?')) {
-        await supabase.from(table).delete().eq('id', id);
-        refreshAll();
-    }
+window.deleteData = async (table, id) => {
+    if(confirm('Hapus?')) { await supabase.from(table).delete().eq('id', id); refreshLists(); }
 };
 
-// 4. Handler Submit Form (Dibuat modular agar rapi)
-const handleForm = (formId, table, getPayload) => {
+// 3. LOGIKA INPUT DATA
+const setupForm = (formId, table, getPayload) => {
     const form = document.getElementById(formId);
     if (!form) return;
     form.onsubmit = async (e) => {
         e.preventDefault();
-        const payload = getPayload();
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Processing...";
+        
+        const payload = await getPayload();
         const { error } = await supabase.from(table).insert([payload]);
-        if (error) alert("Gagal: " + error.message);
-        else {
-            alert("Berhasil ditambah!");
-            form.reset();
-            refreshAll();
-        }
+        
+        if (error) alert("Error: " + error.message);
+        else { alert("Berhasil!"); e.target.reset(); refreshLists(); }
+        btn.innerText = "Add Data";
     };
 };
 
-// Inisialisasi semua form
-handleForm('project-form', 'projects', () => ({
+// Inisialisasi masing-masing form
+setupForm('project-form', 'projects', async () => ({
     title: document.getElementById('p-title').value,
+    tech_stack: document.getElementById('p-tech').value.split(','),
     description: document.getElementById('p-desc').value,
-    link_github: document.getElementById('p-link').value
+    link_github: document.getElementById('p-link').value,
+    image_url: await uploadFile(document.getElementById('p-img').files[0], 'projects')
 }));
 
-handleForm('work-form', 'work_experience', () => ({
+setupForm('work-form', 'work_experience', async () => ({
     job_position: document.getElementById('e-title').value,
     company: document.getElementById('e-company').value,
     duration: document.getElementById('e-duration').value,
-    description: document.getElementById('e-desc').value
+    description: document.getElementById('e-desc').value,
+    image_url: await uploadFile(document.getElementById('e-img').files[0], 'work')
 }));
 
-handleForm('certification-form', 'certifications', () => ({
-    name: document.getElementById('c-title').value,
-    publisher: document.getElementById('c-issuer').value,
-    description: document.getElementById('c-desc').value
-}));
+// Tambahkan setupForm untuk Cert & Volunteer di sini...
 
-handleForm('volunteer-form', 'volunteers', () => ({
-    role: document.getElementById('v-title').value,
-    organization: document.getElementById('v-org').value,
-    duration: document.getElementById('v-duration').value,
-    description: document.getElementById('v-desc').value
-}));
-
-// Submit khusus Profile (UPSERT)
-document.getElementById('profile-form').onsubmit = async (e) => {
-    e.preventDefault();
-    await supabase.from('profiles').upsert({
-        id: 1,
-        headline: document.getElementById('headline').value,
-        about_text: document.getElementById('about_text').value
-    });
-    alert("Profile Updated!");
-};
-
-checkAuth();
+window.onload = refreshLists;
