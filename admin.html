@@ -136,9 +136,15 @@
             <h3>Section 4: Experience</h3>
             <form id="work-form">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <input type="text" id="e-start" placeholder="Start Date">
-                    <input type="text" id="e-end" placeholder="End Date">
-                </div>
+    <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" id="e-start" required>
+    </div>
+    <div class="form-group">
+        <label>End Date</label>
+        <input type="date" id="e-end"> </div>
+</div>
+                
                 <input type="text" id="e-title" placeholder="Position">
                 <input type="text" id="e-company" placeholder="Company">
                 <textarea id="e-desc" placeholder="Description"></textarea>
@@ -152,7 +158,12 @@
         <section id="section-cert" class="admin-card">
             <h3>Section 5: Certifications</h3>
             <form id="certification-form">
-                <input type="text" id="c-date" placeholder="Date">
+
+                <div class="form-group">
+    <label>Date Issued</label>
+    <input type="date" id="c-date" required>
+</div>
+                
                 <input type="text" id="c-title" placeholder="Title">
                 <input type="text" id="c-issuer" placeholder="Publisher">
                 <textarea id="c-desc" placeholder="Description"></textarea>
@@ -165,7 +176,11 @@
         <section id="section-volunteer" class="admin-card">
             <h3>Section 6: Volunteer</h3>
             <form id="volunteer-form">
-                <input type="text" id="v-date" placeholder="Date">
+
+                <div class="form-group">
+    <label>Activity Date</label>
+    <input type="date" id="v-date" required>
+</div>
                 <input type="text" id="v-title" placeholder="Title">
                 <input type="text" id="v-org" placeholder="Organization">
                 <textarea id="v-desc" placeholder="Description"></textarea>
@@ -216,6 +231,31 @@
 
     </main>
 
-    <script type="module" src="js/admin-editor.js"></script>
+    <script type="module" src="js/admin-editor.js">
+        // Fungsi format tanggal untuk tampilan publik
+const formatTgl = (str) => {
+    if(!str) return "";
+    return new Date(str).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+};
+
+// Contoh penggunaan pada template Experience:
+fetchTo('experience', 'exp-list', d => `
+    <div class="media-card">
+        ${d.image_url ? `<img src="${d.image_url}" alt="${d.position}">` : ''}
+        <div class="media-info">
+            <span class="date-tag">
+                ${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : 'Sekarang'}
+            </span>
+            <h4>${d.position}</h4>
+            <h5>${d.company}</h5>
+            <p>${d.description}</p>
+        </div>
+    </div>
+`);
+    </script>
 </body>
 </html>
