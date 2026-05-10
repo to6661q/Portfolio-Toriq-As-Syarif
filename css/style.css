@@ -14,7 +14,6 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: var(--tex
 .text-center { text-align: center; }
 
 /* 1. HEADER */
-
 /* --- HEADER STYLING --- */
 header {
     background-color: #006661; /* Warna hijau sesuai permintaan */
@@ -91,6 +90,7 @@ header {
     color: #006661; /* Icon gembok jadi hijau kembali */
     transform: rotate(15deg);
 }
+
 /* 2. PROFILE HERO */
 .hero-section { padding: 100px 0; background: linear-gradient(to bottom, var(--light), var(--white)); }
 .profile-img { width: 180px; height: 180px; border-radius: 50%; border: 6px solid var(--primary); object-fit: cover; margin-bottom: 25px; }
