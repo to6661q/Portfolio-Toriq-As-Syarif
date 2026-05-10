@@ -136,48 +136,69 @@ header {
 }
 
 /* 2. PROFILE HERO */
-/* --- CUSTOMIZING SECTION 2: PROFILE (ROW LAYOUT) --- */
-
-/* Target the specific section to override padding and layout */
-#profile.hero-section {
-    padding: 50px 0 20px 0; /* Reduced padding: small bottom distance ( Top, Right, Bottom, Left ) */
-    text-align: left; /* Align text internally to the left within the flex row */
+/* --- PROFILE ROW SECTION --- */
+.hero-section {
+    padding: 30px 0 15px; /* Padding atas sedang, bawah kecil sesuai permintaan */
+    background: #ffffff; /* Latar belakang bersih */
+    border-bottom: 1px solid #f0f0f0; /* Garis tipis pemisah yang elegan */
 }
 
-/* Inner container for flex row layout */
-#profile .container {
+/* Flexbox Container */
+.profile-row {
     display: flex;
-    align-items: center; /* Vertically center the photo and text content */
-    justify-content: flex-start; /* Left align the content within the container */
+    align-items: center; /* Menjaga foto dan teks sejajar secara vertikal di tengah */
+    justify-content: flex-start; /* Memulai konten dari kiri */
+    gap: 25px; /* Jarak antara foto dan teks */
 }
 
-/* Adjust photo styling for the row: remove bottom margin, create space to the right */
-#profile .profile-img {
-    width: 150px; /* Reduced slightly if too prominent in row, old size 180 */
-    height: 150px;
-    margin-bottom: 0; /* Remove bottom margin from previous centered layout */
-    margin-right: 25px; /* Create space between photo and text content */
-    /* Keeps the circle shape, border, and object-fit from base style */
+/* Styling Foto Profil */
+.profile-img {
+    width: 110px; /* Ukuran diperkecil agar pas dalam satu baris */
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid #006661; /* Border hijau khas kamu */
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Styling for the stacked text container to ensure fullname and headline stack tightly */
-#profile #display-profile-text.profile-text-stack {
+/* Wadah Teks (Nama & Headline) */
+.profile-text-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Nama di atas, Headline di bawah */
     justify-content: center;
 }
 
-/* Adjust fullname name for row layout prominence */
-#profile #display-name {
-    margin: 0; /* Clear margins to stack tightly */
-    font-size: 2.8rem; /* Adjusted for better visibility in a row */
+.name-text {
+    font-size: 2rem; /* Ukuran nama yang dominan */
+    font-weight: 800;
+    color: #333;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
 }
 
-/* Adjust headline styling for row layout prominence */
-#profile #display-headline.headline {
-    margin: 5px 0 0 0; /* Small top space, clear other margins for tight stacking */
-    font-size: 1.3rem; /* Supportive headline font size */
-    color: var(--primary); /* Keeps theme color #006661 */
+.headline-text {
+    font-size: 1.1rem;
+    color: #006661; /* Warna hijau untuk profesi */
+    font-weight: 600;
+    margin: 5px 0 0 0; /* Jarak atas tipis dari nama */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 768px) {
+    .profile-row {
+        gap: 15px;
+    }
+    .name-text {
+        font-size: 1.5rem;
+    }
+    .profile-img {
+        width: 80px;
+        height: 80px;
+    }
 }
 
 /* 3. BIODATA */
