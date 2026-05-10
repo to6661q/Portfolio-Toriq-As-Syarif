@@ -1,54 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | TAS</title>
+    <title>Admin Dashboard | Portfolio TAS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css"> 
 </head>
 <body class="admin-body">
+
     <aside class="sidebar">
+        <div class="sidebar-header" style="padding: 20px; text-align: center; color: white; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <h2>Admin Panel</h2>
+        </div>
         <nav class="sidebar-nav">
             <ul class="nav-list">
-                <li><a href="#profile"><i class="fas fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#profile"><i class="fas fa-user"></i> <span>Profile Summary</span></a></li>
                 <li><a href="#project"><i class="fas fa-code"></i> <span>Projects</span></a></li>
-                <li><a href="#work"><i class="fas fa-briefcase"></i> <span>Work</span></a></li>
-                <li><a href="#certification"><i class="fas fa-award"></i> <span>Certs</span></a></li>
-                <li><a href="#volunteer"><i class="fas fa-heart"></i> <span>Volunteer</span></a></li>
+                <li><a href="#work"><i class="fas fa-briefcase"></i> <span>Work Experience</span></a></li>
+                <li><a href="#certification"><i class="fas fa-award"></i> <span>Certifications</span></a></li>
+                <li><a href="#volunteer"><i class="fas fa-hands-helping"></i> <span>Volunteer</span></a></li>
             </ul>
         </nav>
-        <button id="logout-btn" class="btn-logout">Logout</button>
+        <button id="logout-btn" class="btn-logout" style="margin: 20px; width: calc(100% - 40px);"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </aside>
 
-   <main class="main-content">
-    <section id="project" class="card">
-        <div class="card-title">Add Project</div>
-        <form id="project-form">
-            <input type="text" id="p-title" placeholder="Judul Projek" required>
-            <input type="text" id="p-tech" placeholder="Tech Stack (contoh: Python, Laravel)">
-            <textarea id="p-desc" placeholder="Deskripsi"></textarea>
-            <input type="url" id="p-link" placeholder="Link GitHub">
-            <input type="file" id="p-img">
-            <button type="submit">Add Project</button>
-        </form>
-        <div id="list-project"></div>
-    </section>
+    <main class="main-content">
+        
+        <section id="profile" class="card">
+            <div class="card-title"><i class="fas fa-user"></i> 1. Profile Summary</div>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="headline">Job Title / Headline:</label>
+                    <input type="text" id="headline" placeholder="Contoh: IT Specialist & Software Developer" required>
+                </div>
+                <div class="form-group">
+                    <label for="about_text">About Me (Description):</label>
+                    <textarea id="about_text" placeholder="Ceritakan singkat tentang diri Anda..." rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Update Profile</button>
+            </form>
+        </section>
 
-    <section id="work" class="card">
-        <div class="card-title">Add Work Experience</div>
-        <form id="work-form">
-            <input type="text" id="e-title" placeholder="Posisi Pekerjaan" required>
-            <input type="text" id="e-company" placeholder="Nama Perusahaan">
-            <input type="text" id="e-duration" placeholder="Durasi (Jan 2024 - Sekarang)">
-            <textarea id="e-desc" placeholder="Deskripsi Tugas"></textarea>
-            <input type="file" id="e-img">
-            <button type="submit">Add Work</button>
-        </form>
-        <div id="list-work"></div>
-    </section>
-    
+        <section id="project" class="card">
+            <div class="card-title"><i class="fas fa-code"></i> 2. Projects</div>
+            <form id="project-form">
+                <div class="form-group">
+                    <input type="text" id="p-title" placeholder="Nama Project" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="p-desc" placeholder="Deskripsi Project" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="url" id="p-link" placeholder="Link GitHub (https://github.com/...)">
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 0.9rem; color: #666;">Upload Gambar Project (Opsional):</label>
+                    <input type="file" id="p-img" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary">Add Project</button>
+            </form>
+            <div id="list-project" class="list-container" style="margin-top: 20px;"></div> 
+        </section>
+
+        <section id="work" class="card">
+            <div class="card-title"><i class="fas fa-briefcase"></i> 3. Work Experience</div>
+            <form id="work-form">
+                <div class="form-group">
+                    <input type="text" id="e-title" placeholder="Posisi (contoh: Software Engineer)" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="e-company" placeholder="Nama Perusahaan" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="e-duration" placeholder="Durasi (contoh: Jan 2024 - Sekarang)">
+                </div>
+                <div class="form-group">
+                    <textarea id="e-desc" placeholder="Deskripsi Tugas & Pencapaian" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 0.9rem; color: #666;">Upload Logo/Gambar (Opsional):</label>
+                    <input type="file" id="e-img" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary">Add Work Experience</button>
+            </form>
+            <div id="list-work" class="list-container" style="margin-top: 20px;"></div>
+        </section>
+
+        <section id="certification" class="card">
+            <div class="card-title"><i class="fas fa-award"></i> 4. Certifications</div>
+            <form id="certification-form">
+                <div class="form-group">
+                    <input type="text" id="c-title" placeholder="Nama Sertifikat" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="c-issuer" placeholder="Penerbit (contoh: AWS, Google, Dicoding)" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="c-desc" placeholder="Deskripsi/Detail Sertifikat" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 0.9rem; color: #666;">Upload File Sertifikat (Opsional):</label>
+                    <input type="file" id="c-img" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary">Add Certification</button>
+            </form>
+            <div id="list-certification" class="list-container" style="margin-top: 20px;"></div>
+        </section>
+
+        <section id="volunteer" class="card">
+            <div class="card-title"><i class="fas fa-hands-helping"></i> 5. Volunteer Experience</div>
+            <form id="volunteer-form">
+                <div class="form-group">
+                    <input type="text" id="v-title" placeholder="Peran/Posisi" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="v-org" placeholder="Nama Organisasi/Kepanitiaan" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="v-duration" placeholder="Durasi (contoh: 2023 - 2024)">
+                </div>
+                <div class="form-group">
+                    <textarea id="v-desc" placeholder="Deskripsi Kegiatan" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 0.9rem; color: #666;">Upload Dokumentasi (Opsional):</label>
+                    <input type="file" id="v-img" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary">Add Volunteer</button>
+            </form>
+            <div id="list-volunteer" class="list-container" style="margin-top: 20px;"></div>
+        </section>
+
     </main>
-    <script type="module" src="js/admin-editor.js"></script>
+
+    <script type="module" src="./js/admin-editor.js"></script>
 </body>
 </html>
