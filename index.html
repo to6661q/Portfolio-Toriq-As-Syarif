@@ -4,32 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toriq As Syarif | Portfolio</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
     <header>
         <div class="container nav-container">
             <h1 class="logo">TAS<span>.</span></h1>
             <nav>
                 <ul class="nav-menu">
                     <li><a href="#profile">Home</a></li>
-                    <li><a href="#project">Project</a></li>
-                    <li><a href="#work">Work</a></li>
-                    <li><a href="#certification">Certs</a></li>
+                    <li><a href="#project">My Project</a></li>
+                    <li><a href="#work">Work Experience</a></li>
+                    <li><a href="#certification">Certifications</a></li>
                     <li><a href="#volunteer">Volunteer</a></li>
-                    <li><a href="login.html"><i class="fas fa-lock"></i></a></li>
+                    <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section id="profile" class="hero">
+    <section id="profile" class="hero" style="background: linear-gradient(135deg, #f4f9f8 0%, #ffffff 100%);">
         <div class="container hero-flex">
+            <div class="hero-img">
+                <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
+            </div>
             <div class="hero-text">
                 <h1>Halo, Saya <span class="highlight">Toriq As Syarif</span></h1>
-                <p id="display-headline" class="subtitle">IT Specialist</p>
-                <p id="display-about" class="about-p">Loading...</p>
+                <p id="display-headline" class="subtitle">IT Specialist & Software Developer</p>
+                <div class="hero-btns">
+                    <a href="#project" class="btn-primary">My Project</a>
+                    <a href="#work" class="btn-primary">Work Experience</a>
+                    <a href="#certification" class="btn-primary">Certifications</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="summary-box">
+                <p id="display-about">Loading summary...</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Educations</h3>
+                    <p><strong>UIN Syarif Hidayatullah Jakarta</strong></p>
+                    <p>S1 Teknik Informatika (GPA: 3.84)</p>
+                </div>
+                <div class="about-card">
+                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
+                    <ul>
+                        <li>Publikasi IEEE Xplore (2026)</li>
+                        <li>Finalis Vibecoding Competition (2026)</li>
+                    </ul>
+                </div>
+                <div class="about-card">
+                    <h3><i class="fas fa-tools"></i> Skills</h3>
+                    <div class="skill-icons">
+                        <i class="devicon-python-plain colored"></i>
+                        <i class="devicon-php-plain colored"></i>
+                        <i class="devicon-laravel-original colored"></i>
+                        <i class="devicon-docker-plain colored"></i>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <h3><i class="fas fa-share-alt"></i> Social Media</h3>
+                    <div class="social-links">
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -41,72 +93,100 @@
         </div>
     </section>
 
-    <section class="section">
+    <section id="work" class="section">
         <div class="container">
-            <h2 class="section-title">Experience & Achievements</h2>
-            <div class="timeline-grid">
-                <div>
-                    <h3>Work Experience</h3>
-                    <div id="work-list"></div>
-                </div>
-                <div>
-                    <h3>Certifications</h3>
-                    <div id="certification-list"></div>
-                </div>
-                <div>
-                    <h3>Volunteer</h3>
-                    <div id="volunteer-list"></div>
-                </div>
-            </div>
+            <h2 class="section-title">Work Experience</h2>
+            <div id="work-list" class="experience-timeline"></div>
         </div>
     </section>
+
+    <section id="certification" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Certifications</h2>
+            <div id="certification-list" class="cert-grid"></div>
+        </div>
+    </section>
+
+    <section id="volunteer" class="section">
+        <div class="container">
+            <h2 class="section-title">Volunteer Experience</h2>
+            <div id="volunteer-list" class="experience-timeline"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-nav">
+            <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
+            <div class="footer-item">
+                <a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a>
+            </div>
+            <div id="quote-display" class="footer-item quote-style"></div>
+        </div>
+    </footer>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        async function loadData() {
-            // 1. Profile
-            const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
-            if (prof) {
-                document.getElementById('display-headline').innerText = prof.headline;
-                document.getElementById('display-about').innerText = prof.about_text;
-            }
-
-            // 2. Projects
-            const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-            if (projs) {
-                document.getElementById('project-list').innerHTML = projs.map(p => `
-                    <div class="project-card">
-                        <img src="${p.image_url || 'img/default-proj.jpg'}" onerror="this.src='img/default-proj.jpg'">
-                        <div class="p-content">
-                            <h3>${p.title}</h3>
-                            <p>${p.description || ''}</p>
-                            <a href="${p.link_github}" target="_blank" class="btn-primary">GitHub</a>
-                        </div>
-                    </div>`).join('');
-            }
-
-            // 3. Timelines (Work, Certs, Vol)
-            const configs = [
-                { table: 'work_experience', el: 'work-list', t: 'job_position', s: 'company' },
-                { table: 'certifications', el: 'certification-list', t: 'name', s: 'publisher' },
-                { table: 'volunteers', el: 'volunteer-list', t: 'role', s: 'organization' }
-            ];
-
-            for (const conf of configs) {
-                const { data } = await supabase.from(conf.table).select('*').order('id', { ascending: false });
-                const container = document.getElementById(conf.el);
-                if (data && container) {
-                    container.innerHTML = data.map(d => `
-                        <div class="exp-item" style="border-left: 2px solid #006661; padding-left: 10px; margin-bottom: 15px;">
-                            <h4 style="color:#006661; margin:0;">${d[conf.t]}</h4>
-                            <small>${d[conf.s]} | ${d.duration || ''}</small>
-                            <p style="margin-top:5px; font-size:0.9rem;">${d.description || ''}</p>
-                        </div>`).join('');
-                }
+        // 1. Load Profile
+        async function loadProfile() {
+            const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
+            if (data) {
+                document.getElementById('display-headline').innerText = data.headline;
+                document.getElementById('display-about').innerText = data.about_text;
             }
         }
-        window.onload = loadData;
+
+        // 2. Load Timeline (Work, Cert, Vol)
+        async function loadTimeline(table, elementId, titleKey, orgKey) {
+            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(elementId);
+            if (data && container) {
+                container.innerHTML = data.map(item => `
+                    <div class="exp-item">
+                        <h4>${item[titleKey]}</h4>
+                        <p class="exp-meta">${item[orgKey] || ''} | ${item.duration || ''}</p>
+                        <p>${item.description || ''}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 3. Load Projects
+        async function loadProjects() {
+            const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
+            const list = document.getElementById('project-list');
+            if (data && list) {
+                list.innerHTML = data.map(item => `
+                    <div class="project-card">
+                        <div class="p-img" style="background-image: url('${item.image_url || 'img/default.jpg'}')"></div>
+                        <div class="p-content">
+                            <h3>${item.title}</h3>
+                            <p>${item.description || ''}</p>
+                            <a href="${item.link_github}" target="_blank" class="btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">GitHub</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 4. QUOTES FIXED
+        const workQuotes = [
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+            "The future depends on what you do today. - Mahatma Gandhi",
+            "Hard work beats talent when talent doesn't work hard. - Tim Notke"
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            loadProjects();
+            loadTimeline('work_experience', 'work-list', 'job_position', 'company');
+            loadTimeline('certifications', 'certification-list', 'name', 'publisher');
+            loadTimeline('volunteers', 'volunteer-list', 'role', 'organization');
+            
+            const qEl = document.getElementById('quote-display');
+            if(qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
+        });
     </script>
 </body>
 </html>
