@@ -3,141 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toriq As Syarif | IT Specialist</title>
+    <title>Toriq As Syarif | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <header>
-    <div class="container nav-flex">
-        <a href="#" class="logo">TAS<span>.</span></a>
-        <nav class="nav-links">
-            <a href="#biodata">Bio</a>
-            <a href="#experience">Experience</a>
-            <a href="#project">Project</a>
-            <a href="#contact">Contact</a>
-            <a href="login.html" title="Admin Login"><i class="fas fa-lock" style="color: var(--primary);"></i></a>
+        <div class="container nav-flex">
+            <a href="#" class="logo">TAS<span>.</span></a>
+            <nav class="nav-links">
+                <a href="#profile">Profile</a>
+                <a href="#biodata">Bio</a>
+                <a href="#experience">Experience</a>
+                <a href="#project">Project</a>
+                <a href="#contact">Contact</a>
+                <a href="login.html" class="admin-lock"><i class="fas fa-lock"></i></a>
+            </nav>
         </div>
-    </nav>
-</header>
-    <section id="profile" class="hero">
-    <div class="container">
-        <img id="display-photo" src="" class="profile-img">
-        <h1 id="display-name" style="margin: 0; font-size: 3rem;"></h1>
-        <p id="display-headline" style="font-size: 1.5rem; color: var(--primary); font-weight: 700;"></p>
-    </div>
-</section>
+    </header>
 
-<section id="biodata" class="section">
-    <div class="container">
-        <h2 class="section-title">Biodata</h2>
-        <div style="margin-bottom: 50px;">
-            <h3><i class="fas fa-info-circle"></i> Description</h3>
-            <p id="display-desc"></p>
+    <section id="profile" class="hero-section">
+        <div class="container text-center">
+            <img id="display-photo" src="img/default-profile.jpg" alt="Profile" class="profile-img">
+            <h1 id="display-name">Toriq As Syarif</h1>
+            <p id="display-headline" class="headline">IT Specialist</p>
         </div>
-        <div class="grid">
-            <div>
-                <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-                <div id="edu-list"></div>
-            </div>
-            <div>
-                <h3><i class="fas fa-trophy"></i> Achievement</h3>
-                <div id="ach-list"></div>
-            </div>
-        </div>
-        <div style="margin-top: 50px;">
-            <h3 style="text-align: center;">Skills</h3>
-            <div id="skill-list" class="skills-flex"></div>
-        </div>
-    </div>
-</section>
+    </section>
 
-<section id="experience" class="section bg-light">
-    <div class="container"><h2 class="section-title">Work Experience</h2><div id="exp-list" class="grid"></div></div>
-</section>
-<section id="cert" class="section">
-    <div class="container"><h2 class="section-title">Certifications</h2><div id="cert-list" class="grid"></div></div>
-</section>
-<section id="volunteer" class="section bg-light">
-    <div class="container"><h2 class="section-title">Volunteer</h2><div id="vol-list" class="grid"></div></div>
-</section>
-
-<section id="project" class="section">
-    <div class="container"><h2 class="section-title">Projects</h2><div id="project-list" class="grid"></div></div>
-</section>
-
-<section id="contact" class="section">
-    <div class="container">
-        <h2 class="section-title">Contact Me</h2>
-        <div id="contact-list" class="skills-flex" style="margin-bottom: 40px;"></div>
-        <div id="map" style="width: 100%; height: 400px; border-radius: 15px; overflow: hidden;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126914.34185244585!2d106.70321287114674!3d-6.25396590390176!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f156291e0a7b%3A0xc39105470691763!2sSouth%20Tangerang%20City%2C%20Banten!5e0!3m2!1sen!2sid!4v1715320000000!5m2!1sen!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-    </div>
-</section>
-
-<footer id="main-footer">
-    <div class="container">
-        <div style="font-weight: 800; font-size: 1.5rem; margin-bottom: 10px;">TAS.</div>
-        <p>@2026 Toriq As Syarif - toriqnain@gmail.com</p>
-        <p id="footer-quote" class="footer-quote"></p>
-    </div>
-</footer>
-
-<script type="module">
-    import { supabase } from './js/supabase-config.js';
-
-    const quotes = [
-        "Code is like humor. When you have to explain it, it’s bad.",
-        "First, solve the problem. Then, write the code.",
-        "Clean code always looks like it was written by someone who cares.",
-        "The best way to predict the future is to invent it.",
-        "Innovation distinguishes between a leader and a follower.",
-        "Your most unhappy customers are your greatest source of learning.",
-        "The only way to do great work is to love what you do.",
-        "Make it work, make it right, make it fast.",
-        "Technology is best when it brings people together.",
-        "Simplicity is the soul of efficiency."
-    ];
-
-    async function init() {
-        // 1. Random Quote
-        document.getElementById('footer-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-
-        // 2. Profile
-        const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
-        if (prof) {
-            document.getElementById('display-name').innerText = prof.full_name;
-            document.getElementById('display-headline').innerText = prof.headline;
-            document.getElementById('display-desc').innerText = prof.description;
-            document.getElementById('display-photo').src = prof.photo_url;
-        }
-
-        const load = async (table, elId, fn) => {
-            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-            if (data) document.getElementById(elId).innerHTML = data.map(fn).join('');
-        };
-
-        // Render sections with specific layouts
-        load('experience', 'exp-list', d => `
-            <div class="card">
-                ${d.image_url ? `<img src="${d.image_url}" class="card-img">` : ''}
-                <div class="card-body">
-                    <span style="color: var(--primary); font-weight: bold;">${d.start_date} - ${d.end_date}</span>
-                    <h4>${d.position} at ${d.company}</h4>
-                    <p>${d.description}</p>
+    <section id="biodata" class="section">
+        <div class="container">
+            <h2 class="section-title">Biodata</h2>
+            <div class="bio-grid">
+                <div class="bio-card full-width">
+                    <h3><i class="fas fa-user-tag"></i> Description</h3>
+                    <p id="display-desc" class="text-muted">Loading description...</p>
                 </div>
-            </div>`);
+                <div class="bio-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <div id="edu-list"></div>
+                </div>
+                <div class="bio-card">
+                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
+                    <div id="ach-list"></div>
+                </div>
+                <div class="bio-card full-width">
+                    <h3><i class="fas fa-laptop-code"></i> Skills</h3>
+                    <div id="skill-list" class="skills-flex"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        load('skill', 'skill-list', d => `
-            <div class="skill-item"><i class="${d.icon_class}"></i><span>${d.name}</span></div>`);
+    <section id="experience" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Work Experience</h2>
+            <div id="exp-list" class="main-grid"></div>
+        </div>
+    </section>
 
-        load('education', 'edu-list', d => `
-            <div style="margin-bottom:15px;"><b>${d.school}</b><br>${d.degree} (${d.year})</div>`);
+    <section id="cert" class="section">
+        <div class="container">
+            <h2 class="section-title">Certifications</h2>
+            <div id="cert-list" class="main-grid"></div>
+        </div>
+    </section>
 
-        // Lakukan hal yang sama untuk cert, volunteer, project, dan contact...
-    }
-    window.onload = init;
-</script>
-    </body>
+    <section id="volunteer" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Volunteer Activities</h2>
+            <div id="vol-list" class="main-grid"></div>
+        </div>
+    </section>
+
+    <section id="project" class="section">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            <div id="project-list" class="main-grid"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-wrapper">
+                <div id="socmed-list" class="socmed-flex"></div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126906.30514930113!2d106.789155!3d-6.2297465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e18d697843%3A0x696661001!2sJakarta!5e0!3m2!1sen!2sid!4v1715330000000" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container text-center">
+            <p class="copyright">@2026 Toriq As Syarif - toriqnain@gmail.com</p>
+            <p id="random-quote" class="quote">"Loading inspiration..."</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        const quotes = [
+            "First, solve the problem. Then, write the code.",
+            "Code is like humor. When you have to explain it, it’s bad.",
+            "Simplicity is the soul of efficiency.",
+            "Experience is the name everyone gives to their mistakes.",
+            "Knowledge is power, but sharing it is empowerment.",
+            "The best way to predict the future is to invent it.",
+            "Make it work, make it right, make it fast.",
+            "Clean code always looks like it was written by someone who cares.",
+            "Innovation distinguishes between a leader and a follower.",
+            "Your most unhappy customers are your greatest source of learning."
+        ];
+
+        async function init() {
+            // 1. Random Quote
+            document.getElementById('random-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+            // 2. Load Profile
+            const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
+            if (prof) {
+                document.getElementById('display-name').innerText = prof.full_name;
+                document.getElementById('display-headline').innerText = prof.headline;
+                document.getElementById('display-desc').innerText = prof.description;
+                if (prof.photo_url) document.getElementById('display-photo').src = prof.photo_url;
+            }
+
+            // Generic Fetch Helper
+            const fetchTo = async (table, elId, templateFn) => {
+                const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+                if (data) document.getElementById(elId).innerHTML = data.map(templateFn).join('');
+            };
+
+            // Section 3: Bio Details
+            fetchTo('education', 'edu-list', d => `<div class="sub-item"><strong>${d.school}</strong><br><small>${d.degree} | ${d.year}</small></div>`);
+            fetchTo('achievement', 'ach-list', d => `<div class="sub-item"><strong>${d.title}</strong><br><small>${d.publisher} (${d.date})</small></div>`);
+            fetchTo('skill', 'skill-list', d => `<div class="skill-icon"><i class="${d.icon_class}"></i><span>${d.name}</span></div>`);
+
+            // Section 4, 5, 6: Media Sections
+            const mediaTemplate = d => `
+                <div class="media-card">
+                    ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+                    <div class="media-info">
+                        <span class="date-tag">${d.start_date || d.date || ''} ${d.end_date ? '- ' + d.end_date : ''}</span>
+                        <h4>${d.title || d.position}</h4>
+                        <h5>${d.company || d.publisher || d.organization || ''}</h5>
+                        <p>${d.description || ''}</p>
+                    </div>
+                </div>`;
+            
+            fetchTo('experience', 'exp-list', mediaTemplate);
+            fetchTo('cert', 'cert-list', mediaTemplate);
+            fetchTo('volunteer', 'vol-list', mediaTemplate);
+
+            // Section 7: Project
+            fetchTo('project', 'project-list', d => `
+                <div class="media-card">
+                    <div class="media-info">
+                        <h4>${d.title}</h4>
+                        <p>${d.description}</p>
+                        <small class="tech-stack">Tech: ${d.tech_stack}</small>
+                        <a href="${d.link_github}" target="_blank" class="github-btn"><i class="fab fa-github"></i> GitHub</a>
+                    </div>
+                </div>`);
+
+            // Section 8: Contact
+            fetchTo('contact', 'socmed-list', d => `
+                <a href="${d.url}" target="_blank" class="socmed-btn"><i class="${d.icon_class}"></i> ${d.platform}</a>
+            `);
+        }
+        window.onload = init;
+    </script>
+</body>
 </html>
