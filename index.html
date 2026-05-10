@@ -119,27 +119,30 @@
         }
     }
 
-    async function loadWork() {
-        const { data } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
-        const container = document.getElementById('work-list');
-        if (data && container) {
-            container.innerHTML = data.map(item => `
-                <div class="exp-item" style="border-left: 2px solid #006661; padding-left: 20px; margin-bottom: 30px; position: relative;">
-                    <div style="width: 12px; height: 12px; background: #006661; border-radius: 50%; position: absolute; left: -7px; top: 5px;"></div>
-                    <h4 style="color: #006661; font-size: 1.1rem; margin-bottom: 5px;">${item.job_title}</h4>
-                    <p style="font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;">${item.company} | <span style="color: #666;">${item.duration}</span></p>
-                    <p style="font-size: 0.9rem; color: #555; line-height: 1.6;">${item.description || ''}</p>
-                </div>
-            `).join('');
-        }
+async function loadTimelineData(table, elementId, titleKey, orgKey) {
+    const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+    const container = document.getElementById(elementId);
+    if (data && container) {
+        container.innerHTML = data.map(item => `
+            <div class="exp-item" style="margin-bottom: 30px; border-left: 3px solid #006661; padding-left: 20px;">
+                <h4 style="color: #006661; margin-bottom: 5px;">${item[titleKey]}</h4>
+                <p class="exp-meta" style="font-weight: 600; font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                    ${item[orgKey] || ''} | ${item.duration || ''}
+                </p>
+                <p style="font-size: 0.9rem; line-height: 1.6; color: #444;">${item.description || ''}</p>
+            </div>
+        `).join('');
     }
+}
 
-  
-        // Panggil fungsi load lainnya (profile, project, etc)
-    });
-    
-    window.addEventListener('DOMContentLoaded', loadContent);   
-    loadWork();
+// Jalankan di DOMContentLoaded
+window.addEventListener('DOMContentLoaded', () => {
+    loadProfile();
+    loadProjects();
+    loadTimelineData('work_experience', 'work-list', 'job_position', 'company');
+    loadTimelineData('certifications', 'certification-list', 'name', 'publisher');
+    loadTimelineData('volunteers', 'volunteer-list', 'role', 'organization');
+});
 </script>
 </body>
 </html>
