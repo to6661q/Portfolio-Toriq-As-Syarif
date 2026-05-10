@@ -1,12 +1,12 @@
 import { supabase } from './supabase-config.js';
 
-// --- GLOBAL VARIABLES ---
+// --- 1. GLOBAL VARIABLES (Pencatat ID Edit) ---
 let editingProjectId = null;
 let editingWorkId = null;
 let editingCertId = null;
 let editingVolId = null;
 
-// --- 1. HELPER: UPLOAD GAMBAR ---
+// --- 2. HELPER: UPLOAD GAMBAR ---
 async function handleUpload(file, folder) {
     if (!file) return null;
     const path = `${folder}/${Date.now()}_${file.name}`;
@@ -19,9 +19,11 @@ async function handleUpload(file, folder) {
     return data.publicUrl;
 }
 
-// --- 2. RENDER LISTS (CRUD: READ) ---
+// --- 3. REFRESH LISTS (CRUD: READ) ---
 async function refreshLists() {
-    // Render Project
+    console.log("Syncing all data lists...");
+
+    // Render Projects
     const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
     renderToElement('list-project', projs, 'title', 'editProject', 'projects');
 
@@ -29,13 +31,13 @@ async function refreshLists() {
     const { data: works } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
     renderToElement('list-work', works, 'job_position', 'editWork', 'work_experience');
 
-    // Render Certifications (Ini yang tadi bikin error karena namanya dobel)
-    const { data: allCerts } = await supabase.from('certifications').select('*').order('id', { ascending: false });
-    renderToElement('list-certification', allCerts, 'name', 'editCertification', 'certifications');
+    // Render Certifications (Variabel diubah jadi 'certData' agar tidak bentrok)
+    const { data: certData } = await supabase.from('certifications').select('*').order('id', { ascending: false });
+    renderToElement('list-certification', certData, 'name', 'editCertification', 'certifications');
 
-    // Render Volunteers
-    const { data: allVols } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
-    renderToElement('list-volunteer', allVols, 'role', 'editVolunteer', 'volunteers');
+    // Render Volunteers (Variabel diubah jadi 'volData')
+    const { data: volData } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
+    renderToElement('list-volunteer', volData, 'role', 'editVolunteer', 'volunteers');
 }
 
 function renderToElement(elId, data, key, editFuncName, tableName) {
@@ -48,23 +50,22 @@ function renderToElement(elId, data, key, editFuncName, tableName) {
         div.innerHTML = `
             <span>${item[key]}</span>
             <div class="actions">
-                <button type="button" class="btn-edit" onclick="${editFuncName}(${item.id})">Edit</button>
-                <button type="button" class="btn-delete" onclick="deleteItem('${tableName}', ${item.id})">Delete</button>
+                <button type="button" class="btn-edit" onclick="window.${editFuncName}(${item.id})">Edit</button>
+                <button type="button" class="btn-delete" onclick="window.deleteItem('${tableName}', ${item.id})">Delete</button>
             </div>`;
         el.appendChild(div);
     });
 }
 
-// --- 3. ACTIONS (CRUD: DELETE) ---
+// --- 4. ACTIONS (DELETE & EDIT) ---
 window.deleteItem = async (table, id) => {
-    if (confirm('Are you sure you want to delete this?')) {
+    if (confirm('Hapus data ini?')) {
         const { error } = await supabase.from(table).delete().eq('id', id);
         if (error) alert(error.message);
         else refreshLists();
     }
 };
 
-// --- 4. PREPARE EDIT (CRUD: UPDATE MODE) ---
 window.editProject = async (id) => {
     const { data } = await supabase.from('projects').select('*').eq('id', id).single();
     if (data) {
@@ -73,7 +74,8 @@ window.editProject = async (id) => {
         document.getElementById('p-tech').value = data.tech_stack?.join(', ') || '';
         document.getElementById('p-desc').value = data.description || '';
         document.getElementById('p-link').value = data.link_github || '';
-        document.querySelector('#project-form button').innerText = "Update Project";
+        const btn = document.querySelector('#project-form button');
+        btn.innerText = "Update Project"; btn.style.background = "#ffc107";
         document.getElementById('project').scrollIntoView({ behavior: 'smooth' });
     }
 };
@@ -86,7 +88,8 @@ window.editWork = async (id) => {
         document.getElementById('e-company').value = data.company;
         document.getElementById('e-duration').value = data.duration;
         document.getElementById('e-desc').value = data.description || '';
-        document.querySelector('#work-form button').innerText = "Update Work";
+        const btn = document.querySelector('#work-form button');
+        btn.innerText = "Update Work"; btn.style.background = "#ffc107";
         document.getElementById('work').scrollIntoView({ behavior: 'smooth' });
     }
 };
@@ -98,7 +101,8 @@ window.editCertification = async (id) => {
         document.getElementById('c-title').value = data.name;
         document.getElementById('c-issuer').value = data.publisher;
         document.getElementById('c-desc').value = data.description || '';
-        document.querySelector('#certification-form button').innerText = "Update Certification";
+        const btn = document.querySelector('#certification-form button');
+        btn.innerText = "Update Certification"; btn.style.background = "#ffc107";
         document.getElementById('certification').scrollIntoView({ behavior: 'smooth' });
     }
 };
@@ -111,115 +115,95 @@ window.editVolunteer = async (id) => {
         document.getElementById('v-org').value = data.organization;
         document.getElementById('v-duration').value = data.duration;
         document.getElementById('v-desc').value = data.description || '';
-        document.querySelector('#volunteer-form button').innerText = "Update Volunteer";
+        const btn = document.querySelector('#volunteer-form button');
+        btn.innerText = "Update Volunteer"; btn.style.background = "#ffc107";
         document.getElementById('volunteer').scrollIntoView({ behavior: 'smooth' });
     }
 };
 
-// --- 5. SUBMIT HANDLERS (CRUD: CREATE & UPDATE) ---
+// --- 5. SUBMIT HANDLERS ---
 
-// Project Submit
-document.getElementById('project-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Processing...';
-    const imgUrl = await handleUpload(document.getElementById('p-img').files[0], 'projects');
-    const payload = {
-        title: document.getElementById('p-title').value,
-        tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
-        description: document.getElementById('p-desc').value,
-        link_github: document.getElementById('p-link').value
+const processSubmit = async (formId, type, table, payloadFn, editingVar, btnText) => {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = 'Processing...';
+
+        const payload = await payloadFn();
+        
+        let error;
+        if (type === 'project' ? editingProjectId : type === 'work' ? editingWorkId : type === 'cert' ? editingCertId : editingVolId) {
+            const id = type === 'project' ? editingProjectId : type === 'work' ? editingWorkId : type === 'cert' ? editingCertId : editingVolId;
+            const res = await supabase.from(table).update(payload).eq('id', id);
+            error = res.error;
+        } else {
+            const res = await supabase.from(table).insert([payload]);
+            error = res.error;
+        }
+
+        if (error) {
+            alert("Error: " + error.message);
+        } else {
+            alert("Success!");
+            // Reset pencatat ID
+            if (type === 'project') editingProjectId = null;
+            if (type === 'work') editingWorkId = null;
+            if (type === 'cert') editingCertId = null;
+            if (type === 'vol') editingVolId = null;
+            
+            e.target.reset();
+            btn.innerText = btnText;
+            btn.style.background = "#006661";
+            refreshLists();
+        }
     };
-    if (imgUrl) payload.image_url = imgUrl;
-
-    if (editingProjectId) {
-        await supabase.from('projects').update(payload).eq('id', editingProjectId);
-        editingProjectId = null;
-    } else {
-        await supabase.from('projects').insert([payload]);
-    }
-    e.target.reset(); btn.innerText = "Add Project"; refreshLists(); alert("Success!");
 };
 
-// Work Submit
-document.getElementById('work-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Processing...';
-    const imgUrl = await handleUpload(document.getElementById('e-img').files[0], 'work');
-    const payload = {
-        job_position: document.getElementById('e-title').value,
-        company: document.getElementById('e-company').value,
-        duration: document.getElementById('e-duration').value,
-        description: document.getElementById('e-desc').value
-    };
-    if (imgUrl) payload.image_url = imgUrl;
+// Inisialisasi semua form submit
+processSubmit('project-form', 'project', 'projects', async () => ({
+    title: document.getElementById('p-title').value,
+    tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
+    description: document.getElementById('p-desc').value,
+    link_github: document.getElementById('p-link').value,
+    image_url: await handleUpload(document.getElementById('p-img').files[0], 'projects')
+}), editingProjectId, "Add Project");
 
-    if (editingWorkId) {
-        await supabase.from('work_experience').update(payload).eq('id', editingWorkId);
-        editingWorkId = null;
-    } else {
-        await supabase.from('work_experience').insert([payload]);
-    }
-    e.target.reset(); btn.innerText = "Add Work"; refreshLists(); alert("Success!");
-};
+processSubmit('work-form', 'work', 'work_experience', async () => ({
+    job_position: document.getElementById('e-title').value,
+    company: document.getElementById('e-company').value,
+    duration: document.getElementById('e-duration').value,
+    description: document.getElementById('e-desc').value,
+    image_url: await handleUpload(document.getElementById('e-img').files[0], 'work')
+}), editingWorkId, "Add Work Experience");
 
-// Certification Submit
-document.getElementById('certification-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Processing...';
-    const imgUrl = await handleUpload(document.getElementById('c-img').files[0], 'certs');
-    const payload = {
-        name: document.getElementById('c-title').value,
-        publisher: document.getElementById('c-issuer').value,
-        description: document.getElementById('c-desc').value
-    };
-    if (imgUrl) payload.image_url = imgUrl;
+processSubmit('certification-form', 'cert', 'certifications', async () => ({
+    name: document.getElementById('c-title').value,
+    publisher: document.getElementById('c-issuer').value,
+    description: document.getElementById('c-desc').value,
+    image_url: await handleUpload(document.getElementById('c-img').files[0], 'certs')
+}), editingCertId, "Add Certification");
 
-    if (editingCertId) {
-        await supabase.from('certifications').update(payload).eq('id', editingCertId);
-        editingCertId = null;
-    } else {
-        await supabase.from('certifications').insert([payload]);
-    }
-    e.target.reset(); btn.innerText = "Add Certification"; refreshLists(); alert("Success!");
-};
-
-// Volunteer Submit
-document.getElementById('volunteer-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Processing...';
-    const imgUrl = await handleUpload(document.getElementById('v-img').files[0], 'volunteer');
-    const payload = {
-        role: document.getElementById('v-title').value,
-        organization: document.getElementById('v-org').value,
-        duration: document.getElementById('v-duration').value,
-        description: document.getElementById('v-desc').value
-    };
-    if (imgUrl) payload.image_url = imgUrl;
-
-    if (editingVolId) {
-        await supabase.from('volunteers').update(payload).eq('id', editingVolId);
-        editingVolId = null;
-    } else {
-        await supabase.from('volunteers').insert([payload]);
-    }
-    e.target.reset(); btn.innerText = "Add Volunteer"; refreshLists(); alert("Success!");
-};
+processSubmit('volunteer-form', 'vol', 'volunteers', async () => ({
+    role: document.getElementById('v-title').value,
+    organization: document.getElementById('v-org').value,
+    duration: document.getElementById('v-duration').value,
+    description: document.getElementById('v-desc').value,
+    image_url: await handleUpload(document.getElementById('v-img').files[0], 'volunteer')
+}), editingVolId, "Add Volunteer");
 
 // Profile Submit
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from('profiles').upsert({
+    await supabase.from('profiles').upsert({
         id: 1,
         headline: document.getElementById('headline').value,
         about_text: document.getElementById('about_text').value
     });
-    if (error) alert(error.message);
-    else alert("Profile Updated!");
+    alert("Profile Updated!");
 };
 
-// --- INITIAL LOAD ---
+// Start
 window.onload = refreshLists;
