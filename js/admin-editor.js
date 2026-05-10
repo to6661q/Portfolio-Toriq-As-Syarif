@@ -1,130 +1,103 @@
 import { supabase } from './supabase-config.js';
 
-// --- 1. PROTECTIONS ---
-async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) window.location.href = 'login.html';
-}
-checkUser();
+let editingProjectId = null;
 
-document.getElementById('logout-btn').onclick = async () => {
-    await supabase.auth.signOut();
-    window.location.href = 'login.html';
-};
-
-// --- 2. UPLOAD HELPER ---
+// --- 1. UPLOAD HELPER ---
 async function handleUpload(file, folder) {
     if (!file) return null;
-    // Pastikan bucket 'portfolio_assets' sudah dibuat di Supabase Storage
-    const path = `${folder}/${Date.now()}_${file.name}`;
-    const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
-    if (error) {
-        console.error("Upload Error:", error.message);
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+        .from('portfolio_assets')
+        .upload(filePath, file);
+
+    if (uploadError) {
+        console.error("Upload failed:", uploadError);
         return null;
     }
-    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
+
+    // Ambil URL Publik
+    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(filePath);
     return data.publicUrl;
 }
 
-// --- 3. REFRESH & RENDER ---
+// --- 2. REFRESH & RENDER ---
 async function refreshLists() {
-    console.log("Refreshing all lists...");
-    
-    // Project List
     const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    if (document.getElementById('total-project')) document.getElementById('total-project').innerText = projs?.length || 0;
-    render('list-project', projs, 'projects', 'title');
-
-    // Work List
-    const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
-    if (document.getElementById('total-work')) document.getElementById('total-work').innerText = exps?.length || 0;
-    render('list-work', exps, 'work_experience', 'job_title');
-
-    // Certification List
-    const { data: certs } = await supabase.from('certifications').select('*').order('id', { ascending: false });
-    if (document.getElementById('total-certification')) document.getElementById('total-certification').innerText = certs?.length || 0;
-    render('list-certification', certs, 'certifications', 'name');
-
-    // Volunteer List
-    const { data: vols } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
-    if (document.getElementById('total-volunteer')) document.getElementById('total-volunteer').innerText = vols?.length || 0;
-    render('list-volunteer', vols, 'volunteers', 'role');
-}
-
-function render(id, data, table, key) {
-    const el = document.getElementById(id);
-    if (!el) return; // Mencegah error jika ID tidak ada di HTML
-    
-    el.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
-    data?.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'manage-item';
-        div.innerHTML = `
-            <span>${item[key]}</span> 
-            <button class="btn-delete" data-id="${item.id}" data-table="${table}">Delete</button>
-        `;
-        el.appendChild(div);
-    });
-
-    el.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.onclick = async () => {
-            if (confirm('Delete this record?')) {
-                await supabase.from(btn.dataset.table).delete().eq('id', btn.dataset.id);
-                refreshLists();
-            }
-        };
-    });
-}
-
-// --- 4. FORM SUBMITS ---
-
-// Profile
-const profileForm = document.getElementById('profile-form');
-if (profileForm) {
-    profileForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const { error } = await supabase.from('profiles').upsert({
-            id: 1,
-            full_name: "Toriq As Syarif",
-            headline: document.getElementById('headline').value,
-            about_text: document.getElementById('about_text').value
+    const listEl = document.getElementById('list-project');
+    if (listEl) {
+        listEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
+        projs?.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'manage-item';
+            div.innerHTML = `
+                <span>${item.title}</span>
+                <div class="actions">
+                    <button type="button" class="btn-edit" onclick="editProject(${item.id})">Edit</button>
+                    <button type="button" class="btn-delete" onclick="deleteItem('projects', ${item.id})">Delete</button>
+                </div>`;
+            listEl.appendChild(div);
         });
-        if (error) alert(error.message);
-        else alert("Profile Updated!");
-    };
+    }
 }
 
-// Project (PERBAIKAN DI SINI)
-const projectForm = document.getElementById('project-form');
-if (projectForm) {
-    projectForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button');
-        btn.innerText = 'Adding...';
+// Global functions agar bisa dipanggil dari HTML
+window.deleteItem = async (table, id) => {
+    if (confirm('Delete?')) {
+        await supabase.from(table).delete().eq('id', id);
+        refreshLists();
+    }
+};
 
-        try {
-            const imgFile = document.getElementById('p-img').files[0];
-            const imgUrl = await handleUpload(imgFile, 'projects');
+window.editProject = async (id) => {
+    const { data: item } = await supabase.from('projects').select('*').eq('id', id).single();
+    if (item) {
+        editingProjectId = item.id;
+        document.getElementById('p-title').value = item.title;
+        document.getElementById('p-tech').value = item.tech_stack?.join(', ') || '';
+        document.getElementById('p-desc').value = item.description || '';
+        document.getElementById('p-link').value = item.link_github || '';
+        
+        const btn = document.querySelector('#project-form button[type="submit"]');
+        btn.innerText = "Update Project";
+        btn.style.background = "#ffc107";
+        document.getElementById('project').scrollIntoView({ behavior: 'smooth' });
+    }
+};
 
-            const { error } = await supabase.from('projects').insert([{
-                title: document.getElementById('p-title').value,
-                tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
-                description: document.getElementById('p-desc').value,
-                link_github: document.getElementById('p-link').value,
-                image_url: imgUrl
-            }]);
+// --- 3. SUBMIT HANDLER ---
+document.getElementById('project-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.innerText = 'Processing...';
 
-            if (error) throw error;
-            alert("Project Added!");
-            e.target.reset();
-            refreshLists();
-        } catch (err) {
-            alert("Error: " + err.message);
-        } finally {
-            btn.innerText = 'Add Project';
-        }
+    const imgFile = document.getElementById('p-img').files[0];
+    const imgUrl = await handleUpload(imgFile, 'projects');
+
+    const payload = {
+        title: document.getElementById('p-title').value,
+        tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
+        description: document.getElementById('p-desc').value,
+        link_github: document.getElementById('p-link').value
     };
-}
+    
+    // Hanya update image_url jika ada file baru yang diupload
+    if (imgUrl) payload.image_url = imgUrl;
 
-// Jalankan Refresh saat awal
+    if (editingProjectId) {
+        await supabase.from('projects').update(payload).eq('id', editingProjectId);
+        editingProjectId = null;
+    } else {
+        await supabase.from('projects').insert([payload]);
+    }
+
+    alert("Success!");
+    btn.innerText = "Add Project";
+    btn.style.background = "#006661";
+    e.target.reset();
+    refreshLists();
+};
+
 window.onload = refreshLists;
