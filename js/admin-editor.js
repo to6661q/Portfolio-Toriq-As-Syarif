@@ -218,5 +218,24 @@ initGenericForm('contact-form', 'contact', 'contact', () => ({
     icon_class: document.getElementById('co-icon').value,
     url: document.getElementById('co-url').value
 }));
+// --- LOGIKA LOGOUT ---
+const logoutBtn = document.getElementById('btn-logout');
 
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault(); // Mencegah link pindah halaman sebelum proses selesai
+
+        if (confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
+            const { error } = await supabase.auth.signOut();
+
+            if (error) {
+                alert("Gagal Logout: " + error.message);
+            } else {
+                alert("Berhasil Logout. Mengalihkan ke halaman login...");
+                // Arahkan kembali ke halaman login atau index
+                window.location.href = 'login.html'; 
+            }
+        }
+    });
+}
 window.onload = refreshAll;
