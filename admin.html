@@ -69,27 +69,35 @@
             </form>
             <div class="list-container" id="list-project"></div>
         </section>
-
-<section id="work" class="card">
+        <section id="work" class="card">
     <div class="card-title">
         <span><i class="fas fa-briefcase"></i> Work Experience Management</span>
         <div class="stats-group">
             <span class="badge-total">Experiences: <span id="total-work">0</span></span>
-            <span class="badge-total">Total Duration: <span id="total-duration">0</span> Years</span>
         </div>
     </div>
-    <form id="work-form">
-        <div class="form-row">
-            <div class="form-group"><label>Job Position</label><input type="text" id="w-position" required></div>
+    <form id="work-form"> <div class="form-row">
+            <div class="form-group"><label>Job Position</label><input type="text" id="w-title" required></div>
             <div class="form-group"><label>Company</label><input type="text" id="w-company"></div>
         </div>
-        <div class="form-group"><label>Duration (Format: YYYY - YYYY / Present)</label><input type="text" id="w-duration" placeholder="e.g. 2022 - 2025"></div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" id="w-start-date" required>
+            </div>
+            <div class="form-group">
+                <label>End Date (Kosongkan jika masih bekerja)</label>
+                <input type="date" id="w-end-date">
+            </div>
+        </div>
         <div class="form-group"><label>Description Work Experience</label><textarea id="w-desc" rows="3"></textarea></div>
         <div class="form-group"><label>Image Work Experience</label><input type="file" id="w-img" accept="image/*"></div>
         <button type="submit" class="btn-primary">Add Work Experience</button>
     </form>
     <div class="list-container" id="list-work"></div>
 </section>
+
+        
 
         <section id="certification" class="card">
             <div class="card-title">
