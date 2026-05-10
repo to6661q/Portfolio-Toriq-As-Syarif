@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toriq As Syarif | Portfolio</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,13 +23,12 @@
                     <li><a href="#work">Work Experience</a></li>
                     <li><a href="#certification">Certifications</a></li>
                     <li><a href="#volunteer">Volunteer</a></li>
-                    <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section id="profile" class="hero" style="background: linear-gradient(135deg, #f4f9f8 0%, #ffffff 100%);">
+    <section id="profile" class="hero">
         <div class="container hero-flex">
             <div class="hero-img">
                 <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
@@ -50,83 +51,170 @@
             <div class="summary-box">
                 <p id="display-about">Loading summary...</p>
             </div>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Educations</h3>
+                    <p><strong>UIN Syarif Hidayatullah Jakarta</strong></p>
+                    <p>S1 Teknik Informatika (GPA: 3.84)</p>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
+                    <ul>
+                        <li>Publikasi IEEE Xplore - Outlier Handling Optimization (2026)</li>
+                        <li>Finalis Vibecoding Competition Ramadhan (2026)</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-tools"></i> Skills</h3>
+                    <div class="skill-icons">
+                        <i class="devicon-python-plain colored" title="Python"></i>
+                        <i class="devicon-php-plain colored" title="PHP"></i>
+                        <i class="devicon-laravel-original colored" title="Laravel"></i>
+                        <i class="devicon-docker-plain colored" title="Docker"></i>
+                        <i class="devicon-kubernetes-plain colored" title="Kubernetes"></i>
+                        <i class="devicon-kotlin-plain colored" title="Kotlin"></i>
+                    </div>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-share-alt"></i> Social Media</h3>
+                    <div class="social-links">
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/toriq-as-syarif" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="mailto:toriqnain@gmail.com"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
             </div>
+        </div>
     </section>
 
     <section id="project" class="section bg-light">
         <div class="container">
             <h2 class="section-title">My Project</h2>
-            <div id="project-list" class="project-grid"></div>
+            <div id="project-list" class="project-grid">
+                </div>
         </div>
     </section>
 
     <section id="work" class="section">
         <div class="container">
             <h2 class="section-title">Work Experience</h2>
-            <div id="work-list" class="experience-timeline"></div>
+            <div id="work-list" class="experience-timeline">
+                </div>
         </div>
     </section>
 
     <section id="certification" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Certifications</h2>
-            <div id="certification-list" class="cert-grid"></div>
+            <div id="certification-list" class="cert-grid">
+                </div>
         </div>
     </section>
 
     <section id="volunteer" class="section">
         <div class="container">
             <h2 class="section-title">Volunteer Experience</h2>
-            <div id="volunteer-list" class="experience-timeline"></div>
+            <div id="volunteer-list" class="experience-timeline">
+                </div>
         </div>
     </section>
 
     <footer>
-        <div class="container footer-nav" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;">
+        <div class="container footer-nav">
             <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
-            <div class="footer-item"><a href="mailto:toriqnain@gmail.com" style="color: #80cbc4; text-decoration: none;">toriqnain@gmail.com</a></div>
-            <div id="quote-display" class="footer-item" style="font-style: italic; opacity: 0.8; font-size: 0.9rem;"></div>
+            <div class="footer-item">
+                <a href="mailto:toriqnain@gmail.com" class="email-link">toriqnain@gmail.com</a>
+            </div>
+            <div id="quote-display" class="footer-item quote-style"></div>
         </div>
     </footer>
 
     <script type="module">
-    import { supabase } from './js/supabase-config.js';
+        import { supabase } from './js/supabase-config.js';
 
-    async function init() {
-        // Profile
-        const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
-        if (prof) {
-            document.getElementById('display-headline').innerText = prof.headline;
-            document.getElementById('display-about').innerText = prof.about_text;
+        // 1. Ambil Data Profil (Headline & Summary)
+        async function loadProfile() {
+            const { data, error } = await supabase.from('profiles').select('*').eq('id', 1).single();
+            if (data) {
+                const headlineEl = document.getElementById('display-headline');
+                const aboutEl = document.getElementById('display-about');
+                if (headlineEl) headlineEl.innerText = data.headline;
+                if (aboutEl) aboutEl.innerText = data.about_text;
+            }
         }
 
-        // Projects
-        const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        document.getElementById('project-list').innerHTML = projs.map(p => `
-            <div class="card">
-                <img src="${p.image_url || 'img/default.jpg'}" style="width:100%; height:180px; object-fit:cover;">
-                <h3>${p.title}</h3>
-                <p>${p.description}</p>
-            </div>`).join('');
+        // 2. Ambil Data Projects (Tabel: projects)
+        async function loadProjects() {
+            const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
+            const list = document.getElementById('project-list');
+            if (data && list) {
+                list.innerHTML = data.map(item => `
+                    <div class="project-card">
+                        <div class="p-img" style="background-image: url('${item.image_url || 'img/default.jpg'}')"></div>
+                        <div class="p-content">
+                            <h3>${item.title}</h3>
+                            <p>${item.description || ''}</p>
+                            <div class="badges">${item.tech_stack ? item.tech_stack.map(t => `<span class="badge">${t}</span>`).join('') : ''}</div>
+                            <a href="${item.link_github}" target="_blank" class="btn-primary" style="padding: 5px 15px; font-size: 0.8rem;">GitHub</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
 
-        // Timelines
-        const configs = [
-            { t: 'work_experience', el: 'work-list', k1: 'job_position', k2: 'company' },
-            { t: 'certifications', el: 'certification-list', k1: 'name', k2: 'publisher' },
-            { t: 'volunteers', el: 'volunteer-list', k1: 'role', k2: 'organization' }
+        // 3. Ambil Data Timeline (Work, Cert, Volunteer)
+        // Disesuaikan dengan nama tabel di SQL kita (work_experience, certifications, volunteers)
+        async function loadTimelineData(table, elementId, titleField, orgField) {
+            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(elementId);
+            if (data && container) {
+                container.innerHTML = data.map(item => `
+                    <div class="exp-item">
+                        <h4>${item[titleField]}</h4>
+                        <p class="exp-meta">${item[orgField] || ''} | ${item.duration || ''}</p>
+                        <p>${item.description || ''}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 4. Logika Quotes Random
+        const workQuotes = [
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "Success is not final; failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+            "Quality is not an act, it is a habit. - Aristotle",
+            "The future depends on what you do today. - Mahatma Gandhi",
+            "Pleasure in the job puts perfection in the work. - Aristotle",
+            "Opportunity is missed by most people because it is dressed in overalls and looks like work. - Thomas Edison",
+            "Hard work beats talent when talent doesn't work hard. - Tim Notke",
+            "Work to become, not to acquire. - Elbert Hubbard",
+            "Your talent determines what you can do. Your motivation determines how much you are willing to do. - Lou Holtz",
+            "Success is the sum of small efforts, repeated day-in and day-out. - Robert Collier"
         ];
 
-        for (const c of configs) {
-            const { data } = await supabase.from(c.t).select('*').order('id', { ascending: false });
-            document.getElementById(c.el).innerHTML = data.map(d => `
-                <div class="exp-item" style="border-left:3px solid #006661; padding-left:15px; margin-bottom:20px;">
-                    <h4 style="color:#006661;">${d[c.k1]}</h4>
-                    <p><b>${d[c.k2]}</b> | ${d.duration || ''}</p>
-                    <p>${d.description || ''}</p>
-                </div>`).join('');
+        function showRandomQuote() {
+            const quoteEl = document.getElementById('quote-display');
+            if(quoteEl) {
+                const randomIndex = Math.floor(Math.random() * workQuotes.length);
+                quoteEl.innerText = `"${workQuotes[randomIndex]}"`;
+            }
         }
-    }
-    window.onload = init;
-</script>
+
+        // JALANKAN SEMUA FUNGSI
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            loadProjects();
+            // Sesuaikan parameter: table_name, element_id, title_column, org_column
+            loadTimelineData('work_experience', 'work-list', 'job_position', 'company');
+            loadTimelineData('certifications', 'certification-list', 'name', 'publisher');
+            loadTimelineData('volunteers', 'volunteer-list', 'role', 'organization');
+            showRandomQuote();
+        });
+
+    </script>
 </body>
 </html>
