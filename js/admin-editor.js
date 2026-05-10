@@ -1,67 +1,83 @@
 import { supabase } from './supabase-config.js';
 
-let editingId = { project: null, work: null, certification: null, volunteer: null };
+console.log("Script Admin Editor Dimulai...");
 
-// --- FUNGSI REFRESH LIST ---
-async function refreshLists() {
-    console.log("Memulai Refresh...");
-    await renderList('projects', 'list-project', 'title', 'project');
-    await renderList('work_experience', 'list-work', 'job_position', 'work');
-    await renderList('certifications', 'list-certification', 'name', 'certification');
-    await renderList('volunteers', 'list-volunteer', 'role', 'volunteer');
+// --- 1. CEK STATUS LOGIN ---
+async function checkUser() {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) {
+        alert("Sesi Login Habis / Tidak Terdeteksi. Silakan Login Kembali.");
+        window.location.href = 'login.html';
+    } else {
+        console.log("User Terautentikasi:", user.email);
+        refreshLists();
+    }
 }
 
-async function renderList(table, elId, titleKey, type) {
-    const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
-    const el = document.getElementById(elId);
-    if (!el || error) return;
+// --- 2. FUNGSI REFRESH (DENGAN ALERT ERROR) ---
+async function refreshLists() {
+    console.log("Memulai Refresh Data...");
+    
+    // Project
+    const { data: projs, error: pErr } = await supabase.from('projects').select('*').order('id', { ascending: false });
+    if (pErr) console.error("Gagal muat Projects:", pErr.message);
+    render('list-project', projs, 'projects', 'title', 'project');
 
-    if (document.getElementById(`total-${type}`)) document.getElementById(`total-${type}`).innerText = data.length;
+    // Work
+    const { data: exps, error: wErr } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
+    if (wErr) console.error("Gagal muat Work:", wErr.message);
+    render('list-work', exps, 'work_experience', 'job_position', 'work');
 
-    el.innerHTML = data.map(item => `
+    // Certification
+    const { data: certs, error: cErr } = await supabase.from('certifications').select('*').order('id', { ascending: false });
+    if (cErr) console.error("Gagal muat Certs:", cErr.message);
+    render('list-certification', certs, 'certifications', 'name', 'certification');
+
+    // Volunteer
+    const { data: vols, error: vErr } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
+    if (vErr) console.error("Gagal muat Vol:", vErr.message);
+    render('list-volunteer', vols, 'volunteers', 'role', 'volunteer');
+}
+
+function render(id, data, table, key, type) {
+    const el = document.getElementById(id);
+    if (!el) {
+        console.warn(`Elemen dengan ID ${id} tidak ditemukan di HTML!`);
+        return;
+    }
+    
+    const counter = document.getElementById(`total-${type}`);
+    if (counter) counter.innerText = data?.length || 0;
+
+    el.innerHTML = `<h4 class="list-head">Data Tersimpan:</h4>`;
+    if (!data || data.length === 0) {
+        el.innerHTML += `<p style="color:gray; font-style:italic; padding:10px;">Belum ada data.</p>`;
+        return;
+    }
+
+    el.innerHTML += data.map(item => `
         <div class="manage-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
-            <span>${item[titleKey]}</span>
-            <div>
-                <button type="button" onclick="window.prepareEdit('${type}', ${item.id})">Edit</button>
-                <button type="button" onclick="window.deleteItem('${table}', ${item.id})" style="background:red;color:white">Del</button>
-            </div>
+            <span>${item[key]}</span>
+            <button onclick="window.deleteItem('${table}', ${item.id})" style="background:#ff4757; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Hapus</button>
         </div>
     `).join('');
 }
 
-// --- AKSI GLOBAL ---
+// --- 3. AKSI GLOBAL ---
 window.deleteItem = async (table, id) => {
-    if (confirm('Hapus data?')) {
-        await supabase.from(table).delete().eq('id', id);
+    if (confirm('Hapus data ini?')) {
+        const { error } = await supabase.from(table).delete().eq('id', id);
+        if (error) alert("Gagal Hapus: " + error.message);
         refreshLists();
     }
 };
 
-window.prepareEdit = async (type, id) => {
-    const tableMap = { project: 'projects', work: 'work_experience', certification: 'certifications', volunteer: 'volunteers' };
-    const { data } = await supabase.from(tableMap[type]).select('*').eq('id', id).single();
-    if (data) {
-        editingId[type] = data.id;
-        if (type === 'project') {
-            document.getElementById('p-title').value = data.title;
-            document.getElementById('p-tech').value = data.tech_stack?.join(', ') || '';
-            document.getElementById('p-desc').value = data.description;
-            document.getElementById('p-link').value = data.link_github;
-            document.querySelector('#project-form button').innerText = "Update Project";
-        }
-        // ... Logika edit untuk work, cert, volunteer bisa ditambahkan polanya sama ...
-        document.getElementById(type).scrollIntoView({ behavior: 'smooth' });
-    }
-};
-
-// --- SUBMIT HANDLING (PROJECT) ---
+// --- 4. HANDLER SUBMIT (DENGAN ALERT STATUS) ---
 const projectForm = document.getElementById('project-form');
 if (projectForm) {
-    projectForm.addEventListener('submit', async (e) => {
+    projectForm.onsubmit = async (e) => {
         e.preventDefault();
-        console.log("Submit Project Dimulai...");
-        const btn = e.target.querySelector('button');
-        btn.innerText = "Processing...";
+        alert("Tombol Add Project Diklik! Memulai proses simpan...");
 
         const payload = {
             title: document.getElementById('p-title').value,
@@ -70,43 +86,22 @@ if (projectForm) {
             link_github: document.getElementById('p-link').value
         };
 
-        try {
-            let error;
-            if (editingId.project) {
-                const res = await supabase.from('projects').update(payload).eq('id', editingId.project);
-                error = res.error;
-            } else {
-                const res = await supabase.from('projects').insert([payload]);
-                error = res.error;
-            }
+        console.log("Mengirim Payload:", payload);
 
-            if (error) throw error;
+        const { data, error } = await supabase.from('projects').insert([payload]);
 
-            alert("Berhasil!");
-            editingId.project = null;
-            btn.innerText = "Add Project";
+        if (error) {
+            console.error("Error Supabase:", error);
+            alert("GAGAL SIMPAN: " + error.message + "\n\nCek apakah nama tabel 'projects' sudah benar di database.");
+        } else {
+            alert("BERHASIL! Data telah masuk ke database.");
             e.target.reset();
             refreshLists();
-        } catch (err) {
-            console.error("Gagal Simpan:", err);
-            alert("Error: " + err.message);
         }
-    });
+    };
 }
 
-// --- SUBMIT HANDLING (PROFILE) ---
-const profileForm = document.getElementById('profile-form');
-if (profileForm) {
-    profileForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const { error } = await supabase.from('profiles').upsert({
-            id: 1,
-            headline: document.getElementById('headline').value,
-            about_text: document.getElementById('about_text').value
-        });
-        if (error) alert(error.message);
-        else alert("Profile Updated!");
-    });
-}
+// Handler untuk form lain (Work, Cert, Volunteer) mengikuti pola yang sama...
 
-window.onload = refreshLists;
+// Jalankan pengecekan user saat halaman dimuat
+checkUser();
