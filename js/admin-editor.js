@@ -17,10 +17,33 @@ document.getElementById('logout-btn').onclick = async () => {
 // --- 2. UPLOAD HELPER ---
 async function handleUpload(file, folder) {
     if (!file) return null;
-    const path = `${folder}/${Date.now()}_${file.name}`;
-    const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
-    if (error) return null;
-    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
+
+    // 1. Definisikan Path (Folder/NamaFile)
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
+
+    // 2. Upload file ke Supabase Storage
+    const { error: uploadError } = await supabase.storage
+        .from('portfolio_assets')
+        .upload(filePath, file);
+
+    if (uploadError) {
+        console.error("Upload Error Details:", uploadError);
+        return null;
+    }
+
+    // 3. Ambil Public URL yang benar-benar bersih
+    const { data } = supabase.storage
+        .from('portfolio_assets')
+        .getPublicUrl(filePath);
+
+    if (!data || !data.publicUrl) {
+        console.error("Gagal mendapatkan Public URL");
+        return null;
+    }
+
+    console.log("Image Uploaded Successfully:", data.publicUrl);
     return data.publicUrl;
 }
 
