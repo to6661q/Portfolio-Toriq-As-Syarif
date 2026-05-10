@@ -1,174 +1,161 @@
 import { supabase } from './supabase-config.js';
 
-let editingProjectId = null;
+let editingId = { work: null, certification: null, volunteer: null, project: null };
 
-// --- 1. UPLOAD HELPER ---
+// --- PROTECTIONS ---
+async function checkUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) window.location.href = 'login.html';
+}
+checkUser();
+
+document.getElementById('logout-btn').onclick = async () => {
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+};
+
+// --- HELPER: UPLOAD ---
 async function handleUpload(file, folder) {
     if (!file) return null;
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `${folder}/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-        .from('portfolio_assets')
-        .upload(filePath, file);
-
-    if (uploadError) {
-        console.error("Upload failed:", uploadError);
-        return null;
-    }
-
-    // Ambil URL Publik
-    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(filePath);
+    const path = `${folder}/${Date.now()}_${file.name}`;
+    const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
+    if (error) return null;
+    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
     return data.publicUrl;
 }
-// --- 2. REFRESH & RENDER ---
+
+// --- REFRESH & RENDER ---
 async function refreshLists() {
-    const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    const listEl = document.getElementById('list-project');
-    if (listEl) {
-        listEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
-        projs?.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'manage-item';
-            div.innerHTML = `
-                <span>${item.title}</span>
-                <div class="actions">
-                    <button type="button" class="btn-edit" onclick="editProject(${item.id})">Edit</button>
-                    <button type="button" class="btn-delete" onclick="deleteItem('projects', ${item.id})">Delete</button>
-                </div>`;
-            listEl.appendChild(div);
-        });
+    renderSection('projects', 'list-project', 'title', 'project');
+    renderSection('work_experience', 'list-work', 'job_position', 'work');
+    renderSection('certifications', 'list-certification', 'name', 'certification');
+    renderSection('volunteers', 'list-volunteer', 'role', 'volunteer');
+}
+
+async function renderSection(table, elementId, key, type) {
+    const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    if (document.getElementById(`total-${type}`)) {
+        document.getElementById(`total-${type}`).innerText = data?.length || 0;
     }
 
+    el.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
+    data?.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'manage-item';
+        div.innerHTML = `
+            <span>${item[key]}</span>
+            <div class="actions">
+                <button class="btn-edit" onclick="setupEdit('${type}', ${item.id})">Edit</button>
+                <button class="btn-delete" onclick="deleteItem('${table}', ${item.id})">Delete</button>
+            </div>`;
+        el.appendChild(div);
+    });
+}
 
-
-
-// Global functions agar bisa dipanggil dari HTML
+// --- GLOBAL ACTIONS ---
 window.deleteItem = async (table, id) => {
-    if (confirm('Delete?')) {
+    if (confirm('Delete this record?')) {
         await supabase.from(table).delete().eq('id', id);
         refreshLists();
     }
 };
 
-window.editProject = async (id) => {
-    const { data: item } = await supabase.from('projects').select('*').eq('id', id).single();
+window.setupEdit = async (type, id) => {
+    const tableMap = { project: 'projects', work: 'work_experience', certification: 'certifications', volunteer: 'volunteers' };
+    const { data: item } = await supabase.from(tableMap[type]).select('*').eq('id', id).single();
+    
     if (item) {
-        editingProjectId = item.id;
-        document.getElementById('p-title').value = item.title;
-        document.getElementById('p-tech').value = item.tech_stack?.join(', ') || '';
-        document.getElementById('p-desc').value = item.description || '';
-        document.getElementById('p-link').value = item.link_github || '';
-        
-        const btn = document.querySelector('#project-form button[type="submit"]');
-        btn.innerText = "Update Project";
-        btn.style.background = "#ffc107";
-        document.getElementById('project').scrollIntoView({ behavior: 'smooth' });
+        editingId[type] = item.id;
+        if (type === 'work') {
+            document.getElementById('e-title').value = item.job_position;
+            document.getElementById('e-company').value = item.company;
+            document.getElementById('e-duration').value = item.duration;
+            document.getElementById('e-desc').value = item.description;
+            document.querySelector('#exp-form button').innerText = "Update Work Experience";
+        } else if (type === 'certification') {
+            document.getElementById('c-title').value = item.name;
+            document.getElementById('c-issuer').value = item.publisher;
+            document.getElementById('c-desc').value = item.description;
+            document.querySelector('#cert-form button').innerText = "Update Certification";
+        } else if (type === 'volunteer') {
+            document.getElementById('v-title').value = item.role;
+            document.getElementById('v-org').value = item.organization;
+            document.getElementById('v-duration').value = item.duration;
+            document.getElementById('v-desc').value = item.description;
+            document.querySelector('#volunteer-form button').innerText = "Update Volunteer";
+        }
+        document.getElementById(type).scrollIntoView({ behavior: 'smooth' });
     }
 };
 
-// --- 3. SUBMIT HANDLER ---
-document.getElementById('project-form').onsubmit = async (e) => {
+// --- FORM SUBMITS ---
+
+// Work Experience
+document.getElementById('exp-form').onsubmit = async (e) => {
     e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Processing...';
-
-    const imgFile = document.getElementById('p-img').files[0];
-    const imgUrl = await handleUpload(imgFile, 'projects');
-
+    const imgUrl = await handleUpload(document.getElementById('e-img').files[0], 'work');
     const payload = {
-        title: document.getElementById('p-title').value,
-        tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
-        description: document.getElementById('p-desc').value,
-        link_github: document.getElementById('p-link').value
+        job_position: document.getElementById('e-title').value,
+        company: document.getElementById('e-company').value,
+        duration: document.getElementById('e-duration').value,
+        description: document.getElementById('e-desc').value
     };
-    
-    // Hanya update image_url jika ada file baru yang diupload
     if (imgUrl) payload.image_url = imgUrl;
 
-    if (editingProjectId) {
-        await supabase.from('projects').update(payload).eq('id', editingProjectId);
-        editingProjectId = null;
+    if (editingId.work) {
+        await supabase.from('work_experience').update(payload).eq('id', editingId.work);
+        editingId.work = null;
     } else {
-        await supabase.from('projects').insert([payload]);
+        await supabase.from('work_experience').insert([payload]);
     }
-
-    alert("Success!");
-    btn.innerText = "Add Project";
-    btn.style.background = "#006661";
-    e.target.reset();
-    refreshLists();
+    e.target.reset(); e.target.querySelector('button').innerText = "Add Work Experience";
+    refreshLists(); alert("Success!");
 };
 
-// --- FUNGSI FORMAT TANGGAL ---
-function formatDuration(start, end) {
-    const options = { month: 'short', year: 'numeric' };
-    const startDate = new Date(start).toLocaleDateString('en-US', options);
-    const endDate = end ? new Date(end).toLocaleDateString('en-US', options) : 'Present';
-    return `${startDate} - ${endDate}`;
-}
-
-// --- REFRESH LIST WORK ---
-async function refreshWorkList() {
-    const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
-    if (document.getElementById('total-work')) document.getElementById('total-work').innerText = exps?.length || 0;
-    
-    const listEl = document.getElementById('list-work');
-    if (listEl) {
-        listEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
-        exps?.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'manage-item';
-            div.innerHTML = `
-                <span><strong>${item.job_title}</strong> at ${item.company}</span>
-                <div class="actions">
-                    <button type="button" class="btn-delete" onclick="deleteWork(${item.id})">Delete</button>
-                </div>`;
-            listEl.appendChild(div);
-        });
-    }
-}
-
-window.deleteWork = async (id) => {
-    if (confirm('Hapus pengalaman kerja ini?')) {
-        await supabase.from('work_experience').delete().eq('id', id);
-        refreshWorkList();
-    }
-};
-
-// --- SUBMIT WORK FORM ---
-const workForm = document.getElementById('work-form');
-if (workForm) {
-    workForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button');
-        btn.innerText = 'Processing...';
-
-        const start = document.getElementById('w-start-date').value;
-        const end = document.getElementById('w-end-date').value;
-        const durationText = formatDuration(start, end);
-
-        const imgFile = document.getElementById('w-img').files[0];
-        const imgUrl = await handleUpload(imgFile, 'experience');
-
-        const { error } = await supabase.from('work_experience').insert([{
-            job_title: document.getElementById('w-title').value,
-            company: document.getElementById('w-company').value,
-            duration: durationText, // Menyimpan teks "Month Year - Month Year/Present"
-            description: document.getElementById('w-desc').value,
-            image_url: imgUrl
-        }]);
-
-        if (error) alert(error.message);
-        else {
-            alert("Work Experience Added!");
-            e.target.reset();
-            refreshWorkList();
-        }
-        btn.innerText = 'Add Work Experience';
+// Certifications
+document.getElementById('cert-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const imgUrl = await handleUpload(document.getElementById('c-img').files[0], 'certs');
+    const payload = {
+        name: document.getElementById('c-title').value,
+        publisher: document.getElementById('c-issuer').value,
+        description: document.getElementById('c-desc').value
     };
-}
+    if (imgUrl) payload.image_url = imgUrl;
 
-    
+    if (editingId.certification) {
+        await supabase.from('certifications').update(payload).eq('id', editingId.certification);
+        editingId.certification = null;
+    } else {
+        await supabase.from('certifications').insert([payload]);
+    }
+    e.target.reset(); e.target.querySelector('button').innerText = "Add Certificate";
+    refreshLists(); alert("Success!");
+};
+
+// Volunteer
+document.getElementById('volunteer-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const imgUrl = await handleUpload(document.getElementById('v-img').files[0], 'volunteer');
+    const payload = {
+        role: document.getElementById('v-title').value,
+        organization: document.getElementById('v-org').value,
+        duration: document.getElementById('v-duration').value,
+        description: document.getElementById('v-desc').value
+    };
+    if (imgUrl) payload.image_url = imgUrl;
+
+    if (editingId.volunteer) {
+        await supabase.from('volunteers').update(payload).eq('id', editingId.volunteer);
+        editingId.volunteer = null;
+    } else {
+        await supabase.from('volunteers').insert([payload]);
+    }
+    e.target.reset(); e.target.querySelector('button').innerText = "Add Volunteer";
+    refreshLists(); alert("Success!");
+};
+
 window.onload = refreshLists;
