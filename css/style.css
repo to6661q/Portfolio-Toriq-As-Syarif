@@ -14,12 +14,104 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: var(--tex
 .text-center { text-align: center; }
 
 /* 1. HEADER */
-header { background: var(--white); padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
-.nav-flex { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-weight: 800; color: var(--primary); font-size: 1.6rem; text-decoration: none; }
-.logo span { color: var(--text); }
-.nav-links a { text-decoration: none; color: var(--text); margin-left: 25px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
-.nav-links a:hover, .admin-lock:hover { color: var(--primary); }
+/* --- HEADER STYLING --- */
+header {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-bottom: 2px solid var(--primary-light);
+}
+
+.nav-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #333;
+}
+
+/* Menu Navigation */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.menu-items {
+    display: flex;
+    gap: 20px;
+}
+
+.menu-items a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.menu-items a:hover {
+    color: var(--primary);
+}
+
+/* Efek garis bawah saat hover */
+.menu-items a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--primary);
+    transition: width 0.3s;
+}
+
+.menu-items a:hover::after {
+    width: 100%;
+}
+
+/* Admin Lock Button */
+.admin-lock {
+    background: var(--primary-light);
+    color: var(--primary);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.admin-lock:hover {
+    background: var(--primary);
+    color: white;
+    transform: rotate(15deg);
+    box-shadow: 0 5px 15px rgba(0, 102, 97, 0.3);
+}
+
+/* Responsive: Sembunyikan menu di HP (Bisa ditambah Hamburger Menu nanti) */
+@media (max-width: 900px) {
+    .menu-items {
+        display: none; /* Kamu bisa ganti dengan toggle menu jika perlu */
+    }
+}
 
 /* 2. PROFILE HERO */
 .hero-section { padding: 100px 0; background: linear-gradient(to bottom, var(--light), var(--white)); }
