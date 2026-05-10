@@ -92,68 +92,46 @@
 <script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    async function loadData() {
-        // 1. Profile
-        try {
-            const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
-            if (prof) {
-                document.getElementById('display-headline').innerText = prof.headline;
-                document.getElementById('display-about').innerText = prof.about_text;
-            }
-        } catch (e) { console.error("Profile error", e); }
+    async function loadPortfolio() {
+        // 1. Load Profile
+        const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
+        if (prof) {
+            document.getElementById('display-headline').innerText = prof.headline;
+            document.getElementById('display-about').innerText = prof.about_text;
+        }
 
-        // 2. Projects
-        try {
-            const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-            const list = document.getElementById('project-list');
-            if (projs && list) {
-                list.innerHTML = projs.map(p => `
-                    <div class="project-card">
-                        <img src="${p.image_url || 'img/default-proj.jpg'}" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.src='img/default-proj.jpg'">
-                        <div class="p-content" style="padding: 15px;">
-                            <h3>${p.title}</h3>
-                            <p>${p.description || ''}</p>
-                            <a href="${p.link_github}" target="_blank" class="btn-primary">View GitHub</a>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        } catch (e) { console.error("Project error", e); }
+        // 2. Load Projects
+        const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
+        if (projs) {
+            document.getElementById('project-list').innerHTML = projs.map(p => `
+                <div class="project-card">
+                    <h3>${p.title}</h3>
+                    <p>${p.description || ''}</p>
+                    <a href="${p.link_github}" target="_blank">View GitHub</a>
+                </div>`).join('');
+        }
 
-        // 3. Timelines (Work, Certification, Volunteer)
-        const timelineConfigs = [
-            { table: 'work_experience', id: 'work-list', t: 'job_position', o: 'company' },
-            { table: 'certifications', id: 'certification-list', t: 'name', o: 'publisher' },
-            { table: 'volunteers', id: 'volunteer-list', t: 'role', o: 'organization' }
+        // 3. Load Timeline (Work, Cert, Volunteer)
+        const categories = [
+            { table: 'work_experience', elId: 'work-list', k1: 'job_position', k2: 'company' },
+            { table: 'certifications', elId: 'certification-list', k1: 'name', k2: 'publisher' },
+            { table: 'volunteers', elId: 'volunteer-list', k1: 'role', k2: 'organization' }
         ];
 
-        for (const config of timelineConfigs) {
-            try {
-                const { data } = await supabase.from(config.table).select('*').order('id', { ascending: false });
-                const container = document.getElementById(config.id);
-                if (data && container) {
-                    container.innerHTML = data.map(item => `
-                        <div class="exp-item">
-                            <h4>${item[config.t]}</h4>
-                            <p class="exp-meta">${item[config.o]} | ${item.duration || ''}</p>
-                            <p>${item.description || ''}</p>
-                        </div>
-                    `).join('');
-                }
-            } catch (e) { console.error(`Error loading ${config.table}`, e); }
+        for (const cat of categories) {
+            const { data } = await supabase.from(cat.table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(cat.elId);
+            if (container && data) {
+                container.innerHTML = data.map(d => `
+                    <div class="exp-item" style="border-left:3px solid #006661; padding-left:15px; margin-bottom:20px;">
+                        <h4 style="color:#006661; margin:0;">${d[cat.k1]}</h4>
+                        <p><strong>${d[cat.k2]}</strong> | ${d.duration || ''}</p>
+                        <p>${d.description || ''}</p>
+                    </div>`).join('');
+            }
         }
     }
-
-    // Quotes Logic
-    const workQuotes = [
-        "The only way to do great work is to love what you do.",
-        "Quality is not an act, it is a habit.",
-        "The future depends on what you do today."
-    ];
-    const qEl = document.getElementById('quote-display');
-    if(qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
-
-    window.addEventListener('DOMContentLoaded', loadData);
+    window.onload = loadPortfolio;
 </script>
 </body>
 </html>
