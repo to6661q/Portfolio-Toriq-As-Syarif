@@ -101,42 +101,37 @@
         }
     }
 
-    // 2. Load My Projects (TABEL: projects)
-    async function loadProjects() {
-        const { data, error } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        const list = document.getElementById('project-list');
-        
-        if (error) console.error("Error Project:", error);
-
-        if (data && list) {
-            list.innerHTML = data.map(item => {
-                // Debugging di console untuk cek apakah URL gambar & link ada
-                console.log(`Project: ${item.title} | Img: ${item.image_url} | Link: ${item.link_github}`);
-                
-                return `
-                    <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px;">
-                        <img src="${item.image_url || 'img/default.jpg'}" 
-                             style="width: 100%; height: 200px; object-fit: cover; display: block;" 
-                             onerror="this.src='https://placehold.co/600x400?text=No+Image'">
-                        
-                        <div class="p-content" style="padding: 20px;">
-                            <h3 style="color: #006661; margin-bottom: 10px;">${item.title}</h3>
-                            <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${item.description || ''}</p>
-                            
-                            <div style="margin-bottom: 15px;">
-                                ${item.tech_stack ? item.tech_stack.map(t => `<span style="background: #e0f2f1; color: #006661; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px; display: inline-block;">${t}</span>`).join('') : ''}
-                            </div>
-
-                            ${item.link_github ? 
-                                `<a href="${item.link_github}" target="_blank" style="display: inline-block; background: #006661; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">View GitHub <i class="fab fa-github"></i></a>` 
-                                : '<span style="color: #ccc; font-style: italic;">No Link Available</span>'}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
+// --- BAGIAN LOAD MY PROJECTS DI index.html (UPDATE FORCED IMAGE DISPLAY) ---
+async function loadProjects() {
+    const { data, error } = await supabase.from('projects').select('*').order('id', { ascending: false });
+    const list = document.getElementById('project-list');
+    
+    if (error) {
+        console.error("Error Project:", error);
     }
 
+    if (data && list) {
+        list.innerHTML = data.map(item => `
+            <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; transition: transform 0.3s; width: 100%; max-width: 350px;">
+                <img src="${item.image_url || 'img/default-proj.jpg'}" 
+                     alt="${item.title}" 
+                     style="width: 100%; height: 200px; object-fit: cover; display: block;" 
+                     onerror="this.src='img/default-proj.jpg'"> <div class="p-content" style="padding: 20px;">
+                    <h3 style="color: #006661; margin-bottom: 10px; font-size: 1.25rem;">${item.title}</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${item.description || ''}</p>
+                    
+                    <div class="badges" style="margin-bottom: 15px;">
+                        ${item.tech_stack ? item.tech_stack.map(t => `<span class="badge" style="background: #e0f2f1; color: #006661; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px; display: inline-block; margin-bottom: 5px;">${t}</span>`).join('') : ''}
+                    </div>
+
+                    ${item.link_github ? 
+                        `<a href="${item.link_github}" target="_blank" class="btn-primary" style="display: inline-block; background: #006661; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">View GitHub <i class="fab fa-github"></i></a>` 
+                        : '<span style="color: #ccc; font-style: italic; font-size: 0.9rem;">No GitHub Link</span>'}
+                </div>
+            </div>
+        `).join('');
+    }
+}
     // 3. Load Timelines
     async function loadTimeline(table, elementId, titleKey, orgKey) {
         const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
