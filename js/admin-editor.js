@@ -211,7 +211,7 @@ initGenericForm('project-form', 'project', 'project', () => ({
     description: document.getElementById('p-desc').value,
     tech_stack: document.getElementById('p-tech').value,
     link_github: document.getElementById('p-link').value
-}));
+}), 'p-img'); // Tambahkan 'p-img' di sini
 
 initGenericForm('contact-form', 'contact', 'contact', () => ({
     platform: document.getElementById('co-platform').value,
