@@ -136,80 +136,75 @@ header {
 }
 
 /* 2. PROFILE HERO */
-/* --- PROFILE CENTERED ROW --- */
+/* --- RESET & PROFILE SECTION --- */
 .hero-section {
-    padding: 40px 0 20px; /* Jarak atas/bawah yang proporsional */
+    padding: 30px 0 10px !important;
     background-color: #ffffff;
+    display: flex;
+    justify-content: center; /* Menarik container ke tengah */
     width: 100%;
 }
 
-/* Container utama untuk centering */
-.profile-row-centered {
-    display: flex;
-    flex-direction: row;      /* Memastikan tetap satu baris */
-    align-items: center;      /* Menjaga foto & teks sejajar vertikal di tengah */
-    justify-content: center;  /* INI KUNCINYA: Menarik seluruh grup ke tengah */
-    gap: 40px;                /* Jarak horizontal antara foto dan teks */
-    width: 100%;
+/* KUNCI UTAMA: Memaksa satu baris dan di tengah */
+.profile-flex-wrapper {
+    display: flex !important;
+    flex-direction: row !important; /* Paksa satu baris horizontal */
+    align-items: center !important;  /* Foto & teks sejajar vertikal */
+    justify-content: center !important; /* Paksa grup berada di tengah */
+    gap: 30px; /* Jarak antara foto dan teks */
+    width: auto; /* Jangan gunakan 100% agar tidak memenuhi layar dan lari ke kiri */
+    margin: 0 auto; /* Margin otomatis kiri-kanan untuk centering */
 }
 
 /* Foto Profil */
 .profile-img {
-    width: 130px;             /* Ukuran foto yang pas untuk desktop */
-    height: 130px;
-    border-radius: 50%;       /* Membuat foto bulat sempurna */
-    border: 5px solid #006661; 
+    width: 120px !important;
+    height: 120px !important;
+    border-radius: 50% !important;
+    border: 4px solid #006661 !important;
     object-fit: cover;
-    box-shadow: 0 8px 20px rgba(0, 102, 97, 0.1); /* Shadow halus bertema hijau */
-    transition: transform 0.3s ease;
-}
-
-.profile-img:hover {
-    transform: scale(1.05);   /* Efek interaktif saat foto disorot */
+    flex-shrink: 0; /* Mencegah foto gepeng saat layar menyempit */
 }
 
 /* Wadah Teks */
-.profile-text-container {
+.profile-text {
     display: flex;
-    flex-direction: column;   /* Nama di atas, Headline di bawah */
-    text-align: left;         /* Teks tetap rata kiri terhadap grupnya sendiri */
+    flex-direction: column;
+    text-align: left; /* Teks tetap rapi rata kiri terhadap fotonya */
+    min-width: fit-content;
 }
 
-.name-text {
-    font-size: 2.8rem;        /* Ukuran font tebal dan modern */
+.profile-text h1 {
+    font-size: 2.2rem;
     font-weight: 800;
-    color: #2d3436;
     margin: 0;
-    line-height: 1;
+    line-height: 1.1;
+    color: #2d3436;
+    white-space: nowrap; /* Mencegah nama turun ke bawah (force satu baris) */
 }
 
-.headline-text {
-    font-size: 1.2rem;
-    color: #006661;           /* Warna identitas kamu */
+.profile-text p {
+    font-size: 1.1rem;
+    color: #006661;
     font-weight: 600;
-    margin: 8px 0 0 0;
+    margin: 5px 0 0 0;
     text-transform: uppercase;
-    letter-spacing: 2px;      /* Memberikan kesan 'luxury' pada profesi */
+    letter-spacing: 1px;
 }
 
-/* --- RESPONSIVENESS --- */
-@media (max-width: 768px) {
-    .profile-row-centered {
-        gap: 20px;
-        /* Jika di HP terlalu sempit, bisa dipertimbangkan untuk stack vertikal */
-        /* flex-direction: column; text-align: center; */
+/* --- RESPONSIVE FIX --- */
+@media (max-width: 600px) {
+    .profile-flex-wrapper {
+        gap: 15px;
     }
-    
-    .name-text {
-        font-size: 2rem;
+    .profile-text h1 {
+        font-size: 1.5rem;
     }
-    
     .profile-img {
-        width: 100px;
-        height: 100px;
+        width: 80px !important;
+        height: 80px !important;
     }
 }
-
 /* 3. BIODATA */
 .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
 .bio-card { background: var(--white); padding: 30px; border-radius: 20px; border: 1px solid #eee; }
