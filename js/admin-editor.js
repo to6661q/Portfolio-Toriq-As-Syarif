@@ -1,113 +1,120 @@
 import { supabase } from './supabase-config.js';
 
-let editingId = { project: null, work: null, certification: null, volunteer: null };
+let editingIds = { project: null, work: null, certification: null, volunteer: null };
 
-// Auth Check
-async function checkAuth() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) window.location.href = 'login.html';
-}
-checkAuth();
-
-document.getElementById('logout-btn').onclick = async () => {
-    await supabase.auth.signOut();
-    window.location.href = 'login.html';
-};
-
-async function handleUpload(file, folder) {
-    if (!file) return null;
-    const path = `${folder}/${Date.now()}_${file.name}`;
-    const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
-    if (error) return null;
-    const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
-    return data.publicUrl;
-}
-
+// Refresh Semua Data di Panel Admin
 async function refreshAll() {
-    renderList('projects', 'list-project', 'title', 'project');
-    renderList('work_experience', 'list-work', 'job_position', 'work');
-    renderList('certifications', 'list-certification', 'name', 'certification');
-    renderList('volunteers', 'list-volunteer', 'role', 'volunteer');
+    try {
+        console.log("Memulai refresh data...");
+        await Promise.all([
+            loadTable('projects', 'list-project', 'title', 'project'),
+            loadTable('work_experience', 'list-work', 'job_position', 'work'),
+            loadTable('certifications', 'list-certification', 'name', 'certification'),
+            loadTable('volunteers', 'list-volunteer', 'role', 'volunteer')
+        ]);
+    } catch (err) {
+        console.error("Gagal memuat data admin:", err);
+    }
 }
 
-async function renderList(table, elId, titleKey, type) {
-    const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+async function loadTable(table, elId, key, type) {
+    const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
     const el = document.getElementById(elId);
     if (!el) return;
 
-    if(document.getElementById(`total-${type}`)) document.getElementById(`total-${type}`).innerText = data?.length || 0;
+    // Update Counter
+    const counter = document.getElementById(`total-${type}`);
+    if (counter) counter.innerText = data?.length || 0;
+
+    if (error) {
+        el.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
+        return;
+    }
 
     el.innerHTML = data.map(item => `
-        <div class="manage-item">
-            <span>${item[titleKey]}</span>
+        <div class="manage-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ddd;">
+            <span>${item[key]}</span>
             <div>
-                <button onclick="window.setupEdit('${type}', ${item.id})">Edit</button>
-                <button onclick="window.deleteItem('${table}', ${item.id})">Delete</button>
+                <button onclick="window.editData('${type}', ${item.id})">Edit</button>
+                <button onclick="window.deleteData('${table}', ${item.id})" style="background:red; color:white">Del</button>
             </div>
         </div>
     `).join('');
 }
 
-window.deleteItem = async (table, id) => {
-    if(confirm('Delete?')) {
-        await supabase.from(table).delete().eq('id', id);
+// Global Actions (Wajib window agar bisa diklik)
+window.deleteData = async (table, id) => {
+    if (confirm('Hapus data ini?')) {
+        const { error } = await supabase.from(table).delete().eq('id', id);
+        if (error) alert(error.message);
         refreshAll();
     }
 };
 
-window.setupEdit = async (type, id) => {
-    const map = { project: 'projects', work: 'work_experience', certification: 'certifications', volunteer: 'volunteers' };
-    const { data: item } = await supabase.from(map[type]).select('*').eq('id', id).single();
-    if (item) {
-        editingId[type] = item.id;
+window.editData = async (type, id) => {
+    const tableMap = { project: 'projects', work: 'work_experience', certification: 'certifications', volunteer: 'volunteers' };
+    const { data } = await supabase.from(tableMap[type]).select('*').eq('id', id).single();
+    if (data) {
+        editingIds[type] = data.id;
         if (type === 'project') {
-            document.getElementById('p-title').value = item.title;
-            document.getElementById('p-tech').value = item.tech_stack?.join(', ') || '';
-            document.getElementById('p-desc').value = item.description || '';
-            document.getElementById('p-link').value = item.link_github || '';
+            document.getElementById('p-title').value = data.title;
+            document.getElementById('p-desc').value = data.description;
+            document.getElementById('p-tech').value = data.tech_stack?.join(', ') || '';
+            document.getElementById('p-link').value = data.link_github;
         } else if (type === 'work') {
-            document.getElementById('e-title').value = item.job_position;
-            document.getElementById('e-company').value = item.company;
-            document.getElementById('e-duration').value = item.duration;
-            document.getElementById('e-desc').value = item.description;
+            document.getElementById('e-title').value = data.job_position;
+            document.getElementById('e-company').value = data.company;
+            document.getElementById('e-duration').value = data.duration;
+            document.getElementById('e-desc').value = data.description;
         }
-        // ... (lanjutkan untuk certification & volunteer) ...
+        // ... (Tambahkan untuk cert & volunteer jika perlu)
         document.getElementById(type).scrollIntoView({ behavior: 'smooth' });
-        document.querySelector(`#${type}-form button`).innerText = "Update Data";
+        alert("Data masuk ke form. Silakan ubah dan klik 'Add/Update'");
     }
 };
 
-// Form Submit Profiles
-document.getElementById('profile-form').onsubmit = async (e) => {
-    e.preventDefault();
-    await supabase.from('profiles').upsert({
-        id: 1,
-        full_name: "Toriq As Syarif",
-        headline: document.getElementById('headline').value,
-        about_text: document.getElementById('about_text').value
-    });
-    alert("Profile Updated!");
-};
+// Form Submit Handling (CONTOH UNTUK PROJECT)
+const projectForm = document.getElementById('project-form');
+if (projectForm) {
+    projectForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+            title: document.getElementById('p-title').value,
+            description: document.getElementById('p-desc').value,
+            tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
+            link_github: document.getElementById('p-link').value
+        };
 
-// Form Submit Projects
-document.getElementById('project-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
-    const payload = {
-        title: document.getElementById('p-title').value,
-        tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
-        description: document.getElementById('p-desc').value,
-        link_github: document.getElementById('p-link').value
+        let result;
+        if (editingIds.project) {
+            result = await supabase.from('projects').update(payload).eq('id', editingIds.project);
+            editingIds.project = null;
+        } else {
+            result = await supabase.from('projects').insert([payload]);
+        }
+
+        if (result.error) alert("Gagal: " + result.error.message);
+        else {
+            alert("Berhasil!");
+            e.target.reset();
+            refreshAll();
+        }
     };
-    if (img) payload.image_url = img;
+}
 
-    if (editingId.project) {
-        await supabase.from('projects').update(payload).eq('id', editingId.project);
-        editingId.project = null;
-    } else {
-        await supabase.from('projects').insert([payload]);
-    }
-    e.target.reset(); refreshAll(); alert("Done!");
-};
+// Profile Submit
+const profileForm = document.getElementById('profile-form');
+if (profileForm) {
+    profileForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const { error } = await supabase.from('profiles').upsert({
+            id: 1,
+            headline: document.getElementById('headline').value,
+            about_text: document.getElementById('about_text').value
+        });
+        if (error) alert(error.message);
+        else alert("Profile Updated!");
+    };
+}
 
 window.onload = refreshAll;
