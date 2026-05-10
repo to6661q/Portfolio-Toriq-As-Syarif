@@ -225,7 +225,7 @@ initGenericForm('certification-form', 'cert', 'cert', () => ({
 initGenericForm('volunteer-form', 'volunteer', 'volunteer', () => ({
     date: document.getElementById('v-date')?.value || '',
     title: document.getElementById('v-title')?.value || '',
-    organization: document.getElementById('v-org')?.value || '',
+    publisher: document.getElementById('v-org')?.value || '', // Di SQL namanya 'publisher' atau 'organization'? Kita samakan.
     description: document.getElementById('v-desc')?.value || ''
 }), 'v-img');
 
@@ -236,6 +236,7 @@ initGenericForm('project-form', 'project', 'project', () => ({
     link_github: document.getElementById('p-link')?.value || ''
 }));
 
+// Socmed (Contact) Fix
 initGenericForm('contact-form', 'contact', 'contact', () => ({
     platform: document.getElementById('co-platform')?.value || '',
     icon_class: document.getElementById('co-icon')?.value || '',
