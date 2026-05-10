@@ -39,17 +39,11 @@ async function refreshAll() {
     console.log("Syncing admin data...");
 
     // Safe-load Profile (ID 1)
-    const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).maybeSingle();
+const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).maybeSingle();
     if (prof) {
-        const elName = document.getElementById('full_name');
-        const elHead = document.getElementById('headline');
-        const elDesc = document.getElementById('bio-desc');
-        const elPhotoPrev = document.getElementById('p-photo-preview');
-
-        if (elName) elName.value = prof.full_name || '';
-        if (elHead) elHead.value = prof.headline || '';
-        if (elDesc) elDesc.value = prof.description || '';
-        if (elPhotoPrev && prof.photo_url) elPhotoPrev.src = prof.photo_url;
+        if (document.getElementById('full_name')) document.getElementById('full_name').value = prof.full_name || '';
+        if (document.getElementById('headline')) document.getElementById('headline').value = prof.headline || '';
+        if (document.getElementById('bio-desc')) document.getElementById('bio-desc').value = prof.description || '';
     }
 
     // Render Lists dengan pengecekan elemen
