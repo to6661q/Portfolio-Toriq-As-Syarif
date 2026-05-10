@@ -10,7 +10,7 @@
 html { scroll-behavior: smooth; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: var(--text); background: var(--white); overflow-x: hidden; }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 .text-center { text-align: center; }
 
 /* 1. HEADER */
@@ -140,8 +140,9 @@ header {
 /* --- RESET & PROFILE SECTION --- */
 
 #profile {
-    margin-top: 80px !important; /* Sesuaikan dengan tinggi header kamu */
-    padding-top: 20px !important; 
+    margin-top: 75px; /* Sesuaikan dengan tinggi header kamu */
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
 }
 .hero-section {
     padding: 30px 0 10px !important;
@@ -222,10 +223,16 @@ header {
 .skill-icon i { font-size: 2.5rem; display: block; margin-bottom: 5px; }
 
 /* SECTIONS */
-
-.section { padding: 0px 0;
-          scroll-margin-top: 90px; /* Nilai ini harus sedikit lebih besar dari tinggi header */
-         }
+section {
+    background-color: #ffffff;
+    padding: 60px 0; /* Memberikan ruang napas antar section */
+}
+#profile, 
+#experience, 
+#volunteer, 
+#contact {
+    background-color: #e7f6f3 !important;
+}
 .bg-light { background: var(--light); }
 .section-title { font-size: 2.5rem; color: var(--primary); font-weight: 800; text-align: center; margin-bottom: 60px; }
 
