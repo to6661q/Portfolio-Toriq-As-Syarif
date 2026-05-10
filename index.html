@@ -167,15 +167,22 @@
             fetchTo('volunteer', 'vol-list', mediaTemplate);
 
             // Section 7: Project
-            fetchTo('project', 'project-list', d => `
-                <div class="media-card">
-                    <div class="media-info">
-                        <h4>${d.title}</h4>
-                        <p>${d.description}</p>
-                        <small class="tech-stack">Tech: ${d.tech_stack}</small>
-                        <a href="${d.link_github}" target="_blank" class="github-btn"><i class="fab fa-github"></i> GitHub</a>
-                    </div>
-                </div>`);
+// Di dalam file index.html, cari fetchTo untuk project-list
+fetchTo('project', 'project-list', d => `
+    <div class="media-card">
+        ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
+        <div class="media-info">
+            <h4>${d.title}</h4>
+            <p>${d.description}</p>
+            <small class="tech-stack" style="display:block; margin-bottom:15px; color:var(--primary); font-weight:bold;">
+                Tech: ${d.tech_stack}
+            </small>
+            <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:var(--primary); color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </div>
+`);
 
             // Section 8: Contact
             fetchTo('contact', 'socmed-list', d => `
