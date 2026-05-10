@@ -92,78 +92,34 @@
 <script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    // 1. Load Profile (Headline & About)
-    async function loadProfile() {
-        const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
-        if (data) {
-            if(document.getElementById('display-headline')) document.getElementById('display-headline').innerText = data.headline;
-            if(document.getElementById('display-about')) document.getElementById('display-about').innerText = data.about_text;
-        }
-    }
-
-// --- BAGIAN LOAD MY PROJECTS DI index.html (UPDATE FORCED IMAGE DISPLAY) ---
-async function loadProjects() {
-    const { data, error } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    const list = document.getElementById('project-list');
-    
-    if (error) {
-        console.error("Error Project:", error);
-    }
-
-    if (data && list) {
-        list.innerHTML = data.map(item => `
-            <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; transition: transform 0.3s; width: 100%; max-width: 350px;">
-                <img src="${item.image_url || 'img/default-proj.jpg'}" 
-                     alt="${item.title}" 
-                     style="width: 100%; height: 200px; object-fit: cover; display: block;" 
-                     onerror="this.src='img/default-proj.jpg'"> <div class="p-content" style="padding: 20px;">
-                    <h3 style="color: #006661; margin-bottom: 10px; font-size: 1.25rem;">${item.title}</h3>
-                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${item.description || ''}</p>
-                    
-                    <div class="badges" style="margin-bottom: 15px;">
-                        ${item.tech_stack ? item.tech_stack.map(t => `<span class="badge" style="background: #e0f2f1; color: #006661; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px; display: inline-block; margin-bottom: 5px;">${t}</span>`).join('') : ''}
+    async function loadContent() {
+        // Load Projects
+        const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
+        const projList = document.getElementById('project-list');
+        
+        if (projects && projList) {
+            projList.innerHTML = projects.map(p => `
+                <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100%;">
+                    <div style="width: 100%; height: 200px; background: #f0f0f0; overflow: hidden;">
+                        <img src="${p.image_url || 'img/default-proj.jpg'}" 
+                             style="width: 100%; height: 100%; object-fit: cover;" 
+                             onerror="this.src='img/default-proj.jpg'">
                     </div>
-
-                    ${item.link_github ? 
-                        `<a href="${item.link_github}" target="_blank" class="btn-primary" style="display: inline-block; background: #006661; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">View GitHub <i class="fab fa-github"></i></a>` 
-                        : '<span style="color: #ccc; font-style: italic; font-size: 0.9rem;">No GitHub Link</span>'}
-                </div>
-            </div>
-        `).join('');
-    }
-}
-    // 3. Load Timelines
-    async function loadTimeline(table, elementId, titleKey, orgKey) {
-        const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-        const container = document.getElementById(elementId);
-        if (data && container) {
-            container.innerHTML = data.map(item => `
-                <div class="exp-item">
-                    <h4>${item[titleKey]}</h4>
-                    <p class="exp-meta">${item[orgKey] || ''} | ${item.duration || ''}</p>
-                    <p>${item.description || ''}</p>
+                    <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
+                        <h3 style="color: #006661; margin-bottom: 10px; font-size: 1.2rem;">${p.title}</h3>
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px; line-height: 1.5; flex-grow: 1;">
+                            ${p.description || 'No description available.'}
+                        </p>
+                        <div style="margin-bottom: 15px;">
+                            ${p.tech_stack ? p.tech_stack.map(t => `<span style="background: #e0f2f1; color: #006661; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px; display: inline-block; margin-bottom: 5px;">${t}</span>`).join('') : ''}
+                        </div>
+                        <a href="${p.link_github}" target="_blank" style="background: #006661; color: white; padding: 10px; text-align: center; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">View GitHub</a>
+                    </div>
                 </div>
             `).join('');
         }
     }
-
-    // 4. Quotes
-    const workQuotes = [
-        "The only way to do great work is to love what you do. - Steve Jobs",
-        "The future depends on what you do today. - Mahatma Gandhi",
-        "Success is not final; failure is not fatal. - Winston Churchill"
-    ];
-
-    window.addEventListener('DOMContentLoaded', () => {
-        loadProfile();
-        loadProjects();
-        loadTimeline('work_experience', 'work-list', 'job_position', 'company');
-        loadTimeline('certifications', 'certification-list', 'name', 'publisher');
-        loadTimeline('volunteers', 'volunteer-list', 'role', 'organization');
-        
-        const qEl = document.getElementById('quote-display');
-        if(qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
-    });
+    window.addEventListener('DOMContentLoaded', loadContent);
 </script>
 </body>
 </html>
