@@ -22,6 +22,9 @@ async function handleUpload(file, folder) {
     const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(filePath);
     return data.publicUrl;
 }
+// --- STATE UNTUK EDIT WORK ---
+let editingWorkId = null;
+
 
 // --- 2. REFRESH & RENDER ---
 async function refreshLists() {
@@ -41,6 +44,74 @@ async function refreshLists() {
             listEl.appendChild(div);
         });
     }
+
+
+    const { data: works } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-work')) document.getElementById('total-work').innerText = works?.length || 0;
+    
+    const workEl = document.getElementById('list-work');
+    if (workEl) {
+        workEl.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
+        works?.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'manage-item';
+            div.innerHTML = `
+                <span>${item.job_position} at ${item.company}</span>
+                <div class="actions">
+                    <button type="button" class="btn-edit" onclick="editWork(${item.id})">Edit</button>
+                    <button type="button" class="btn-delete" onclick="deleteItem('work_experience', ${item.id})">Delete</button>
+                </div>`;
+            workEl.appendChild(div);
+        });
+    }
+
+    window.editWork = async (id) => {
+    const { data: item } = await supabase.from('work_experience').select('*').eq('id', id).single();
+    if (item) {
+        editingWorkId = item.id;
+        document.getElementById('e-title').value = item.job_position;
+        document.getElementById('e-company').value = item.company || '';
+        document.getElementById('e-duration').value = item.duration || '';
+        document.getElementById('e-desc').value = item.description || '';
+        
+        const btn = document.querySelector('#exp-form button[type="submit"]');
+        btn.innerText = "Update Work Experience";
+        btn.style.background = "#ffc107";
+        document.getElementById('work').scrollIntoView({ behavior: 'smooth' });
+    }
+};// --- HANDLER SUBMIT WORK (Insert/Update) ---
+const expForm = document.getElementById('exp-form');
+if (expForm) {
+    expForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = 'Processing...';
+
+        const imgFile = document.getElementById('e-img').files[0];
+        const imgUrl = await handleUpload(imgFile, 'experience');
+
+        const payload = {
+            job_position: document.getElementById('e-title').value,
+            company: document.getElementById('e-company').value,
+            duration: document.getElementById('e-duration').value,
+            description: document.getElementById('e-desc').value
+        };
+        if (imgUrl) payload.image_url = imgUrl;
+
+        if (editingWorkId) {
+            await supabase.from('work_experience').update(payload).eq('id', editingWorkId);
+            editingWorkId = null;
+        } else {
+            await supabase.from('work_experience').insert([payload]);
+        }
+
+        alert("Work Experience Saved!");
+        btn.innerText = "Add Work Experience";
+        btn.style.background = "#006661";
+        e.target.reset();
+        refreshLists();
+    };
+}
 }
 
 // Global functions agar bisa dipanggil dari HTML
