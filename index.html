@@ -89,86 +89,61 @@
         </div>
     </footer>
 
-
-        <script type="module">
+<script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    // 1. Load Profile (Headline & About)
-    async function loadProfile() {
-        const { data } = await supabase.from('profiles').select('*').eq('id', 1).single();
-        if (data) {
-            if(document.getElementById('display-headline')) document.getElementById('display-headline').innerText = data.headline;
-            if(document.getElementById('display-about')) document.getElementById('display-about').innerText = data.about_text;
+    async function loadAllContent() {
+        // 1. Profile
+        const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
+        if (prof) {
+            document.querySelector('.hero-text .subtitle').innerText = prof.headline;
+            document.querySelector('.summary-box p').innerText = prof.about_text;
         }
-    }
 
-    // 2. Load My Projects (TABEL: projects)
-    // --- BAGIAN LOAD MY PROJECTS DI index.html (UPDATE FORCED IMAGE DISPLAY) ---
-async function loadProjects() {
-    const { data, error } = await supabase.from('projects').select('*').order('id', { ascending: false });
-    const list = document.getElementById('project-list');
-    
-    if (data && list) {
-        list.innerHTML = data.map(item => {
-            // CEK DI CONSOLE F12: Muncul link https atau null?
-            console.log(`Checking Image for ${item.title}:`, item.image_url);
-
-            return `
-                <div class="project-card">
-                    <img src="${item.image_url || 'img/default-proj.jpg'}" 
-                         alt="${item.title}" 
-                         class="project-img-display"
-                         style="width: 100%; height: 200px; object-fit: cover; display: block;"
-                         onerror="this.src='img/default-proj.jpg'">
-                    
-                    <div class="p-content">
-                        <h3>${item.title}</h3>
-                        <p>${item.description || ''}</p>
-                        <div class="badges">
-                            ${item.tech_stack ? item.tech_stack.map(t => `<span class="badge">${t}</span>`).join('') : ''}
-                        </div>
-                        <a href="${item.link_github}" target="_blank" class="btn-primary">View GitHub</a>
+        // 2. Projects (DENGAN FIX GAMBAR)
+        const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
+        const projList = document.getElementById('project-list');
+        if (projects && projList) {
+            projList.innerHTML = projects.map(p => `
+                <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
+                    <div style="width: 100%; height: 200px; background: #eee;">
+                        <img src="${p.image_url || 'img/default-proj.jpg'}" 
+                             style="width: 100%; height: 100%; object-fit: cover;" 
+                             onerror="this.src='img/default-proj.jpg'">
                     </div>
-                </div>
-            `;
-        }).join('');
-    }
-}
-
-    // 3. Load Timelines
-    async function loadTimeline(table, elementId, titleKey, orgKey) {
-        const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-        const container = document.getElementById(elementId);
-        if (data && container) {
-            container.innerHTML = data.map(item => `
-                <div class="exp-item">
-                    <h4>${item[titleKey]}</h4>
-                    <p class="exp-meta">${item[orgKey] || ''} | ${item.duration || ''}</p>
-                    <p>${item.description || ''}</p>
+                    <div style="padding: 20px; flex-grow: 1;">
+                        <h3 style="color: #006661; margin-bottom: 10px;">${p.title}</h3>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">${p.description || ''}</p>
+                        <div style="margin-bottom: 15px;">
+                            ${p.tech_stack ? p.tech_stack.map(t => `<span style="background: #e0f2f1; color: #006661; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px;">${t}</span>`).join('') : ''}
+                        </div>
+                        <a href="${p.link_github}" target="_blank" style="background: #006661; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-block;">View GitHub</a>
+                    </div>
                 </div>
             `).join('');
         }
-    }
 
-    // 4. Quotes
-    const workQuotes = [
-        "The only way to do great work is to love what you do. - Steve Jobs",
-        "The future depends on what you do today. - Mahatma Gandhi",
-        "Success is not final; failure is not fatal. - Winston Churchill"
-    ];
+        // 3. Timelines (Work, Cert, Volunteer)
+        const loadTimeline = async (table, elementId, titleKey, orgKey) => {
+            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(elementId);
+            if (data && container) {
+                container.innerHTML = data.map(item => `
+                    <div class="exp-item">
+                        <h4>${item[titleKey]}</h4>
+                        <p class="exp-meta">${item[orgKey] || ''} | ${item.duration || ''}</p>
+                        <p>${item.description || ''}</p>
+                    </div>
+                `).join('');
+            }
+        };
 
-    window.addEventListener('DOMContentLoaded', () => {
-        loadProfile();
-        loadProjects();
         loadTimeline('work_experience', 'work-list', 'job_position', 'company');
         loadTimeline('certifications', 'certification-list', 'name', 'publisher');
         loadTimeline('volunteers', 'volunteer-list', 'role', 'organization');
-        
-        const qEl = document.getElementById('quote-display');
-        if(qEl) qEl.innerText = `"${workQuotes[Math.floor(Math.random() * workQuotes.length)]}"`;
-    }); 
-        
-    window.addEventListener('DOMContentLoaded', loadContent);
+    }
+
+    window.addEventListener('DOMContentLoaded', loadAllContent);
 </script>
 </body>
 </html>
