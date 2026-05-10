@@ -21,66 +21,33 @@
         <button id="logout-btn" class="btn-logout">Logout</button>
     </aside>
 
-    <main class="main-content">
-        <section id="profile" class="card">
-            <div class="card-title">Profile Summary</div>
-            <form id="profile-form">
-                <input type="text" id="headline" placeholder="Headline">
-                <textarea id="about_text" placeholder="About Me"></textarea>
-                <button type="submit" class="btn-primary">Update Profile</button>
-            </form>
-        </section>
+   <main class="main-content">
+    <section id="project" class="card">
+        <div class="card-title">Add Project</div>
+        <form id="project-form">
+            <input type="text" id="p-title" placeholder="Judul Projek" required>
+            <input type="text" id="p-tech" placeholder="Tech Stack (contoh: Python, Laravel)">
+            <textarea id="p-desc" placeholder="Deskripsi"></textarea>
+            <input type="url" id="p-link" placeholder="Link GitHub">
+            <input type="file" id="p-img">
+            <button type="submit">Add Project</button>
+        </form>
+        <div id="list-project"></div>
+    </section>
 
-        <section id="project" class="card">
-            <div class="card-title">Projects <span id="total-project" class="badge">0</span></div>
-            <form id="project-form">
-                <input type="text" id="p-title" placeholder="Title" required>
-                <input type="text" id="p-tech" placeholder="Tech (comma separated)">
-                <textarea id="p-desc" placeholder="Description"></textarea>
-                <input type="url" id="p-link" placeholder="GitHub Link">
-                <input type="file" id="p-img">
-                <button type="submit" class="btn-primary">Add Project</button>
-            </form>
-            <div id="list-project" class="list-container"></div>
-        </section>
-
-        <section id="work" class="card">
-            <div class="card-title">Work <span id="total-work" class="badge">0</span></div>
-            <form id="work-form">
-                <input type="text" id="e-title" placeholder="Position" required>
-                <input type="text" id="e-company" placeholder="Company">
-                <input type="text" id="e-duration" placeholder="Duration">
-                <textarea id="e-desc" placeholder="Description"></textarea>
-                <input type="file" id="e-img">
-                <button type="submit" class="btn-primary">Add Work</button>
-            </form>
-            <div id="list-work" class="list-container"></div>
-        </section>
-
-        <section id="certification" class="card">
-            <div class="card-title">Certifications <span id="total-certification" class="badge">0</span></div>
-            <form id="certification-form">
-                <input type="text" id="c-title" placeholder="Name" required>
-                <input type="text" id="c-issuer" placeholder="Publisher">
-                <textarea id="c-desc" placeholder="Description"></textarea>
-                <input type="file" id="c-img">
-                <button type="submit" class="btn-primary">Add Certificate</button>
-            </form>
-            <div id="list-certification" class="list-container"></div>
-        </section>
-
-        <section id="volunteer" class="card">
-            <div class="card-title">Volunteer <span id="total-volunteer" class="badge">0</span></div>
-            <form id="volunteer-form">
-                <input type="text" id="v-title" placeholder="Role" required>
-                <input type="text" id="v-org" placeholder="Organization">
-                <input type="text" id="v-duration" placeholder="Duration">
-                <textarea id="v-desc" placeholder="Description"></textarea>
-                <input type="file" id="v-img">
-                <button type="submit" class="btn-primary">Add Volunteer</button>
-            </form>
-            <div id="list-volunteer" class="list-container"></div>
-        </section>
+    <section id="work" class="card">
+        <div class="card-title">Add Work Experience</div>
+        <form id="work-form">
+            <input type="text" id="e-title" placeholder="Posisi Pekerjaan" required>
+            <input type="text" id="e-company" placeholder="Nama Perusahaan">
+            <input type="text" id="e-duration" placeholder="Durasi (Jan 2024 - Sekarang)">
+            <textarea id="e-desc" placeholder="Deskripsi Tugas"></textarea>
+            <input type="file" id="e-img">
+            <button type="submit">Add Work</button>
+        </form>
+        <div id="list-work"></div>
+    </section>
+    
     </main>
     <script type="module" src="js/admin-editor.js"></script>
 </body>
