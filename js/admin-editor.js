@@ -206,13 +206,10 @@ document.getElementById('project-form').onsubmit = async (e) => {
     e.target.reset();
     refreshLists();
 };
+
 document.getElementById('work-form').onsubmit = async (e) => {
     e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Processing...';
-
-    const imgFile = document.getElementById('e-img').files[0];
-    const imgUrl = await handleUpload(imgFile, 'work');
+    console.log("Tombol Work diklik!"); // Debug 1
 
     const payload = {
         job_position: document.getElementById('e-title').value,
@@ -221,21 +218,24 @@ document.getElementById('work-form').onsubmit = async (e) => {
         description: document.getElementById('e-desc').value
     };
     
-    if (imgUrl) payload.image_url = imgUrl;
+    console.log("Payload yang dikirim:", payload); // Debug 2
 
-    if (editingWorkId) {
-        await supabase.from('work_experience').update(payload).eq('id', editingWorkId);
-        editingWorkId = null;
-    } else {
-        await supabase.from('work_experience').insert([payload]);
+    try {
+        if (editingWorkId) {
+            const { error } = await supabase.from('work_experience').update(payload).eq('id', editingWorkId);
+            if (error) throw error;
+        } else {
+            const { error } = await supabase.from('work_experience').insert([payload]);
+            if (error) throw error;
+        }
+        alert("Berhasil Simpan Work!");
+        refreshLists();
+    } catch (err) {
+        console.error("Error saat simpan ke Supabase:", err.message); // Debug 3
+        alert("Gagal: " + err.message);
     }
-
-    alert("Work Experience Saved!");
-    btn.innerText = "Add Work Experience";
-    btn.style.background = "#006661"; // Kembali ke warna standar
-    e.target.reset();
-    refreshLists();
 };
+
 document.getElementById('certification-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
