@@ -13,6 +13,7 @@
         <div class="container nav-flex">
             <a href="#" class="logo">TORIQ<span>.</span></a>
             <nav class="nav-links">
+                <a href="#biodata">Biodata</a>
                 <a href="#project">Projects</a>
                 <a href="#work">Experience</a>
                 <a href="#cert">Certs</a>
@@ -27,6 +28,30 @@
             <p id="display-about">...</p>
         </div>
     </section>
+    <section id="biodata" class="section">
+    <div class="container">
+        <h2 class="section-title">Personal Biodata</h2>
+        <div class="exp-grid">
+            <div>
+                <div style="margin-bottom: 40px;">
+                    <h3><i class="fas fa-info-circle"></i> Description</h3>
+                    <p id="bio-about" style="color: var(--text-muted);"></p>
+                </div>
+                <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                <div id="education-list"></div>
+            </div>
+            
+            <div>
+                <div style="margin-bottom: 40px;">
+                    <h3><i class="fas fa-trophy"></i> Achievements</h3>
+                    <div id="achievement-list"></div>
+                </div>
+                <h3><i class="fas fa-share-alt"></i> Connect with Me</h3>
+                <div id="socmed-list" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;"></div>
+            </div>
+        </div>
+    </div>
+</section>
 
     <section id="project" class="section bg-alt">
         <div class="container">
@@ -77,6 +102,36 @@
         import { supabase } from './js/supabase-config.js';
 
         async function init() {
+
+            // Di dalam init() index.html, tambahkan pemanggilan data berikut:
+
+    // 1. Description (Ambil dari profile)
+    const { data: bioProf } = await supabase.from('profile').select('*').eq('id', 1).single();
+    if (bioProf) document.getElementById('bio-about').innerText = bioProf.about_text;
+
+    // 2. Education
+    fetchToElement('education', 'education-list', d => `
+        <div class="timeline-item">
+            <h4>${d.school}</h4>
+            <div class="meta">${d.degree}</div>
+            <span class="duration">${d.year} ${d.gpa ? '| GPA: ' + d.gpa : ''}</span>
+        </div>
+    `);
+
+    // 3. Achievement
+    fetchToElement('achievement', 'achievement-list', d => `
+        <div class="timeline-item" style="padding: 15px 20px;">
+            <h4 style="font-size: 1.1rem;">${d.title}</h4>
+            <div class="meta" style="font-size: 0.85rem;">${d.issuer} | ${d.year}</div>
+        </div>
+    `);
+
+    // 4. Social Media (Button style)
+    fetchToElement('socmed', 'socmed-list', d => `
+        <a href="${d.url}" target="_blank" class="btn-primary" style="text-decoration: none; font-size: 0.8rem; padding: 8px 15px;">
+            ${d.platform}
+        </a>
+    `);
             // Load Profile
             const { data: p } = await supabase.from('profile').select('*').eq('id', 1).single();
             if (p) {
