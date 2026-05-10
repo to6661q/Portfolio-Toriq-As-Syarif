@@ -1,6 +1,6 @@
 import { supabase } from './supabase-config.js';
 
-// --- PROTECTIONS & LOGOUT ---
+// --- 1. PROTECTIONS ---
 async function checkUser() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) window.location.href = 'login.html';
@@ -12,58 +12,57 @@ document.getElementById('logout-btn').onclick = async () => {
     window.location.href = 'login.html';
 };
 
-// --- HELPER: SMOOTH SCROLL ---
-document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            window.scrollTo({ top: target.offsetTop - 30, behavior: 'smooth' });
-        }
-    });
-});
-
-// --- HELPER: UPLOAD ---
+// --- 2. UPLOAD HELPER ---
 async function handleUpload(file, folder) {
     if (!file) return null;
+    // Pastikan bucket 'portfolio_assets' sudah dibuat di Supabase Storage
     const path = `${folder}/${Date.now()}_${file.name}`;
     const { error } = await supabase.storage.from('portfolio_assets').upload(path, file);
-    if (error) throw error;
+    if (error) {
+        console.error("Upload Error:", error.message);
+        return null;
+    }
     const { data } = supabase.storage.from('portfolio_assets').getPublicUrl(path);
     return data.publicUrl;
 }
 
-// --- BAGIAN REFRESH LIST UNTUK PROJECT ---
+// --- 3. REFRESH & RENDER ---
 async function refreshLists() {
-    // Ambil data dari tabel 'projects'
-    const { data: projs, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('id', { ascending: false });
-
-    if (error) {
-        console.error("Error fetching projects:", error.message);
-        return;
-    }
-
-    // Update Counter (ID: total-project)
-    const counter = document.getElementById('total-project');
-    if (counter) counter.innerText = projs?.length || 0;
-
-    // Render ke List (ID: list-project)
-    render('list-project', projs, 'projects', 'title');
+    console.log("Refreshing all lists...");
     
-    // ... (panggil refresh untuk work, certification, volunteer di bawahnya)
+    // Project List
+    const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-project')) document.getElementById('total-project').innerText = projs?.length || 0;
+    render('list-project', projs, 'projects', 'title');
+
+    // Work List
+    const { data: exps } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-work')) document.getElementById('total-work').innerText = exps?.length || 0;
+    render('list-work', exps, 'work_experience', 'job_title');
+
+    // Certification List
+    const { data: certs } = await supabase.from('certifications').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-certification')) document.getElementById('total-certification').innerText = certs?.length || 0;
+    render('list-certification', certs, 'certifications', 'name');
+
+    // Volunteer List
+    const { data: vols } = await supabase.from('volunteers').select('*').order('id', { ascending: false });
+    if (document.getElementById('total-volunteer')) document.getElementById('total-volunteer').innerText = vols?.length || 0;
+    render('list-volunteer', vols, 'volunteers', 'role');
 }
 
 function render(id, data, table, key) {
     const el = document.getElementById(id);
-    if (!el) return;
+    if (!el) return; // Mencegah error jika ID tidak ada di HTML
+    
     el.innerHTML = `<h4 class="list-head">Inputted Records:</h4>`;
     data?.forEach(item => {
         const div = document.createElement('div');
         div.className = 'manage-item';
-        div.innerHTML = `<span>${item[key]}</span> <button class="btn-delete" data-id="${item.id}" data-table="${table}">Delete</button>`;
+        div.innerHTML = `
+            <span>${item[key]}</span> 
+            <button class="btn-delete" data-id="${item.id}" data-table="${table}">Delete</button>
+        `;
         el.appendChild(div);
     });
 
@@ -77,51 +76,55 @@ function render(id, data, table, key) {
     });
 }
 
-// --- SUBMIT HANDLERS ---
-// --- HANDLER SUBMIT PROJECT ---
-document.getElementById('project-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerText = 'Adding...';
+// --- 4. FORM SUBMITS ---
 
-    try {
-        // Upload gambar ke folder 'projects'
-        const imgFile = document.getElementById('p-img').files[0];
-        const imgUrl = await handleUpload(imgFile, 'projects');
+// Profile
+const profileForm = document.getElementById('profile-form');
+if (profileForm) {
+    profileForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const { error } = await supabase.from('profiles').upsert({
+            id: 1,
+            full_name: "Toriq As Syarif",
+            headline: document.getElementById('headline').value,
+            about_text: document.getElementById('about_text').value
+        });
+        if (error) alert(error.message);
+        else alert("Profile Updated!");
+    };
+}
 
-        // Insert ke tabel 'projects'
-        const { error } = await supabase.from('projects').insert([{
-            title: document.getElementById('p-title').value,
-            tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
-            description: document.getElementById('p-desc').value,
-            link_github: document.getElementById('p-link').value,
-            image_url: imgUrl
-        }]);
+// Project (PERBAIKAN DI SINI)
+const projectForm = document.getElementById('project-form');
+if (projectForm) {
+    projectForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = 'Adding...';
 
-        if (error) throw error;
+        try {
+            const imgFile = document.getElementById('p-img').files[0];
+            const imgUrl = await handleUpload(imgFile, 'projects');
 
-        alert("Project Added Successfully!");
-        e.target.reset(); // Kosongkan form
-        refreshLists();   // Update tampilan list & counter
-    } catch (err) {
-        alert("Failed to add project: " + err.message);
-    } finally {
-        btn.innerText = 'Add Project';
-    }
-};
+            const { error } = await supabase.from('projects').insert([{
+                title: document.getElementById('p-title').value,
+                tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
+                description: document.getElementById('p-desc').value,
+                link_github: document.getElementById('p-link').value,
+                image_url: imgUrl
+            }]);
 
-// Insert Project
-document.getElementById('project-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const img = await handleUpload(document.getElementById('p-img').files[0], 'projects');
-    await supabase.from('projects').insert([{
-        title: document.getElementById('p-title').value,
-        tech_stack: document.getElementById('p-tech').value.split(','),
-        description: document.getElementById('p-desc').value,
-        image_url: img,
-        link_github: document.getElementById('p-link').value
-    }]);
-    e.target.reset(); refreshLists(); alert("Project Added!");
-};
+            if (error) throw error;
+            alert("Project Added!");
+            e.target.reset();
+            refreshLists();
+        } catch (err) {
+            alert("Error: " + err.message);
+        } finally {
+            btn.innerText = 'Add Project';
+        }
+    };
+}
 
+// Jalankan Refresh saat awal
 window.onload = refreshLists;
