@@ -121,89 +121,100 @@ window.editVolunteer = async (id) => {
     }
 };
 
-// --- 5. SUBMIT HANDLERS ---
+// --- 5. SUBMIT HANDLERS (DENGAN PENGECEKAN AMAN) ---
 
-const processSubmit = async (formId, type, table, payloadFn, editingVar, btnText) => {
+const initForm = (formId, table, type, payloadFn, btnText) => {
     const form = document.getElementById(formId);
-    if (!form) return;
-    
+    if (!form) {
+        console.warn(`Peringatan: Form dengan ID "${formId}" tidak ditemukan. Pastikan ID ini ada di admin.html`);
+        return; // Jangan lanjut kalau form tidak ada
+    }
+
     form.onsubmit = async (e) => {
         e.preventDefault();
         const btn = e.target.querySelector('button');
+        const originalBtnText = btn.innerText;
         btn.innerText = 'Processing...';
 
         const payload = await payloadFn();
         
-        let error;
-        if (type === 'project' ? editingProjectId : type === 'work' ? editingWorkId : type === 'cert' ? editingCertId : editingVolId) {
-            const id = type === 'project' ? editingProjectId : type === 'work' ? editingWorkId : type === 'cert' ? editingCertId : editingVolId;
-            const res = await supabase.from(table).update(payload).eq('id', id);
-            error = res.error;
-        } else {
-            const res = await supabase.from(table).insert([payload]);
-            error = res.error;
-        }
+        // Cek ID mana yang sedang diedit
+        let currentId = null;
+        if (type === 'project') currentId = editingProjectId;
+        else if (type === 'work') currentId = editingWorkId;
+        else if (type === 'cert') currentId = editingCertId;
+        else if (type === 'vol') currentId = editingVolId;
 
-        if (error) {
-            alert("Error: " + error.message);
-        } else {
-            alert("Success!");
-            // Reset pencatat ID
-            if (type === 'project') editingProjectId = null;
-            if (type === 'work') editingWorkId = null;
-            if (type === 'cert') editingCertId = null;
-            if (type === 'vol') editingVolId = null;
-            
+        try {
+            if (currentId) {
+                await supabase.from(table).update(payload).eq('id', currentId);
+                // Reset ID setelah update
+                if (type === 'project') editingProjectId = null;
+                else if (type === 'work') editingWorkId = null;
+                else if (type === 'cert') editingCertId = null;
+                else if (type === 'vol') editingVolId = null;
+            } else {
+                await supabase.from(table).insert([payload]);
+            }
+
+            alert("Data Berhasil Disimpan!");
             e.target.reset();
-            btn.innerText = btnText;
+            btn.innerText = btnText; // Kembali ke teks awal (Add...)
             btn.style.background = "#006661";
             refreshLists();
+        } catch (err) {
+            alert("Error: " + err.message);
+            btn.innerText = originalBtnText;
         }
     };
 };
 
-// Inisialisasi semua form submit
-processSubmit('project-form', 'project', 'projects', async () => ({
+// --- INISIALISASI SEMUA FORM ---
+// Pastikan ID di bawah ini SAMA PERSIS dengan di admin.html
+
+initForm('project-form', 'projects', 'project', async () => ({
     title: document.getElementById('p-title').value,
     tech_stack: document.getElementById('p-tech').value.split(',').map(t => t.trim()),
     description: document.getElementById('p-desc').value,
     link_github: document.getElementById('p-link').value,
     image_url: await handleUpload(document.getElementById('p-img').files[0], 'projects')
-}), editingProjectId, "Add Project");
+}), "Add Project");
 
-processSubmit('work-form', 'work', 'work_experience', async () => ({
+initForm('work-form', 'work_experience', 'work', async () => ({
     job_position: document.getElementById('e-title').value,
     company: document.getElementById('e-company').value,
     duration: document.getElementById('e-duration').value,
     description: document.getElementById('e-desc').value,
     image_url: await handleUpload(document.getElementById('e-img').files[0], 'work')
-}), editingWorkId, "Add Work Experience");
+}), "Add Work");
 
-processSubmit('certification-form', 'cert', 'certifications', async () => ({
+initForm('certification-form', 'certifications', 'cert', async () => ({
     name: document.getElementById('c-title').value,
     publisher: document.getElementById('c-issuer').value,
     description: document.getElementById('c-desc').value,
     image_url: await handleUpload(document.getElementById('c-img').files[0], 'certs')
-}), editingCertId, "Add Certification");
+}), "Add Certification");
 
-processSubmit('volunteer-form', 'vol', 'volunteers', async () => ({
+initForm('volunteer-form', 'volunteers', 'vol', async () => ({
     role: document.getElementById('v-title').value,
     organization: document.getElementById('v-org').value,
     duration: document.getElementById('v-duration').value,
     description: document.getElementById('v-desc').value,
     image_url: await handleUpload(document.getElementById('v-img').files[0], 'volunteer')
-}), editingVolId, "Add Volunteer");
+}), "Add Volunteer");
 
-// Profile Submit
-document.getElementById('profile-form').onsubmit = async (e) => {
-    e.preventDefault();
-    await supabase.from('profiles').upsert({
-        id: 1,
-        headline: document.getElementById('headline').value,
-        about_text: document.getElementById('about_text').value
-    });
-    alert("Profile Updated!");
-};
-
+// Khusus Profile (Gunakan pengecekan manual)
+const profForm = document.getElementById('profile-form');
+if (profForm) {
+    profForm.onsubmit = async (e) => {
+        e.preventDefault();
+        await supabase.from('profiles').upsert({
+            id: 1,
+            headline: document.getElementById('headline').value,
+            about_text: document.getElementById('about_text').value
+        });
+        alert("Profile Updated!");
+    };
+}
 // Start
 window.onload = refreshLists;
