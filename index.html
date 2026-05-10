@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toriq As Syarif | Portfolio</title>
+    <title>Toriq As Syarif | IT Specialist</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
         <div class="container nav-flex">
-            <a href="#" class="logo">TAS<span>.</span></a>
+            <a href="#" class="logo">TORIQ<span>.</span></a>
             <nav class="nav-links">
                 <a href="#project">Projects</a>
-                <a href="#work">Work</a>
+                <a href="#work">Experience</a>
                 <a href="#cert">Certs</a>
                 <a href="#volunteer">Volunteer</a>
             </nav>
@@ -28,32 +28,49 @@
         </div>
     </section>
 
-    <section id="project" class="section bg-light">
+    <section id="project" class="section bg-alt">
         <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
+            <h2 class="section-title">Selected Projects</h2>
             <div id="project-list" class="grid"></div>
         </div>
     </section>
 
-    <section class="section">
+    <section id="work" class="section">
         <div class="container">
-            <h2 class="section-title">Experience & Activities</h2>
-            <div class="exp-grid">
-                <div>
-                    <h3 style="margin-bottom: 30px;"><i class="fas fa-briefcase"></i> Work History</h3>
-                    <div id="work-list"></div>
-                </div>
-                <div>
-                    <h3 style="margin-bottom: 30px;"><i class="fas fa-award"></i> Achievement & Contributions</h3>
-                    <div id="cert-list"></div>
-                    <div id="volunteer-list" style="margin-top: 50px;"></div>
-                </div>
-            </div>
+            <h2 class="section-title">Work Experience</h2>
+            <div id="work-list" style="max-width: 800px; margin: 0 auto;"></div>
         </div>
     </section>
 
-    <footer style="padding: 50px 0; text-align: center; border-top: 1px solid #eee; color: #999; font-size: 0.9rem;">
-        &copy; 2026 Toriq As Syarif. Built with Supabase.
+    <section id="cert" class="section bg-alt">
+        <div class="container">
+            <h2 class="section-title">Certifications</h2>
+            <div id="cert-list" class="grid"></div>
+        </div>
+    </section>
+
+    <section id="volunteer" class="section">
+        <div class="container">
+            <h2 class="section-title">Volunteer Activities</h2>
+            <div id="volunteer-list" style="max-width: 800px; margin: 0 auto;"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h2>Let's Connect</h2>
+                <p>Toriq As Syarif - IT Specialist & Developer</p>
+                <div class="footer-links">
+                    <a href="#project">Projects</a>
+                    <a href="#work">Experience</a>
+                    <a href="admin.html">Admin Login</a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Toriq As Syarif. All Rights Reserved.
+            </div>
+        </div>
     </footer>
 
     <script type="module">
@@ -67,46 +84,45 @@
                 document.getElementById('display-about').innerText = p.about_text;
             }
 
-            // Fungsi Load Data universal agar rapi
-            const fetchData = async (table, elId, templateFn) => {
+            const fetchToElement = async (table, elId, templateFn) => {
                 const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
                 if (data) document.getElementById(elId).innerHTML = data.map(templateFn).join('');
             };
 
-            // Template Project Card
-            fetchData('project', 'project-list', d => `
+            // Projects (Card style)
+            fetchToElement('project', 'project-list', d => `
                 <div class="card">
                     <h3>${d.title}</h3>
-                    <p>${d.description || 'No description available.'}</p>
-                    <a href="${d.link_github || '#'}" target="_blank" class="github-link">
-                        View Project Repository &rarr;
-                    </a>
+                    <p>${d.description}</p>
+                    <a href="${d.link_github}" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none;">View GitHub &rarr;</a>
                 </div>
             `);
 
-            // Template Work Item
-            fetchData('work', 'work-list', d => `
-                <div class="exp-item">
+            // Work (Timeline style)
+            fetchToElement('work', 'work-list', d => `
+                <div class="timeline-item">
                     <h4>${d.job_position}</h4>
-                    <div class="meta">${d.company} | ${d.duration}</div>
-                    <p class="desc">${d.description || ''}</p>
+                    <div class="meta">${d.company}</div>
+                    <span class="duration">${d.duration}</span>
+                    <p style="margin:0; font-size:0.95rem; color:var(--text-muted);">${d.description}</p>
                 </div>
             `);
 
-            // Template Cert Item
-            fetchData('cert', 'cert-list', d => `
-                <div class="exp-item">
-                    <h4>${d.name}</h4>
-                    <div class="meta">${d.publisher}</div>
+            // Cert (Small card style)
+            fetchToElement('cert', 'cert-list', d => `
+                <div class="card" style="padding:25px; text-align:center;">
+                    <h4 style="margin:0 0 10px 0; color:var(--primary);">${d.name}</h4>
+                    <div class="meta" style="font-size:0.85rem; opacity:0.7;">${d.publisher}</div>
                 </div>
             `);
 
-            // Template Volunteer Item
-            fetchData('volunteer', 'volunteer-list', d => `
-                <div class="exp-item">
+            // Volunteer (Timeline style)
+            fetchToElement('volunteer', 'volunteer-list', d => `
+                <div class="timeline-item">
                     <h4>${d.role}</h4>
-                    <div class="meta">${d.organization} | ${d.duration}</div>
-                    <p class="desc">${d.description || ''}</p>
+                    <div class="meta">${d.organization}</div>
+                    <span class="duration">${d.duration}</span>
+                    <p style="margin:0; font-size:0.95rem; color:var(--text-muted);">${d.description}</p>
                 </div>
             `);
         }
