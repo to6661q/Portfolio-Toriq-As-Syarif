@@ -237,5 +237,5 @@ header {
 .map-container { border-radius: 25px; overflow: hidden; height: 400px; border: 5px solid var(--white); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
 /* 9. FOOTER */
-footer { background: var(--primary); color: var(--white); padding: 80px 0 40px; }
+footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; }
 .quote { font-style: italic; opacity: 0.8; margin-top: 20px; font-size: 1.1rem; }
