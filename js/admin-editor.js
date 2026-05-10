@@ -2,7 +2,12 @@ import { supabase } from './supabase-config.js';
 
 // Pencatat ID untuk edit
 let editingIds = { education: null, skill: null, achievement: null, experience: null, cert: null, volunteer: null, project: null, contact: null };
-
+// --- HELPER: FORMAT TANGGAL INDONESIA ---
+const formatDateIDN = (dateString) => {
+    if (!dateString) return "";
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+};
 // --- 1. HELPER UPLOAD (FIX BUCKET ERROR) ---
 async function uploadFile(file, folder) {
     if (!file) return null;
@@ -47,18 +52,31 @@ async function refreshAll() {
     renderList('contact', 'list-contact', 'platform');
 }
 
+// --- UPDATE PADA FUNGSI renderList ---
+// Ubah bagian penampil tanggal di list admin agar lebih rapi
 async function renderList(table, elId, key) {
     const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
     const el = document.getElementById(elId);
     if (!el) return;
-    el.innerHTML = data?.map(item => `
-        <div class="manage-item" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
-            <span>${item[key]}</span>
+
+    el.innerHTML = data?.map(item => {
+        // Logika khusus untuk menampilkan tanggal yang sudah diformat di list admin
+        let dateInfo = "";
+        if (table === 'experience') dateInfo = `<small>${formatDateIDN(item.start_date)} - ${item.end_date ? formatDateIDN(item.end_date) : 'Sekarang'}</small>`;
+        if (table === 'cert' || table === 'volunteer') dateInfo = `<small>${formatDateIDN(item.date)}</small>`;
+
+        return `
+        <div class="manage-item" style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #eee; align-items:center;">
             <div>
-                <button onclick="window.prepareEdit('${table}', ${item.id})" style="color:blue; cursor:pointer; border:none; background:none;">Edit</button>
-                <button onclick="window.deleteItem('${table}', ${item.id})" style="color:red; cursor:pointer; margin-left:10px; border:none; background:none;">Hapus</button>
+                <div style="font-weight:bold; color:#006661;">${item[key]}</div>
+                ${dateInfo}
             </div>
-        </div>`).join('') || 'Kosong';
+            <div>
+                <button onclick="window.prepareEdit('${table}', ${item.id})" style="color:blue; border:none; background:none; cursor:pointer;">Edit</button>
+                <button onclick="window.deleteItem('${table}', ${item.id})" style="color:red; border:none; background:none; cursor:pointer; margin-left:10px;">Hapus</button>
+            </div>
+        </div>`;
+    }).join('') || '<p style="font-size:0.8rem; color:#999; padding:10px;">Belum ada data.</p>';
 }
 
 // --- 3. EXPOSE FUNCTIONS TO WINDOW (SOLUSI ERROR "is not a function") ---
