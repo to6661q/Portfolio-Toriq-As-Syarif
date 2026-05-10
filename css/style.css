@@ -136,10 +136,49 @@ header {
 }
 
 /* 2. PROFILE HERO */
-.hero-section { padding: 100px 0; background: linear-gradient(to bottom, var(--light), var(--white)); }
-.profile-img { width: 180px; height: 180px; border-radius: 50%; border: 6px solid var(--primary); object-fit: cover; margin-bottom: 25px; }
-#display-name { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -1px; }
-.headline { font-size: 1.4rem; color: var(--primary); font-weight: 700; margin-top: 10px; }
+/* --- CUSTOMIZING SECTION 2: PROFILE (ROW LAYOUT) --- */
+
+/* Target the specific section to override padding and layout */
+#profile.hero-section {
+    padding: 50px 0 20px 0; /* Reduced padding: small bottom distance ( Top, Right, Bottom, Left ) */
+    text-align: left; /* Align text internally to the left within the flex row */
+}
+
+/* Inner container for flex row layout */
+#profile .container {
+    display: flex;
+    align-items: center; /* Vertically center the photo and text content */
+    justify-content: flex-start; /* Left align the content within the container */
+}
+
+/* Adjust photo styling for the row: remove bottom margin, create space to the right */
+#profile .profile-img {
+    width: 150px; /* Reduced slightly if too prominent in row, old size 180 */
+    height: 150px;
+    margin-bottom: 0; /* Remove bottom margin from previous centered layout */
+    margin-right: 25px; /* Create space between photo and text content */
+    /* Keeps the circle shape, border, and object-fit from base style */
+}
+
+/* Styling for the stacked text container to ensure fullname and headline stack tightly */
+#profile #display-profile-text.profile-text-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Adjust fullname name for row layout prominence */
+#profile #display-name {
+    margin: 0; /* Clear margins to stack tightly */
+    font-size: 2.8rem; /* Adjusted for better visibility in a row */
+}
+
+/* Adjust headline styling for row layout prominence */
+#profile #display-headline.headline {
+    margin: 5px 0 0 0; /* Small top space, clear other margins for tight stacking */
+    font-size: 1.3rem; /* Supportive headline font size */
+    color: var(--primary); /* Keeps theme color #006661 */
+}
 
 /* 3. BIODATA */
 .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
