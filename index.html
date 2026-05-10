@@ -89,30 +89,52 @@
         </div>
     </footer>
 
-<script type="module">
+    <script type="module">
     import { supabase } from './js/supabase-config.js';
 
     async function loadPortfolio() {
-        // Load Projects
-        const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        document.getElementById('project-list').innerHTML = projs.map(p => `
-            <div class="card">
-                <img src="${p.image_url || 'img/default.jpg'}" style="width:100%; height:200px; object-fit:cover;">
-                <h3>${p.title}</h3>
-                <p>${p.description}</p>
-            </div>
-        `).join('');
+        // 1. Profile
+        const { data: prof } = await supabase.from('profiles').select('*').eq('id', 1).single();
+        if (prof) {
+            document.getElementById('display-headline').innerText = prof.headline;
+            document.getElementById('display-about').innerText = prof.about_text;
+        }
 
-        // Load Work (Lakukan hal yang sama untuk tabel lain)
-        const { data: works } = await supabase.from('work_experience').select('*');
-        document.getElementById('work-list').innerHTML = works.map(w => `
-            <div class="exp-item">
-                <h4>${w.job_position}</h4>
-                <p>${w.company} | ${w.duration}</p>
-            </div>
-        `).join('');
+        // 2. Project
+        const { data: projs } = await supabase.from('projects').select('*').order('id', { ascending: false });
+        if (projs) {
+            document.getElementById('project-list').innerHTML = projs.map(p => `
+                <div class="project-card">
+                    <img src="${p.image_url || 'img/default-proj.jpg'}" style="width:100%; height:200px; object-fit:cover;" onerror="this.src='img/default-proj.jpg'">
+                    <div style="padding:15px;">
+                        <h3>${p.title}</h3>
+                        <p>${p.description || ''}</p>
+                        <a href="${p.link_github}" target="_blank" class="btn-primary">GitHub</a>
+                    </div>
+                </div>`).join('');
+        }
+
+        // 3. Timelines (Work, Cert, Vol)
+        const configs = [
+            { table: 'work_experience', el: 'work-list', t: 'job_position', s: 'company' },
+            { table: 'certifications', el: 'certification-list', t: 'name', s: 'publisher' },
+            { table: 'volunteers', el: 'volunteer-list', t: 'role', s: 'organization' }
+        ];
+
+        for (const conf of configs) {
+            const { data } = await supabase.from(conf.table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(conf.el);
+            if (container && data) {
+                container.innerHTML = data.map(d => `
+                    <div class="exp-item" style="border-left: 2px solid #006661; padding-left: 15px; margin-bottom: 20px;">
+                        <h4 style="color:#006661; margin:0;">${d[conf.t]}</h4>
+                        <p><b>${d[conf.s]}</b> | ${d.duration || ''}</p>
+                        <p style="font-size:0.9rem;">${d.description || ''}</p>
+                    </div>`).join('');
+            }
+        }
     }
-    loadPortfolio();
+    window.onload = loadPortfolio;
 </script>
 </body>
 </html>
