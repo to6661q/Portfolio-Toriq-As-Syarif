@@ -227,3 +227,9 @@ footer {
     .hero-img img { width: 220px; height: 220px; }
     .footer-nav { flex-direction: column; gap: 15px; text-align: center; }
 }
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
