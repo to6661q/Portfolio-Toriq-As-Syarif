@@ -119,8 +119,6 @@
         }
     }
 
-    import { supabase } from './js/supabase-config.js';
-
     async function loadWork() {
         const { data } = await supabase.from('work_experience').select('*').order('id', { ascending: false });
         const container = document.getElementById('work-list');
