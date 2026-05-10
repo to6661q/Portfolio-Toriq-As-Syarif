@@ -2,145 +2,95 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toriq As Syarif | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <title>Portofolio</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
     <header>
-        <div class="container nav-container">
-            <h1 class="logo">TAS<span>.</span></h1>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#profile">Home</a></li>
-                    <li><a href="#project">My Project</a></li>
-                    <li><a href="#work">Work Experience</a></li>
-                    <li><a href="#certification">Certifications</a></li>
-                    <li><a href="#volunteer">Volunteer</a></li>
-                    <li><a href="login.html" class="lock-icon"><i class="fas fa-lock"></i></a></li>
-                </ul>
+        <div class="container nav-flex">
+            <h2 style="color:var(--primary); margin:0;">TAS.</h2>
+            <nav class="nav-links">
+                <a href="#project">Projects</a>
+                <a href="#work">Work</a>
+                <a href="#cert">Certs</a>
+                <a href="#volunteer">Volunteer</a>
             </nav>
         </div>
     </header>
 
-    <section id="profile" class="hero" style="background: linear-gradient(135deg, #f4f9f8 0%, #ffffff 100%);">
-        <div class="container hero-flex">
-            <div class="hero-img">
-                <img id="display-profile-pic" src="img/profile.jpg" alt="Toriq As Syarif">
-            </div>
-            <div class="hero-text">
-                <h1>Halo, Saya <span class="highlight">Toriq As Syarif</span></h1>
-                <p id="display-headline" class="subtitle">IT Specialist & Software Developer</p>
-                <div class="hero-btns">
-                    <a href="#project" class="btn-primary">My Project</a>
-                    <a href="#work" class="btn-primary">Work Experience</a>
-                    <a href="#certification" class="btn-primary">Certifications</a>
-                </div>
-            </div>
+    <section id="profile" class="section">
+        <div class="container" style="text-align:center;">
+            <h1 id="display-headline" style="font-size:3rem; margin-bottom:10px;">Loading...</h1>
+            <p id="display-about" style="max-width:700px; margin: 0 auto; line-height:1.6;"></p>
+        </div>
+    </section>
+
+    <section id="project" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            <div id="project-list" class="grid"></div>
         </div>
     </section>
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="summary-box">
-                <p id="display-about">Loading summary...</p>
-            </div>
-            </div>
-    </section>
-
-    <section id="project" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title">My Project</h2>
-            <div id="project-list" class="project-grid"></div>
-        </div>
-    </section>
-
-    <section id="work" class="section">
-        <div class="container">
-            <h2 class="section-title">Work Experience</h2>
-            <div id="work-list" class="experience-timeline"></div>
-        </div>
-    </section>
-
-    <section id="certification" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title">Certifications</h2>
-            <div id="certification-list" class="cert-grid"></div>
-        </div>
-    </section>
-
-    <section id="volunteer" class="section">
-        <div class="container">
-            <h2 class="section-title">Volunteer Experience</h2>
-            <div id="volunteer-list" class="experience-timeline"></div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container footer-nav" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;">
-            <div class="footer-item">&copy; 2026 Toriq As Syarif</div>
-            <div class="footer-item"><a href="mailto:toriqnain@gmail.com" style="color: #80cbc4; text-decoration: none;">toriqnain@gmail.com</a></div>
-            <div id="quote-display" class="footer-item" style="font-style: italic; opacity: 0.8; font-size: 0.9rem;"></div>
-        </div>
-    </footer>
-<script type="module">
-    import { supabase } from './js/supabase-config.js';
-
-    async function loadContent() {
-        // Load Projects
-        const { data: projects } = await supabase.from('projects').select('*').order('id', { ascending: false });
-        const projList = document.getElementById('project-list');
-        
-        if (projects && projList) {
-            projList.innerHTML = projects.map(p => `
-                <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100%;">
-                    <div style="width: 100%; height: 200px; background: #f0f0f0; overflow: hidden;">
-                        <img src="${p.image_url || 'img/default-proj.jpg'}" 
-                             style="width: 100%; height: 100%; object-fit: cover;" 
-                             onerror="this.src='img/default-proj.jpg'">
-                    </div>
-                    <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
-                        <h3 style="color: #006661; margin-bottom: 10px; font-size: 1.2rem;">${p.title}</h3>
-                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px; line-height: 1.5; flex-grow: 1;">
-                            ${p.description || 'No description available.'}
-                        </p>
-                        <div style="margin-bottom: 15px;">
-                            ${p.tech_stack ? p.tech_stack.map(t => `<span style="background: #e0f2f1; color: #006661; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px; display: inline-block; margin-bottom: 5px;">${t}</span>`).join('') : ''}
-                        </div>
-                        <a href="${p.link_github}" target="_blank" style="background: #006661; color: white; padding: 10px; text-align: center; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">View GitHub</a>
-                    </div>
+            <h2 class="section-title">Experience & Activities</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
+                <div>
+                    <h3>Work Experience</h3>
+                    <div id="work-list"></div>
                 </div>
-            `).join('');
-        }
-
-        if (work_experience && workList) {
-            workList.innerHTML = work_experience.map(p => `
-                <div class="project-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100%;">
-                    <div style="width: 100%; height: 200px; background: #f0f0f0; overflow: hidden;">
-                        <img src="${p.image_url || 'img/default-proj.jpg'}" 
-                             style="width: 100%; height: 100%; object-fit: cover;" 
-                             onerror="this.src='img/default-proj.jpg'">
-                    </div>
-                    <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
-                        <h3 style="color: #006661; margin-bottom: 10px; font-size: 1.2rem;">${p.title}</h3>
-                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px; line-height: 1.5; flex-grow: 1;">
-                            ${p.description || 'No description available.'}
-                        </p>
-                        <div style="margin-bottom: 15px;">
-                            ${p.tech_stack ? p.tech_stack.map(t => `<span style="background: #e0f2f1; color: #006661; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 5px; display: inline-block; margin-bottom: 5px;">${t}</span>`).join('') : ''}
-                        </div>
-                        <a href="${p.link_github}" target="_blank" style="background: #006661; color: white; padding: 10px; text-align: center; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">View GitHub</a>
-                    </div>
+                <div>
+                    <h3>Certifications & Volunteer</h3>
+                    <div id="cert-list"></div>
+                    <div id="volunteer-list" style="margin-top:40px;"></div>
                 </div>
-            `).join('');
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        async function init() {
+            const { data: p } = await supabase.from('profile').select('*').eq('id', 1).single();
+            if (p) {
+                document.getElementById('display-headline').innerText = p.headline;
+                document.getElementById('display-about').innerText = p.about_text;
+            }
+
+            const load = async (table, elId, htmlFn) => {
+                const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+                if (data) document.getElementById(elId).innerHTML = data.map(htmlFn).join('');
+            };
+
+            load('project', 'project-list', d => `
+                <div class="card">
+                    <h3>${d.title}</h3>
+                    <p>${d.description}</p>
+                    <a href="${d.link_github}" target="_blank" style="color:var(--primary); font-weight:bold;">View Github</a>
+                </div>`);
+
+            load('work', 'work-list', d => `
+                <div class="exp-item">
+                    <h4>${d.job_position}</h4>
+                    <p><b>${d.company}</b> | ${d.duration}</p>
+                    <p>${d.description}</p>
+                </div>`);
+
+            load('cert', 'cert-list', d => `
+                <div class="exp-item">
+                    <h4>${d.name}</h4>
+                    <p>${d.publisher}</p>
+                </div>`);
+
+            load('volunteer', 'volunteer-list', d => `
+                <div class="exp-item">
+                    <h4>${d.role}</h4>
+                    <p><b>${d.organization}</b> | ${d.duration}</p>
+                </div>`);
         }
-    }
-    window.addEventListener('DOMContentLoaded', loadContent);
-</script>
+        window.onload = init;
+    </script>
 </body>
 </html>
