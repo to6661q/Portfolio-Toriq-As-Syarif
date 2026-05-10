@@ -136,66 +136,78 @@ header {
 }
 
 /* 2. PROFILE HERO */
-/* --- PROFILE ROW SECTION --- */
+/* --- PROFILE CENTERED ROW --- */
 .hero-section {
-    padding: 40px 0 20px;   /* Atas 40px, Bawah 20px */
-    background: #ffffff;
+    padding: 40px 0 20px; /* Jarak atas/bawah yang proporsional */
+    background-color: #ffffff;
+    width: 100%;
 }
 
-/* Flexbox Container */
-.profile-row {
+/* Container utama untuk centering */
+.profile-row-centered {
     display: flex;
-    align-items: center; /* Menjaga foto dan teks sejajar secara vertikal di tengah */
-    justify-content: flex-start; /* Memulai konten dari kiri */
-    gap: 25px; /* Jarak antara foto dan teks */
+    flex-direction: row;      /* Memastikan tetap satu baris */
+    align-items: center;      /* Menjaga foto & teks sejajar vertikal di tengah */
+    justify-content: center;  /* INI KUNCINYA: Menarik seluruh grup ke tengah */
+    gap: 40px;                /* Jarak horizontal antara foto dan teks */
+    width: 100%;
 }
 
-/* Styling Foto Profil */
+/* Foto Profil */
 .profile-img {
-    width: 110px; /* Ukuran diperkecil agar pas dalam satu baris */
-    height: 110px;
-    border-radius: 50%;
-    border: 4px solid #006661; /* Border hijau khas kamu */
+    width: 130px;             /* Ukuran foto yang pas untuk desktop */
+    height: 130px;
+    border-radius: 50%;       /* Membuat foto bulat sempurna */
+    border: 5px solid #006661; 
     object-fit: cover;
-    display: block;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 20px rgba(0, 102, 97, 0.1); /* Shadow halus bertema hijau */
+    transition: transform 0.3s ease;
 }
 
-/* Wadah Teks (Nama & Headline) */
-/* Pastikan teks tidak ikut center-align secara internal agar tetap rapi di samping foto */
+.profile-img:hover {
+    transform: scale(1.05);   /* Efek interaktif saat foto disorot */
+}
+
+/* Wadah Teks */
 .profile-text-container {
     display: flex;
-    flex-direction: column;
-    text-align: left;       /* Teks tetap rata kiri terhadap wadahnya sendiri */
+    flex-direction: column;   /* Nama di atas, Headline di bawah */
+    text-align: left;         /* Teks tetap rata kiri terhadap grupnya sendiri */
 }
 
 .name-text {
-    font-size: 2rem; /* Ukuran nama yang dominan */
+    font-size: 2.8rem;        /* Ukuran font tebal dan modern */
     font-weight: 800;
-    color: #333;
+    color: #2d3436;
     margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
+    line-height: 1;
 }
 
 .headline-text {
-    font-size: 1.1rem;
-    color: #006661; /* Warna hijau untuk profesi */
+    font-size: 1.2rem;
+    color: #006661;           /* Warna identitas kamu */
     font-weight: 600;
-    margin: 5px 0 0 0; /* Jarak atas tipis dari nama */
+    margin: 8px 0 0 0;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;      /* Memberikan kesan 'luxury' pada profesi */
 }
 
-/* --- RESPONSIVE DESIGN --- */
+/* --- RESPONSIVENESS --- */
 @media (max-width: 768px) {
-    .profile-row {
-    display: flex;
-    align-items: center;    /* Tetap sejajar secara vertikal */
-    justify-content: center; /* INI YANG DIUBAH: Memindahkan seluruh konten ke tengah */
-    gap: 30px;              /* Jarak antara foto dan teks */
-    width: 100%;            /* Memastikan container mengambil ruang penuh */
-}
+    .profile-row-centered {
+        gap: 20px;
+        /* Jika di HP terlalu sempit, bisa dipertimbangkan untuk stack vertikal */
+        /* flex-direction: column; text-align: center; */
+    }
+    
+    .name-text {
+        font-size: 2rem;
+    }
+    
+    .profile-img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 /* 3. BIODATA */
