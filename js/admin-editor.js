@@ -1,7 +1,8 @@
 import { supabase } from './supabase-config.js';
 
 // Pencatat ID untuk fitur Edit
-let editingIds = { project: null, work: null, cert: null, volunteer: null };
+
+let editingIds = { education: null,socmed: null, achievement:null, project: null, work: null, cert: null, volunteer: null };
 
 // --- 1. FUNGSI PENYEGAR DATA ---
 async function refresh() {
@@ -13,6 +14,10 @@ async function refresh() {
         document.getElementById('headline').value = prof.headline || '';
         document.getElementById('about_text').value = prof.about_text || '';
     }
+
+    renderList('education', 'list-education', 'school');
+renderList('socmed', 'list-socmed', 'platform');
+renderList('achievement', 'list-achievement', 'title');
 
     // Render tabel lainnya
     renderList('project', 'list-project', 'title');
@@ -66,7 +71,20 @@ window.prepareEdit = async (table, id) => {
         document.getElementById('v-role').value = data.role;
         document.getElementById('v-org').value = data.organization;
         document.getElementById('v-dur').value = data.duration;
-    }
+    }else if (table === 'education') {
+        document.getElementById('edu-school').value = data.school;
+        document.getElementById('edu-degree').value = data.degree;
+        document.getElementById('edu-year').value = data.year;
+        document.getElementById('edu-gpa').value = data.gpa;
+    } else if (table === 'socmed') {
+        document.getElementById('sm-platform').value = data.platform;
+        document.getElementById('sm-url').value = data.url;
+    } else if (table === 'achievement') {
+        document.getElementById('ach-title').value = data.title;
+        document.getElementById('ach-issuer').value = data.issuer;
+        document.getElementById('ach-year').value = data.year;
+}
+    
     
     const btn = document.querySelector(`#${table}-form button`);
     if(btn) btn.innerText = "Update Data";
@@ -124,6 +142,24 @@ const initGenericForm = (formId, table, type, payloadFn) => {
         alert("Berhasil!");
     };
 };
+
+initGenericForm('education-form', 'education', 'education', () => ({
+    school: document.getElementById('edu-school').value,
+    degree: document.getElementById('edu-degree').value,
+    year: document.getElementById('edu-year').value,
+    gpa: document.getElementById('edu-gpa').value
+}));
+
+initGenericForm('socmed-form', 'socmed', 'socmed', () => ({
+    platform: document.getElementById('sm-platform').value,
+    url: document.getElementById('sm-url').value
+}));
+
+initGenericForm('achievement-form', 'achievement', 'achievement', () => ({
+    title: document.getElementById('ach-title').value,
+    issuer: document.getElementById('ach-issuer').value,
+    year: document.getElementById('ach-year').value
+}));
 
 initGenericForm('project-form', 'project', 'project', () => ({
     title: document.getElementById('p-title').value,
