@@ -92,20 +92,27 @@ window.prepareEdit = async (table, id) => {
     document.getElementById(`section-${table}`).scrollIntoView({ behavior: 'smooth' });
 };
 
-// Fungsi Khusus Footer
-window.saveFooterSettings = async () => {
-    const email = document.getElementById('f-email').value;
-    const quotes = document.getElementById('f-quotes').value;
-    
-    const { error } = await supabase.from('footer_settings').upsert({ id: 1, email, quotes_list: quotes });
-    if (error) {
-        console.error(error);
-        alert("Gagal update footer: " + error.message);
-    } else {
-        alert("Footer Berhasil Diperbarui!");
-        refreshAll();
-    }
-};
+// Tambahkan ini di bagian paling bawah file admin-editor.js kamu
+const footerBtn = document.getElementById('btn-save-footer');
+if (footerBtn) {
+    footerBtn.addEventListener('click', async () => {
+        const email = document.getElementById('f-email').value;
+        const quotes = document.getElementById('f-quotes').value;
+        
+        const { error } = await supabase.from('footer_settings').upsert({ 
+            id: 1, 
+            email: email, 
+            quotes_list: quotes 
+        });
+
+        if (error) {
+            alert("Gagal update footer: " + error.message);
+        } else {
+            alert("Footer Berhasil Diperbarui!");
+            refreshAll();
+        }
+    });
+}
 
 // --- 4. SUBMIT HANDLERS ---
 
