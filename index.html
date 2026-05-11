@@ -138,7 +138,20 @@
         async function init() {
             // 1. Random Quote
             document.getElementById('random-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-
+// Fungsi format tanggal untuk tampilan 05 June 2026
+const formatTglCustom = (dateString) => {
+    if (!dateString) return "";
+    
+    // Kita gunakan 'en-GB' untuk format Day Month Year
+    // 'id-ID' jika ingin "05 Juni 2026"
+    const dateObj = new Date(dateString);
+    
+    return dateObj.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+};
             // 2. Load Profile
             const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
             if (prof) {
