@@ -181,7 +181,20 @@
         // Section 3: Bio Details
         fetchTo('education', 'edu-list', d => `<div class="sub-item"><strong>${d.school}</strong><br><small>${d.degree} | ${d.year}</small></div>`);
         fetchTo('achievement', 'ach-list', d => `<div class="sub-item"><strong>${d.title}</strong><br><small>${d.publisher} (${d.date})</small></div>`);
-        fetchTo('skill', 'skill-list', d => `<div class="skill-icon"><i class="${d.icon_class}"></i><span>${d.name}</span></div>`);
+        async function fetchSkills() {
+    const { data } = await supabase.from('skill').select('*').order('id', { ascending: true });
+    const container = document.getElementById('skill-list');
+    if (container && data) {
+        container.innerHTML = data.map(s => `
+            <div class="skill-card-new">
+                <div class="skill-icon-wrapper">
+                    <img src="${s.image_url || 'img/default-skill.png'}" alt="${s.name}">
+                </div>
+                <span>${s.name}</span>
+            </div>
+        `).join('');
+    }
+}
 
         // --- REVISI MEDIA TEMPLATE (Experience, Cert, Volunteer) ---
         const mediaTemplate = d => {
