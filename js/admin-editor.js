@@ -236,6 +236,10 @@ initGenericForm('contact-form', 'contact', 'contact', () => ({
     icon_class: document.getElementById('co-icon').value,
     url: document.getElementById('co-url').value
 }));
+
+initGenericForm('skill-form', 'skill', 'skill', () => ({
+    name: document.getElementById('skill-name').value
+}), 'skill-img'); // Tambahkan 'skill-img' di sini
 // --- LOGIKA LOGOUT ---
 const logoutBtn = document.getElementById('btn-logout');
 
