@@ -118,157 +118,117 @@
             <p class="copyright">@2026 Toriq As Syarif - toriqnain@gmail.com</p>
         </div>
     </footer>
-
     <script type="module">
-        import { supabase } from './js/supabase-config.js';
+    import { supabase } from './js/supabase-config.js';
 
-        const quotes = [
-            "First, solve the problem. Then, write the code.",
-            "Code is like humor. When you have to explain it, it’s bad.",
-            "Simplicity is the soul of efficiency.",
-            "Experience is the name everyone gives to their mistakes.",
-            "Knowledge is power, but sharing it is empowerment.",
-            "The best way to predict the future is to invent it.",
-            "Make it work, make it right, make it fast.",
-            "Clean code always looks like it was written by someone who cares.",
-            "Innovation distinguishes between a leader and a follower.",
-            "Your most unhappy customers are your greatest source of learning."
-        ];
+    const quotes = [
+        "First, solve the problem. Then, write the code.",
+        "Code is like humor. When you have to explain it, it’s bad.",
+        "Simplicity is the soul of efficiency.",
+        "Experience is the name everyone gives to their mistakes.",
+        "Knowledge is power, but sharing it is empowerment.",
+        "The best way to predict the future is to invent it.",
+        "Make it work, make it right, make it fast.",
+        "Clean code always looks like it was written by someone who cares.",
+        "Innovation distinguishes between a leader and a follower.",
+        "Your most unhappy customers are your greatest source of learning."
+    ];
 
-        async function init() {
-            // 1. Random Quote
-            document.getElementById('random-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-// Fungsi format tanggal untuk tampilan 05 June 2026
-const formatTglCustom = (dateString) => {
-    if (!dateString) return "";
-    
-    // Kita gunakan 'en-GB' untuk format Day Month Year
-    // 'id-ID' jika ingin "05 Juni 2026"
-    const dateObj = new Date(dateString);
-    
-    return dateObj.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-};
-            // 2. Load Profile
-            const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
-            if (prof) {
-                document.getElementById('display-name').innerText = prof.full_name;
-                document.getElementById('display-headline').innerText = prof.headline;
-                document.getElementById('display-desc').innerText = prof.description;
-                if (prof.photo_url) document.getElementById('display-photo').src = prof.photo_url;
+    async function init() {
+        // 1. Random Quote
+        document.getElementById('random-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+        // --- REVISI TANGGAL: FUNGSI PENERJEMAH ---
+        const formatTgl = (dateString) => {
+            if (!dateString) return "";
+            const dateObj = new Date(dateString);
+            return dateObj.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+        };
+
+        // 2. Load Profile
+        const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
+        if (prof) {
+            document.getElementById('display-name').innerText = prof.full_name;
+            document.getElementById('display-headline').innerText = prof.headline;
+            document.getElementById('display-desc').innerText = prof.description;
+            if (prof.photo_url) document.getElementById('display-photo').src = prof.photo_url;
+        }
+
+        // Generic Fetch Helper
+        const fetchTo = async (table, elId, templateFn) => {
+            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+            if (data) document.getElementById(elId).innerHTML = data.map(templateFn).join('');
+        };
+
+        // Section 3: Bio Details
+        fetchTo('education', 'edu-list', d => `<div class="sub-item"><strong>${d.school}</strong><br><small>${d.degree} | ${d.year}</small></div>`);
+        fetchTo('achievement', 'ach-list', d => `<div class="sub-item"><strong>${d.title}</strong><br><small>${d.publisher} (${d.date})</small></div>`);
+        fetchTo('skill', 'skill-list', d => `<div class="skill-icon"><i class="${d.icon_class}"></i><span>${d.name}</span></div>`);
+
+        // --- REVISI MEDIA TEMPLATE (Experience, Cert, Volunteer) ---
+        const mediaTemplate = d => {
+            // Olah Tanggal (Gaya Baru: Teks Polos)
+            let displayDate = "";
+            if (d.start_date) {
+                displayDate = `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}`;
+            } else if (d.date) {
+                displayDate = formatTgl(d.date);
             }
 
-            // Generic Fetch Helper
-            const fetchTo = async (table, elId, templateFn) => {
-                const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-                if (data) document.getElementById(elId).innerHTML = data.map(templateFn).join('');
-            };
+            // REVISI TECH: Split spasi menjadi Badge/Pill
+            let techBadges = "";
+            if (d.tech_stack) {
+                techBadges = d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('');
+            }
 
-            // Section 3: Bio Details
-            fetchTo('education', 'edu-list', d => `<div class="sub-item"><strong>${d.school}</strong><br><small>${d.degree} | ${d.year}</small></div>`);
-            fetchTo('achievement', 'ach-list', d => `<div class="sub-item"><strong>${d.title}</strong><br><small>${d.publisher} (${d.date})</small></div>`);
-            fetchTo('skill', 'skill-list', d => `<div class="skill-icon"><i class="${d.icon_class}"></i><span>${d.name}</span></div>`);
+            return `
+                <div class="media-card">
+                    ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+                    <div class="media-info">
+                        <span class="date-text-new">${displayDate}</span>
+                        <h4>${d.title || d.position}</h4>
+                        <h5>${d.company || d.publisher || d.organization || ''}</h5>
+                        <p>${d.description || ''}</p>
+                        ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
+                    </div>
+                </div>`;
+        };
 
-            // Section 4, 5, 6: Media Sections
-const mediaTemplate = d => {
-    // 1. Fungsi format tanggal (tetap sama)
-    const formatTgl = (str) => {
-        if (!str) return "";
-        const dateObj = new Date(str);
-        return dateObj.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
+        fetchTo('experience', 'exp-list', mediaTemplate);
+        fetchTo('cert', 'cert-list', mediaTemplate);
+        fetchTo('volunteer', 'vol-list', mediaTemplate);
+
+        // --- REVISI SECTION 7: PROJECT (Gaya Badge) ---
+        fetchTo('project', 'project-list', d => {
+            let techBadges = "";
+            if (d.tech_stack) {
+                techBadges = d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('');
+            }
+
+            return `
+            <div class="media-card">
+                ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
+                <div class="media-info">
+                    <h4>${d.title}</h4>
+                    <p>${d.description}</p>
+                    ${techBadges ? `<div class="tech-container" style="margin-bottom:15px;">${techBadges}</div>` : ''}
+                    <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:var(--primary); color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>`;
         });
-    };
 
-    // 2. Olah Tanggal
-    let displayDate = "";
-    if (d.start_date) {
-        displayDate = `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}`;
-    } else if (d.date) {
-        displayDate = formatTgl(d.date);
+        // Section 8: Contact
+        fetchTo('contact', 'socmed-list', d => `
+            <a href="${d.url}" target="_blank" class="socmed-btn"><i class="${d.icon_class}"></i> ${d.platform}</a>
+        `);
     }
-
-    // 3. LOGIKA BARU: Pecah Tech Stack menjadi Tag Individu
-    // Kita pecah string berdasarkan spasi
-    let techBadges = "";
-    if (d.tech_stack) {
-        const skills = d.tech_stack.split(' '); // Memecah berdasarkan spasi
-        techBadges = skills.map(skill => `<span class="tech-badge">${skill}</span>`).join('');
-    }
-
-    return `
-        <div class="media-card">
-            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
-            <div class="media-info">
-                <span class="date-text-new">${displayDate}</span>
-                
-                <h4>${d.title || d.position}</h4>
-                <h5>${d.company || d.publisher || d.organization || ''}</h5>
-                <p>${d.description || ''}</p>
-
-                ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
-            </div>
-        </div>`;
-};
-
-    // 2. Logika untuk menentukan apa yang ditampilkan di span date-tag
-    let displayDate = "";
-    if (d.start_date) {
-        // Jika ini Experience (ada start_date)
-        const start = formatTgl(d.start_date);
-        const end = d.end_date ? formatTgl(d.end_date) : "Present";
-        displayDate = `${start} - ${end}`;
-    } else if (d.date) {
-        // Jika ini Cert atau Volunteer (hanya ada date)
-        displayDate = formatTgl(d.date);
-    }
-
-    // 3. Return HTML Template
-    return `
-        <div class="media-card">
-            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
-            <div class="media-info">
-                <span class="date-tag">${displayDate}</span>
-                <h4>${d.title || d.position}</h4>
-                <h5>${d.company || d.publisher || d.organization || ''}</h5>
-                <p>${d.description || ''}</p>
-            </div>
-        </div>`;
-};
-            
-            fetchTo('experience', 'exp-list', mediaTemplate);
-            fetchTo('cert', 'cert-list', mediaTemplate);
-            fetchTo('volunteer', 'vol-list', mediaTemplate);
-
-            // Section 7: Project
-// Di dalam file index.html, cari fetchTo untuk project-list
-fetchTo('project', 'project-list', d => `
-    <div class="media-card">
-        ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
-        <div class="media-info">
-            <h4>${d.title}</h4>
-            <p>${d.description}</p>
-            <small class="tech-stack" style="display:block; margin-bottom:15px; color:var(--primary); font-weight:bold;">
-                Tech: ${d.tech_stack}
-            </small>
-            <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:var(--primary); color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
-                <i class="fab fa-github"></i> GitHub
-            </a>
-        </div>
-    </div>
-`);
-
-            // Section 8: Contact
-            fetchTo('contact', 'socmed-list', d => `
-                <a href="${d.url}" target="_blank" class="socmed-btn"><i class="${d.icon_class}"></i> ${d.platform}</a>
-            `);
-        }
-        window.onload = init;
-    </script>
+    window.onload = init;
+</script>
 </body>
 </html>
