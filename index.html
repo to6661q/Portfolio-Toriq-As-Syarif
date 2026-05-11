@@ -132,7 +132,7 @@
     <img class="modal-content" id="img-full">
     <div id="caption"></div>
 </div>
-    <script type="module">
+   <script type="module">
     import { supabase } from './js/supabase-config.js';
 
     const quotes = [
@@ -148,142 +148,132 @@
         "Your most unhappy customers are your greatest source of learning."
     ];
 
-    async function init() {
-        // 1. Random Quote
-        document.getElementById('random-quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+    // 1. FUNGSI PENERJEMAH TANGGAL
+    const formatTgl = (str) => {
+        if (!str) return "";
+        const dateObj = new Date(str);
+        if (isNaN(dateObj)) return str;
+        return dateObj.toLocaleDateString('en-GB', {
+            day: '2-digit', month: 'long', year: 'numeric'
+        });
+    };
 
-        // --- REVISI TANGGAL: FUNGSI PENERJEMAH ---
-        const formatTgl = (dateString) => {
-            if (!dateString) return "";
-            const dateObj = new Date(dateString);
-            return dateObj.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
-        };
-
-        // 2. Load Profile
-        const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
-        if (prof) {
-            document.getElementById('display-name').innerText = prof.full_name;
-            document.getElementById('display-headline').innerText = prof.headline;
-            document.getElementById('display-desc').innerText = prof.description;
-            if (prof.photo_url) document.getElementById('display-photo').src = prof.photo_url;
+    // 2. MASTER TEMPLATE (Experience, Cert, Volunteer)
+    const mediaTemplate = (d) => {
+        // Gaya Tanggal: Bold & Hijau (via CSS class)
+        let displayDate = "";
+        if (d.start_date) {
+            displayDate = `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}`;
+        } else if (d.date) {
+            displayDate = formatTgl(d.date);
         }
 
-        // Generic Fetch Helper
+        // Gaya Tech: Badge Biru (via CSS class)
+        let techBadges = "";
+        if (d.tech_stack) {
+            techBadges = d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('');
+        }
+
+        return `
+            <div class="media-card">
+                ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+                <div class="media-info">
+                    <span class="date-text-new">${displayDate}</span>
+                    <h4>${d.title || d.position}</h4>
+                    <h5>${d.company || d.publisher || d.organization || ''}</h5>
+                    <p>${d.description || ''}</p>
+                    ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
+                </div>
+            </div>`;
+    };
+
+    async function init() {
+        // A. Random Quote
+        const quoteEl = document.getElementById('random-quote');
+        if(quoteEl) quoteEl.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+        // B. Load Profile
+        const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
+        if (prof) {
+            if(document.getElementById('display-name')) document.getElementById('display-name').innerText = prof.full_name;
+            if(document.getElementById('display-headline')) document.getElementById('display-headline').innerText = prof.headline;
+            if(document.getElementById('display-desc')) document.getElementById('display-desc').innerText = prof.description;
+            if(prof.photo_url && document.getElementById('display-photo')) document.getElementById('display-photo').src = prof.photo_url;
+        }
+
+        // C. Helper Fetch
         const fetchTo = async (table, elId, templateFn) => {
-            const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
-            if (data) document.getElementById(elId).innerHTML = data.map(templateFn).join('');
+            const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
+            const container = document.getElementById(elId);
+            if (data && container) {
+                container.innerHTML = data.map(templateFn).join('');
+            } else if (error) {
+                console.error(`Error loading ${table}:`, error);
+            }
         };
 
-        // Section 3: Bio Details
+        // D. Render Sections
         fetchTo('education', 'edu-list', d => `<div class="sub-item"><strong>${d.school}</strong><br><small>${d.degree} | ${d.year}</small></div>`);
         fetchTo('achievement', 'ach-list', d => `<div class="sub-item"><strong>${d.title}</strong><br><small>${d.publisher} (${d.date})</small></div>`);
-        async function fetchSkills() {
-    const { data } = await supabase.from('skill').select('*').order('id', { ascending: true });
-    const container = document.getElementById('skill-list');
-    if (container && data) {
-        container.innerHTML = data.map(s => `
+        
+        // REVISI SKILLS GAMBAR
+        fetchTo('skill', 'skill-list', s => `
             <div class="skill-card-new">
                 <div class="skill-icon-wrapper">
-                    <img src="${s.image_url || 'img/default-skill.png'}" alt="${s.name}">
+                    <img src="${s.image_url || 'img/default.png'}" alt="${s.name}">
                 </div>
                 <span>${s.name}</span>
             </div>
-        `).join('');
-    }
-}
-
-        // --- REVISI MEDIA TEMPLATE (Experience, Cert, Volunteer) ---
-        const mediaTemplate = d => {
-            // Olah Tanggal (Gaya Baru: Teks Polos)
-            let displayDate = "";
-            if (d.start_date) {
-                displayDate = `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}`;
-            } else if (d.date) {
-                displayDate = formatTgl(d.date);
-            }
-
-            // REVISI TECH: Split spasi menjadi Badge/Pill
-            let techBadges = "";
-            if (d.tech_stack) {
-                techBadges = d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('');
-            }
-
-            return `
-                <div class="media-card">
-                    ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
-                    <div class="media-info">
-                        <span class="date-text-new">${displayDate}</span>
-                        <h4>${d.title || d.position}</h4>
-                        <h5>${d.company || d.publisher || d.organization || ''}</h5>
-                        <p>${d.description || ''}</p>
-                        ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
-                    </div>
-                </div>`;
-        };
+        `);
 
         fetchTo('experience', 'exp-list', mediaTemplate);
         fetchTo('cert', 'cert-list', mediaTemplate);
         fetchTo('volunteer', 'vol-list', mediaTemplate);
 
-        // --- REVISI SECTION 7: PROJECT (Gaya Badge) ---
+        // REVISI PROJECT (4 Grid & Tech Badge)
         fetchTo('project', 'project-list', d => {
-            let techBadges = "";
-            if (d.tech_stack) {
-                techBadges = d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('');
-            }
-
+            let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
             return `
-            <div class="media-card">
-                ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
-                <div class="media-info">
-                    <h4>${d.title}</h4>
-                    <p>${d.description}</p>
-                    ${techBadges ? `<div class="tech-container" style="margin-bottom:15px;">${techBadges}</div>` : ''}
-                    <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:var(--primary); color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>`;
+                <div class="media-card">
+                    ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
+                    <div class="media-info">
+                        <h4>${d.title}</h4>
+                        <p>${d.description}</p>
+                        ${techBadges ? `<div class="tech-container" style="margin-bottom:15px;">${techBadges}</div>` : ''}
+                        <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:#006661; color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>`;
         });
 
-        // Section 8: Contact
-        // Cari baris fetchTo('contact', ...) dan ubah template-nya menjadi ini:
-fetchTo('contact', 'socmed-list', d => `
-    <a href="${d.url}" target="_blank" title="${d.platform}">
-        <i class="${d.icon_class}"></i>
-    </a>
-`);
+        // REVISI CONTACT (Hanya Ikon)
+        fetchTo('contact', 'socmed-list', d => `
+            <a href="${d.url}" target="_blank" title="${d.platform}">
+                <i class="${d.icon_class}"></i>
+            </a>
+        `);
 
-
-        // --- LOGIKA POP-UP GAMBAR (LIGHTBOX) ---
-const modal = document.getElementById("image-modal");
-const modalImg = document.getElementById("img-full");
-
-// Mendengarkan klik di seluruh dokumen (Event Delegation)
-document.addEventListener('click', (e) => {
-    // Jika yang diklik adalah elemen IMG
-    if (e.target.tagName === 'IMG') {
-        modal.style.display = "block";
-        modalImg.src = e.target.src;
-        
-        // Opsional: Hilangkan scroll pada body saat gambar terbuka
-        document.body.style.overflow = "hidden";
+        // E. LOGIKA POP-UP GAMBAR (LIGHTBOX)
+        const modal = document.getElementById("image-modal");
+        const modalImg = document.getElementById("img-full");
+        if (modal && modalImg) {
+            document.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IMG' && !e.target.closest('.admin-sidebar')) {
+                    modal.style.display = "block";
+                    modalImg.src = e.target.src;
+                    document.body.style.overflow = "hidden";
+                }
+            });
+            const closeModal = () => {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            };
+            document.querySelector('.close-modal').onclick = closeModal;
+            modal.onclick = (e) => { if(e.target === modal) closeModal(); };
+        }
     }
-});
 
-// Tutup modal saat tombol (x) diklik atau area luar gambar diklik
-const closeModal = () => {
-    modal.style.display = "none";
-    document.body.style.overflow = "auto";
-};
-
-document.querySelector('.close-modal').onclick = closeModal;
-modal.onclick = (e) => { if(e.target === modal) closeModal(); };
-    }
     window.onload = init;
 </script>
 </body>
