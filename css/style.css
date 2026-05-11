@@ -173,29 +173,34 @@ header {
     flex-shrink: 0; /* Mencegah foto gepeng saat layar menyempit */
 }
 /* --- GAYA BARU UNTUK TANGGAL (Sekarang seperti gaya Tech sebelumnya) --- */
+/* --- GAYA TANGGAL (Bold & Hijau Utama) --- */
 .date-text-new {
     font-size: 0.85rem;
-    color: #666; /* Warna abu-abu profesional */
-    font-weight: 600;
+    color: #006661; /* Warna hijau brand kamu */
+    font-weight: 700; /* Bold */
     display: block;
     margin-bottom: 5px;
 }
 
-/* --- GAYA BARU UNTUK TECH STACK (Sekarang seperti gaya Tag/Badge) --- */
+/* --- GAYA TECH STACK (Background Biru, Teks Kecil, Bold, Miring) --- */
 .tech-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     margin-top: 10px;
 }
 
 .tech-badge {
-    background-color: #2596be; /* Warna hijau utama */
+    background-color: #2596be; /* Biru cerah kontras */
     color: #ffffff;
-    padding: 4px 12px;
-    border-radius: 20px; /* Membuat bentuk pill/kapsul */
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px; /* Sedikit kotak agar terlihat lebih 'techy' */
+    
+    /* Revisi Teks */
+    font-size: 0.65rem;  /* Kecil */
+    font-weight: 800;    /* Tebal/Bold */
+    font-style: italic;  /* Miring */
+    
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: inline-block;
