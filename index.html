@@ -118,6 +118,12 @@
             <p class="copyright">@2026 Toriq As Syarif - toriqnain@gmail.com</p>
         </div>
     </footer>
+
+    <div id="image-modal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="img-full">
+    <div id="caption"></div>
+</div>
     <script type="module">
     import { supabase } from './js/supabase-config.js';
 
@@ -227,6 +233,32 @@
         fetchTo('contact', 'socmed-list', d => `
             <a href="${d.url}" target="_blank" class="socmed-btn"><i class="${d.icon_class}"></i> ${d.platform}</a>
         `);
+
+
+        // --- LOGIKA POP-UP GAMBAR (LIGHTBOX) ---
+const modal = document.getElementById("image-modal");
+const modalImg = document.getElementById("img-full");
+
+// Mendengarkan klik di seluruh dokumen (Event Delegation)
+document.addEventListener('click', (e) => {
+    // Jika yang diklik adalah elemen IMG
+    if (e.target.tagName === 'IMG') {
+        modal.style.display = "block";
+        modalImg.src = e.target.src;
+        
+        // Opsional: Hilangkan scroll pada body saat gambar terbuka
+        document.body.style.overflow = "hidden";
+    }
+});
+
+// Tutup modal saat tombol (x) diklik atau area luar gambar diklik
+const closeModal = () => {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+};
+
+document.querySelector('.close-modal').onclick = closeModal;
+modal.onclick = (e) => { if(e.target === modal) closeModal(); };
     }
     window.onload = init;
 </script>
