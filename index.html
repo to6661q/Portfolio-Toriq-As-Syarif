@@ -173,16 +173,43 @@ const formatTglCustom = (dateString) => {
             fetchTo('skill', 'skill-list', d => `<div class="skill-icon"><i class="${d.icon_class}"></i><span>${d.name}</span></div>`);
 
             // Section 4, 5, 6: Media Sections
-            const mediaTemplate = d => `
-                <div class="media-card">
-                    ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
-                    <div class="media-info">
-                        <span class="date-tag">${d.start_date || d.date || ''} ${d.end_date ? '- ' + d.end_date : ''}</span>
-                        <h4>${d.title || d.position}</h4>
-                        <h5>${d.company || d.publisher || d.organization || ''}</h5>
-                        <p>${d.description || ''}</p>
-                    </div>
-                </div>`;
+const mediaTemplate = d => {
+    // 1. Fungsi internal untuk format tanggal (English: 05 June 2026)
+    const formatTgl = (str) => {
+        if (!str) return "";
+        const dateObj = new Date(str);
+        // Gunakan 'en-GB' untuk urutan Day Month Year
+        return dateObj.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+    };
+
+    // 2. Logika untuk menentukan apa yang ditampilkan di span date-tag
+    let displayDate = "";
+    if (d.start_date) {
+        // Jika ini Experience (ada start_date)
+        const start = formatTgl(d.start_date);
+        const end = d.end_date ? formatTgl(d.end_date) : "Present";
+        displayDate = `${start} - ${end}`;
+    } else if (d.date) {
+        // Jika ini Cert atau Volunteer (hanya ada date)
+        displayDate = formatTgl(d.date);
+    }
+
+    // 3. Return HTML Template
+    return `
+        <div class="media-card">
+            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+            <div class="media-info">
+                <span class="date-tag">${displayDate}</span>
+                <h4>${d.title || d.position}</h4>
+                <h5>${d.company || d.publisher || d.organization || ''}</h5>
+                <p>${d.description || ''}</p>
+            </div>
+        </div>`;
+};
             
             fetchTo('experience', 'exp-list', mediaTemplate);
             fetchTo('cert', 'cert-list', mediaTemplate);
