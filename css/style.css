@@ -250,9 +250,78 @@ header {
 .full-width { grid-column: span 2; }
 .bio-card h3 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
 .sub-item { margin-bottom: 15px; }
-.skills-flex { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; padding: 20px 0; }
-.skill-icon { text-align: center; color: var(--primary); }
-.skill-icon i { font-size: 2.5rem; display: block; margin-bottom: 5px; }
+/* --- SUBSECTION SKILLS REVISI --- */
+
+/* Container List */
+#skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* Kartu Skill */
+.skill-card-new {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default; /* Kursor standar, menandakan tidak ada link/klik */
+    user-select: none; /* Teks tidak bisa di-highlight agar terasa seperti widget */
+}
+
+/* Wrapper Logo */
+.skill-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background: #ffffff;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.skill-icon-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(20%); /* Sedikit pudar saat normal */
+    transition: all 0.3s ease;
+}
+
+/* --- EFEK SAAT KURSOR DI ATASNYA (HOVER) --- */
+.skill-card-new:hover {
+    transform: translateY(-10px); /* Melompat pelan ke atas */
+}
+
+.skill-card-new:hover .skill-icon-wrapper {
+    background-color: #e7f6f3; /* Berubah ke warna mint kamu */
+    box-shadow: 0 10px 25px rgba(0, 102, 97, 0.15);
+    border-color: #006661;
+}
+
+.skill-card-new:hover img {
+    filter: grayscale(0%); /* Warna logo jadi cerah kembali */
+    transform: scale(1.15); /* Gambar sedikit membesar */
+}
+
+.skill-card-new span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.skill-card-new:hover span {
+    color: #006661; /* Teks nama skill jadi hijau */
+}
 
 /* SECTIONS */
 section {
