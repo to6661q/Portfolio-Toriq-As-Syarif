@@ -174,17 +174,47 @@ const formatTglCustom = (dateString) => {
 
             // Section 4, 5, 6: Media Sections
 const mediaTemplate = d => {
-    // 1. Fungsi internal untuk format tanggal (English: 05 June 2026)
+    // 1. Fungsi format tanggal (tetap sama)
     const formatTgl = (str) => {
         if (!str) return "";
         const dateObj = new Date(str);
-        // Gunakan 'en-GB' untuk urutan Day Month Year
         return dateObj.toLocaleDateString('en-GB', {
             day: '2-digit',
             month: 'long',
             year: 'numeric'
         });
     };
+
+    // 2. Olah Tanggal
+    let displayDate = "";
+    if (d.start_date) {
+        displayDate = `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}`;
+    } else if (d.date) {
+        displayDate = formatTgl(d.date);
+    }
+
+    // 3. LOGIKA BARU: Pecah Tech Stack menjadi Tag Individu
+    // Kita pecah string berdasarkan spasi
+    let techBadges = "";
+    if (d.tech_stack) {
+        const skills = d.tech_stack.split(' '); // Memecah berdasarkan spasi
+        techBadges = skills.map(skill => `<span class="tech-badge">${skill}</span>`).join('');
+    }
+
+    return `
+        <div class="media-card">
+            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+            <div class="media-info">
+                <span class="date-text-new">${displayDate}</span>
+                
+                <h4>${d.title || d.position}</h4>
+                <h5>${d.company || d.publisher || d.organization || ''}</h5>
+                <p>${d.description || ''}</p>
+
+                ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
+            </div>
+        </div>`;
+};
 
     // 2. Logika untuk menentukan apa yang ditampilkan di span date-tag
     let displayDate = "";
