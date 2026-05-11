@@ -112,9 +112,10 @@
             <div class="record-list">
                 <label><strong>Technical Skills (Icon)</strong></label>
                 <form id="skill-form">
-                    <input type="text" id="skill-name" placeholder="Nama Skill">
-                    <input type="text" id="skill-icon" placeholder="FontAwesome Class (ex: fab fa-python)">
-                    <button type="submit" class="btn-primary" style="margin-top:5px; width:100%;">Add Skill</button>
+                    <input type="text" id="skill-name" placeholder="Skill Name" required>
+                    <label style="font-size: 0.8rem; display: block; margin-top: 10px;">Skill Logo (Image)</label>
+                    <input type="file" id="skill-img" accept="image/*">
+                    <button type="submit">Add Skill</button>
                 </form>
                 <div id="list-skill"></div>
             </div>
