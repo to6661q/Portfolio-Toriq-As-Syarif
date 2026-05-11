@@ -246,6 +246,44 @@ section {
 .media-info h4 { margin: 15px 0 5px; font-size: 1.4rem; }
 .media-info h5 { margin: 0 0 15px; color: var(--text); opacity: 0.7; font-weight: 600; }
 
+/* --- GRID LAYOUT UNTUK CERT & PROJECT --- */
+
+/* Target ID kontainer tempat data di-render */
+#cert-list, #project-list {
+    display: grid;
+    /* Membuat 4 kolom dengan lebar yang sama (1fr) */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px; /* Jarak antar kartu data */
+    margin-top: 20px;
+    align-items: stretch;
+}
+
+/* Memastikan kartu (media-card) memenuhi lebar kolom grid */
+#cert-list .media-card, 
+#project-list .media-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- RESPONSIVE BREAKPOINTS --- */
+
+/* Jika layar berukuran tablet (di bawah 1024px), ubah jadi 2 kolom */
+@media (max-width: 1024px) {
+    #cert-list, #project-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Jika layar berukuran HP (di bawah 600px), ubah jadi 1 kolom */
+@media (max-width: 600px) {
+    #cert-list, #project-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* 8. CONTACT */
 .contact-wrapper { display: flex; flex-direction: column; gap: 40px; }
 .socmed-flex { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
