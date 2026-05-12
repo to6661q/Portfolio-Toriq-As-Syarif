@@ -539,3 +539,29 @@ footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; 
 .media-card img:hover {
     opacity: 0.9;
 }
+/* --- GAYA TOMBOL DOWNLOAD CV --- */
+.cv-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 24px;
+    background-color: var(--primary); /* Hijau utama kamu */
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    width: fit-content;
+    box-shadow: 0 4px 10px rgba(0, 102, 97, 0.2);
+}
+
+.cv-btn:hover {
+    background-color: #02bfb6; /* Biru hover yang kamu pilih */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 150, 190, 0.3);
+    color: #ffffff;
+}
+
+.cv-btn i {
+    margin-right: 8px;
+}
