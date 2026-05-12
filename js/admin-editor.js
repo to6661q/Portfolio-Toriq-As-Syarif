@@ -207,7 +207,7 @@ initGenericForm('work-form', 'experience', 'experience', () => ({
     end_date: document.getElementById('e-end').value,
     position: document.getElementById('e-title').value,
     company: document.getElementById('e-company').value,
-    description: document.getElementById('e-desc').value
+    description: document.getElementById('e-desc').value,
     tech_stack: document.getElementById('exp-tech').value
 }), 'e-img');
 
@@ -215,7 +215,7 @@ initGenericForm('certification-form', 'cert', 'cert', () => ({
     date: document.getElementById('c-date').value,
     title: document.getElementById('c-title').value,
     publisher: document.getElementById('c-issuer').value,
-    description: document.getElementById('c-desc').value
+    description: document.getElementById('c-desc').value,
     tech_stack: document.getElementById('cert-tech').value
 }), 'c-img');
 
@@ -223,7 +223,7 @@ initGenericForm('volunteer-form', 'volunteer', 'volunteer', () => ({
     date: document.getElementById('v-date').value,
     title: document.getElementById('v-title').value,
     organization: document.getElementById('v-org').value,
-    description: document.getElementById('v-desc').value
+    description: document.getElementById('v-desc').value,
     tech_stack: document.getElementById('vol-tech').value
 }), 'v-img');
 
