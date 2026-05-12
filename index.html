@@ -41,6 +41,9 @@
             <div class="profile-text">
                 <h1 id="display-name">Toriq As Syarif</h1>
                 <p id="display-headline">IT Specialist</p>
+                <a id="cv-download-link" href="#" target="_blank" class="cv-btn" style="display:none;">
+                    <i class="fas fa-file-download"></i> Download My CV
+                </a>
             </div>
         </div>
 
@@ -214,6 +217,11 @@
                 document.getElementById('display-desc').classList.add('text-muted'); // Pastikan class ini ada
             }
             if(prof.photo_url && document.getElementById('display-photo')) document.getElementById('display-photo').src = prof.photo_url;
+            if (prof.cv_url && document.getElementById('cv-download-link')) {
+                const cvLink = document.getElementById('cv-download-link');
+                cvLink.href = prof.cv_url;
+                cvLink.style.display = 'inline-block'; // Tombol muncul hanya jika file ada
+            }
         }
 
         // C. Helper Fetch
