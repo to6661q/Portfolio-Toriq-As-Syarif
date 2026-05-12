@@ -191,7 +191,7 @@ header {
 }
 
 .tech-badge {
-    background-color: #2596be; /* Biru cerah kontras */
+    background-color: #02bfb6; /* Biru cerah kontras */
     color: #ffffff;
     padding: 3px 10px;
     border-radius: 4px; /* Sedikit kotak agar terlihat lebih 'techy' */
@@ -454,7 +454,7 @@ section {
 }
 
 .socmed-icons-only a:hover {
-    color: #2596be;    /* Berubah jadi biru saat hover */
+    color: #02bfb6;    /* Berubah jadi biru saat hover */
     transform: translateY(-5px);
 }
 
@@ -527,7 +527,7 @@ footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; 
 }
 
 .close-modal:hover {
-    color: #2596be; /* Warna biru tech kamu saat hover */
+    color: #02bfb6; /* Warna biru tech kamu saat hover */
 }
 
 /* Tambahkan kursor zoom-in pada semua gambar di website */
