@@ -368,17 +368,18 @@ section {
 .sub-item small, 
 /* Revisi Quote agar berada di tengah */
 #random-quote {
-    max-width: 800px;
-    margin: 0 auto 30px; /* Centering blok elemen */
-    display: block;
-    text-align: center;   /* KUNCI: Membuat teks di dalam blok berada di tengah */
-    
-    /* Memastikan gaya teks sama dengan deskripsi bio (Revisi sebelumnya) */
     font-size: 1rem !important;
     color: #666 !important;
     line-height: 1.6 !important;
     font-weight: 400 !important;
-    font-style: normal !important;
+    font-style: normal !important; /* Mematikan miring pada quote agar seragam */
+}
+
+/* Khusus Quote agar tidak terlalu lebar */
+#random-quote {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    display: block;
 }
 /* --- GRID LAYOUT UNTUK CERT & PROJECT --- */
 
