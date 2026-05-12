@@ -183,16 +183,17 @@
         }
 
         return `
-            <div class="media-card">
-                ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
-                <div class="media-info">
-                    <span class="date-text-new">${displayDate}</span>
-                    <h4>${d.title || d.position}</h4>
-                    <h5>${d.company || d.publisher || d.organization || ''}</h5>
-                    <p>${d.description || ''}</p>
-                    ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
-                </div>
-            </div>`;
+<div class="media-card">
+            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+            <div class="media-info">
+                <span class="date-text-new">${d.start_date ? formatTgl(d.start_date) : formatTgl(d.date)}</span>
+                <h4>${d.title || d.position}</h4>
+                <h5 class="text-muted">${d.company || d.publisher || d.organization || ''}</h5>
+                <p class="text-muted">${d.description || ''}</p>
+                
+                ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
+            </div>
+        </div>`;
     };
 
     async function init() {
