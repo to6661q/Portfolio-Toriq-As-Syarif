@@ -140,17 +140,36 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     const btn = e.target.querySelector('button');
     btn.innerText = "Saving...";
     
+    // 1. Upload Foto (Existing)
     const photoUrl = await uploadFile(document.getElementById('p-photo').files[0], 'profiles');
+    
+    // --- TAMBAHAN: Logika Upload CV ---
+    // Mengambil file dari input dengan ID 'profile-cv' dan menyimpannya di folder 'documents'
+    const cvUrl = await uploadFile(document.getElementById('profile-cv').files[0], 'documents');
+    // ----------------------------------
+
     const payload = {
         id: 1,
         full_name: document.getElementById('full_name').value,
         headline: document.getElementById('headline').value,
         description: document.getElementById('bio-desc').value
     };
+
     if (photoUrl) payload.photo_url = photoUrl;
+
+    // --- TAMBAHAN: Masukkan URL CV ke Payload ---
+    if (cvUrl) payload.cv_url = cvUrl; 
+    // -------------------------------------------
     
-    await supabase.from('profile').upsert(payload);
-    alert("Profile Saved!");
+    // Proses Simpan ke Supabase
+    const { error } = await supabase.from('profile').upsert(payload);
+    
+    if (error) {
+        alert("Error: " + error.message);
+    } else {
+        alert("Profile Saved!");
+    }
+    
     btn.innerText = "Update Profile";
     refreshAll();
 };
