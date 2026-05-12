@@ -201,7 +201,7 @@ header {
     font-weight: 800;    /* Tebal/Bold */
     font-style: italic;  /* Miring */
     
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 0.5px;
     display: inline-block;
 }
