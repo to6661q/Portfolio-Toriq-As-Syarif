@@ -137,24 +137,23 @@
    <script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    const quotes = {
-        "Life is a journey, not a destination."
-        "The art of life is a constant readjustment to our surroundings."
-        "Simplicity is the ultimate sophistication."
-        "Balance is not something you find, it's something you create."
-        "Do not watch the clock; do what it does. Keep going."
-        "In the middle of every difficulty lies opportunity."
-        "The only way to do great work is to love what you do."
-        "Great things are done by a series of small things brought together."
-        "Work hard in silence, let your success be your noise."
-        "The best way to predict the future is to create it."
-        "Your work is a craft, and your life is the canvas."
-        "Action is the foundational key to all success."
-        "Terbentur, terbentur, terbentuk."
-        "Stay 'green' so you can keep growing."
+    const quotes = [
+        "Life is a journey, not a destination.",
+        "The art of life is a constant readjustment to our surroundings.",
+        "Simplicity is the ultimate sophistication.",
+        "Balance is not something you find, it's something you create.",
+        "Do not watch the clock; do what it does. Keep going.",
+        "In the middle of every difficulty lies opportunity.",
+        "The only way to do great work is to love what you do.",
+        "Great things are done by a series of small things brought together.",
+        "Work hard in silence, let your success be your noise.",
+        "The best way to predict the future is to create it.",
+        "Your work is a craft, and your life is the canvas.",
+        "Action is the foundational key to all success.",
+        "Terbentur, terbentur, terbentuk.",
+        "Stay 'green' so you can keep growing.",
         "Enjoy the process and have a good meal."
-        
-       };
+        ];
 
     // 1. FUNGSI PENERJEMAH TANGGAL
     const formatTgl = (str) => {
