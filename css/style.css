@@ -165,12 +165,12 @@ header {
 
 /* Foto Profil */
 .profile-img {
-    width: 120px !important;
-    height: 120px !important;
+    width: 180px !important; /* Diperbesar dari 120px */
+    height: 180px !important;
     border-radius: 50% !important;
-    border: 4px solid #006661 !important;
+    border: 5px solid #006661 !important;
     object-fit: cover;
-    flex-shrink: 0; /* Mencegah foto gepeng saat layar menyempit */
+    flex-shrink: 0;
 }
 /* --- GAYA BARU UNTUK TANGGAL (Sekarang seperti gaya Tech sebelumnya) --- */
 /* --- GAYA TANGGAL (Bold & Hijau Utama) --- */
@@ -214,19 +214,21 @@ header {
 }
 
 .profile-text h1 {
-    font-size: 2.2rem;
+    font-size: 3.5rem; /* Nama diperbesar sesuai permintaan */
     font-weight: 800;
     margin: 0;
-    line-height: 1.1;
+    line-height: 1;
     color: #2d3436;
-    white-space: nowrap; /* Mencegah nama turun ke bawah (force satu baris) */
+    white-space: nowrap;
 }
 
 .profile-text p {
-    font-size: 1.1rem;
-    color: #006661;
-    font-weight: 600;
-    margin: 5px 0 0 0;
+    font-size: 1.4rem; 
+    color: var(--primary);
+    font-weight: 700;
+    margin: 10px 0 0 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--light); /* Style H3 Bio */
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -343,9 +345,40 @@ section {
 .media-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
 .media-card img { width: 100%; height: 220px; object-fit: cover; }
 .media-info { padding: 30px; }
-.media-info h4 { margin: 15px 0 5px; font-size: 1.4rem; }
+/* Gaya untuk semua TITLE (Position, Cert Title, Project Title, Contact Title) */
+/* Meniru style .bio-card h3 */
+.media-info h4, 
+.contact-title {
+    color: var(--primary) !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--light);
+    padding-bottom: 10px;
+    text-align: left;
+}
 .media-info h5 { margin: 0 0 15px; color: var(--text); opacity: 0.7; font-weight: 600; }
 
+/* Gaya untuk semua DESCRIPTION & QUOTE */
+/* Meniru style .bio-card p / #display-desc */
+.text-muted, 
+.media-info p, 
+.media-info h5, 
+.sub-item small, 
+#random-quote {
+    font-size: 1rem !important;
+    color: #666 !important;
+    line-height: 1.6 !important;
+    font-weight: 400 !important;
+    font-style: normal !important; /* Mematikan miring pada quote agar seragam */
+}
+/* Khusus Quote agar tidak terlalu lebar */
+#random-quote {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    display: block;
+}
 /* --- GRID LAYOUT UNTUK CERT & PROJECT --- */
 
 /* Target ID kontainer tempat data di-render */
