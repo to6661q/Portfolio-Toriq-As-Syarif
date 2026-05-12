@@ -10,18 +10,28 @@ const formatDateIDN = (dateString) => {
 };
 // --- 1. HELPER UPLOAD (FIX BUCKET ERROR) ---
 async function uploadFile(file, folder) {
-    if (!file) return null;
-    try {
-        const path = `${folder}/${Date.now()}_${file.name}`;
-        const { error } = await supabase.storage.from('assets').upload(path, file);
-        if (error) {
-            console.error("Upload Error:", error.message);
-            alert("Gagal upload: Pastikan Bucket 'assets' sudah dibuat di Supabase & disetel Public.");
-            return null;
-        }
-        const { data } = supabase.storage.from('assets').getPublicUrl(path);
-        return data.publicUrl;
-    } catch (e) { return null; }
+    if (!file) return null; // Jika tidak pilih file, dia memang balik null
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
+
+    // CEK NAMA BUCKET DI SINI! 
+    // Ganti 'portfolio-assets' dengan nama bucket aslimu di Supabase
+    const { data, error } = await supabase.storage
+        .from('portfolio-assets') 
+        .upload(filePath, file);
+
+    if (error) {
+        console.error("Upload error details:", error);
+        return null;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+        .from('portfolio-assets')
+        .getPublicUrl(filePath);
+
+    return publicUrl;
 }
 
 // --- 2. REFRESH DATA ---
@@ -140,13 +150,17 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     const btn = e.target.querySelector('button');
     btn.innerText = "Saving...";
     
-    // 1. Upload Foto (Existing)
-    const photoUrl = await uploadFile(document.getElementById('p-photo').files[0], 'profiles');
-    
-    // --- TAMBAHAN: Logika Upload CV ---
-    // Mengambil file dari input dengan ID 'profile-cv' dan menyimpannya di folder 'documents'
-    const cvUrl = await uploadFile(document.getElementById('profile-cv').files[0], 'documents');
-    // ----------------------------------
+    // Ambil elemen input
+    const photoInput = document.getElementById('p-photo');
+    const cvInput = document.getElementById('profile-cv'); // Pastikan ID ini ada di HTML
+
+    // Proses upload
+    const photoUrl = await uploadFile(photoInput.files[0], 'profiles');
+    const cvUrl = await uploadFile(cvInput.files[0], 'documents');
+
+    // DEBUG: Cek apakah file tertangkap atau tidak
+    console.log("File PDF terpilih:", cvInput.files[0]);
+    console.log("URL CV Hasil Upload:", cvUrl);
 
     const payload = {
         id: 1,
@@ -156,18 +170,16 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     };
 
     if (photoUrl) payload.photo_url = photoUrl;
+    if (cvUrl) payload.cv_url = cvUrl; // Hanya kirim jika cvUrl tidak null
 
-    // --- TAMBAHAN: Masukkan URL CV ke Payload ---
-    if (cvUrl) payload.cv_url = cvUrl; 
-    // -------------------------------------------
-    
-    // Proses Simpan ke Supabase
+    // Simpan ke tabel 'profile'
     const { error } = await supabase.from('profile').upsert(payload);
     
     if (error) {
-        alert("Error: " + error.message);
+        console.error("Supabase Error:", error.message);
+        alert("Gagal simpan: " + error.message);
     } else {
-        alert("Profile Saved!");
+        alert("Profile & CV Saved!");
     }
     
     btn.innerText = "Update Profile";
