@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        //* CSS ADMIN FOR LAYOUT SIDEBAR */
+        /* CSS ADMIN FOR LAYOUT SIDEBAR */
         body { 
             display: flex;
             background: #f4f9f8;
@@ -53,25 +53,55 @@
             margin-bottom: 40px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
         }
-        .admin-card h3 { color: #006661; border-bottom: 2px solid #f4f9f8; padding-bottom: 10px; margin-bottom: 20px; }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.85rem; }
-        input, textarea, select { 
-            width: 100%; padding: 10px; border: 1px solid #ddd; 
-            border-radius: 8px; font-family: inherit; 
+        .admin-card h3 {
+            color: #006661;
+            border-bottom: 2px solid #f4f9f8;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
-        .btn-save { background: #006661; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; }
-        
-        .record-list { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        input, textarea, select { 
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd; 
+            border-radius: 8px;
+            font-family: inherit; 
+        }
+        .btn-save {
+            background: #006661;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
+        .record-list {
+            margin-top: 25px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
         .manage-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: #f9fdfc; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+            background: #f9fdfc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-
     <aside class="admin-sidebar">
         <h2>TAS. Admin</h2>
         <nav class="admin-nav">
@@ -84,17 +114,14 @@
             <a href="#section-contact"><i class="fas fa-envelope"></i> Contact</a>
             <a href="#section-footer"><i class="fas fa-shoe-prints"></i> Footer</a>
             <a href="index.html" target="_blank" rel="noopener noreferrer" style="margin-top: 50px; color: #ffcc00;">
-        <i class="fas fa-external-link-alt"></i> Lihat Website
-    </a>
-
-    <a href="#" id="btn-logout" style="color: #ff4d4d; font-weight: 800;">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
+                <i class="fas fa-external-link-alt"></i> Lihat Website
+            </a>
+            <a href="#" id="btn-logout" style="color: #ff4d4d; font-weight: 800;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </nav>
     </aside>
-
     <main class="admin-main">
-
         <section id="section-profile" class="admin-card">
             <h3>Section 2: Profile Settings</h3>
             <form id="profile-form">
@@ -117,16 +144,13 @@
                 <button type="submit" class="btn-save">Update Profile</button>
             </form>
         </section>
-
         <section id="section-biodata" class="admin-card">
             <h3>Section 3: Biodata</h3>
-            
             <div class="sub-form">
                 <label><strong>Bio Description</strong></label>
                 <textarea id="bio-desc" rows="4" placeholder="Ceritakan tentang diri Anda..."></textarea>
                 <button onclick="updateBioDesc()" class="btn-save" style="margin-top: 10px; width: auto;">Save Description</button>
             </div>
-
             <div class="record-list">
                 <label><strong>Education Records</strong></label>
                 <form id="education-form">
@@ -137,7 +161,6 @@
                 </form>
                 <div id="list-education"></div>
             </div>
-
             <div class="record-list">
                 <label><strong>Technical Skills (Icon)</strong></label>
                 <form id="skill-form">
@@ -148,7 +171,6 @@
                 </form>
                 <div id="list-skill"></div>
             </div>
-
             <div class="record-list">
                 <label><strong>Achievements</strong></label>
                 <form id="achievement-form">
@@ -161,20 +183,18 @@
                 <div id="list-achievement"></div>
             </div>
         </section>
-
         <section id="section-experience" class="admin-card">
             <h3>Section 4: Experience</h3>
             <form id="work-form">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-    <div class="form-group">
-        <label>Start Date</label>
-        <input type="date" id="e-start" required>
-    </div>
-    <div class="form-group">
-        <label>End Date</label>
-        <input type="date" id="e-end"> </div>
-</div>
-                
+                    <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="date" id="e-start" required>
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="date" id="e-end"> </div>
+                </div>
                 <input type="text" id="e-title" placeholder="Position">
                 <input type="text" id="e-company" placeholder="Company">
                 <textarea id="e-desc" placeholder="Description"></textarea>
@@ -185,16 +205,13 @@
             </form>
             <div id="list-work"></div>
         </section>
-
         <section id="section-cert" class="admin-card">
             <h3>Section 5: Certifications</h3>
             <form id="certification-form">
-
                 <div class="form-group">
-    <label>Date Issued</label>
-    <input type="date" id="c-date" required>
-</div>
-                
+                    <label>Date Issued</label>
+                    <input type="date" id="c-date" required>
+                </div>   
                 <input type="text" id="c-title" placeholder="Title">
                 <input type="text" id="c-issuer" placeholder="Publisher">
                 <textarea id="c-desc" placeholder="Description"></textarea>
@@ -204,15 +221,13 @@
             </form>
             <div id="list-certification"></div>
         </section>
-
         <section id="section-volunteer" class="admin-card">
             <h3>Section 6: Volunteer</h3>
             <form id="volunteer-form">
-
                 <div class="form-group">
-    <label>Activity Date</label>
-    <input type="date" id="v-date" required>
-</div>
+                <label>Activity Date</label>
+                <input type="date" id="v-date" required>
+            </div>
                 <input type="text" id="v-title" placeholder="Title">
                 <input type="text" id="v-org" placeholder="Organization">
                 <textarea id="v-desc" placeholder="Description"></textarea>
@@ -222,22 +237,19 @@
             </form>
             <div id="list-volunteer"></div>
         </section>
-<section id="section-project" class="admin-card">
-    <h3>Section 7: Projects</h3>
-    <form id="project-form">
-        <input type="text" id="p-title" placeholder="Project Title" required>
-        <textarea id="p-desc" placeholder="Description"></textarea>
-        <input type="text" id="p-tech" placeholder="Tech Stack (contoh: PHP, Laravel, Docker)">
-        <input type="url" id="p-link" placeholder="GitHub Link">
-        
-        <label style="display:block; margin-top:10px; font-size:0.8rem; font-weight:bold;">Project Image</label>
-        <input type="file" id="p-img" accept="image/*">
-        
-        <button type="submit" class="btn-save" style="margin-top:15px;">Save Project</button>
-    </form>
-    <div id="list-project"></div>
-</section>
-
+        <section id="section-project" class="admin-card">
+            <h3>Section 7: Projects</h3>
+            <form id="project-form">
+                <input type="text" id="p-title" placeholder="Project Title" required>
+                <textarea id="p-desc" placeholder="Description"></textarea>
+                <input type="text" id="p-tech" placeholder="Tech Stack (contoh: PHP, Laravel, Docker)">
+                <input type="url" id="p-link" placeholder="GitHub Link">
+                <label style="display:block; margin-top:10px; font-size:0.8rem; font-weight:bold;">Project Image</label>
+                <input type="file" id="p-img" accept="image/*">
+                <button type="submit" class="btn-save" style="margin-top:15px;">Save Project</button>
+            </form>
+            <div id="list-project"></div>
+        </section>
         <section id="section-contact" class="admin-card">
             <h3>Section 8: Contact & Maps</h3>
             <form id="contact-form">
@@ -248,7 +260,6 @@
             </form>
             <div id="list-contact"></div>
         </section>
-
         <section id="section-footer" class="admin-card">
             <h3>Section 9: Footer Settings</h3>
             <div class="form-group">
@@ -261,34 +272,31 @@
             </div>
             <button type="button" onclick="window.saveFooterSettings()" class="btn-save">Update Footer</button>
         </section>
-
     </main>
-
     <script type="module" src="js/admin-editor.js">
-        // Fungsi format tanggal untuk tampilan publik
-const formatTgl = (str) => {
-    if(!str) return "";
-    return new Date(str).toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-};
-
-// Contoh penggunaan pada template Experience:
-fetchTo('experience', 'exp-list', d => `
-    <div class="media-card">
-        ${d.image_url ? `<img src="${d.image_url}" alt="${d.position}">` : ''}
-        <div class="media-info">
-            <span class="date-tag">
-                ${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : 'Sekarang'}
-            </span>
-            <h4>${d.position}</h4>
-            <h5>${d.company}</h5>
-            <p>${d.description}</p>
-        </div>
-    </div>
-`);
+        // DATE FORMAT FUNCTION
+        const formatTgl = (str) => {
+            if(!str) return "";
+            return new Date(str).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        };
+        // EXPERIENCE TEMPLATE
+        fetchTo('experience', 'exp-list', d => `
+            <div class="media-card">
+                ${d.image_url ? `<img src="${d.image_url}" alt="${d.position}">` : ''}
+                <div class="media-info">
+                    <span class="date-tag">
+                        ${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : 'Present'}
+                    </span>
+                    <h4>${d.position}</h4>
+                    <h5>${d.company}</h5>
+                    <p>${d.description}</p>
+                </div>
+            </div>
+        `);
     </script>
 </body>
 </html>
