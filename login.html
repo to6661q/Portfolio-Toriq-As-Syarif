@@ -10,7 +10,11 @@
             --primary: #006661;
             --dark: #004d49;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0;
+           padding: 0;
+           box-sizing:
+               border-box;
+          }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f4;
@@ -28,10 +32,25 @@
             max-width: 380px;
             text-align: center;
         }
-        .login-box h2 { color: var(--primary); margin-bottom: 8px; }
-        .login-box p { color: #636e72; margin-bottom: 25px; font-size: 14px; }
-        .form-group { text-align: left; margin-bottom: 18px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--dark); font-size: 13px; }
+        .login-box h2 {
+            color: var(--primary);
+                       margin-bottom: 8px;
+        }
+        .login-box p {
+            color: #636e72;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .form-group {
+            text-align:left;
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 13px; }
         input {
             width: 100%;
             padding: 12px;
@@ -39,7 +58,10 @@
             border-radius: 8px;
             font-size: 14px;
         }
-        input:focus { outline: none; border-color: var(--primary); }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
         button {
             width: 100%;
             padding: 12px;
@@ -51,14 +73,20 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        button:hover { background: var(--dark); }
-        #message { color: #e74c3c; font-size: 13px; margin-top: 10px; }
+        button:hover {
+            background: var(--dark);
+        }
+        #message {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="login-box">
         <h2>Admin Access</h2>
-        <p>Silakan masuk untuk mengelola portofolio.</p>
+        <p>Login to access</p>
         <form id="login-form">
             <div class="form-group">
                 <label>Email Address</label>
