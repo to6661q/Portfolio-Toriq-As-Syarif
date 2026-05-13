@@ -1,4 +1,4 @@
-// Smooth Scrolling
+// SMOOTH SCROLLING
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -7,8 +7,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         });
     });
 });
-
-// Navbar background change on scroll
+// NAVBAR BACKGROUND VHANGE ON SCROLL
 window.addEventListener('scroll', function() {
     const nav = document.querySelector('#navbar');
     if (window.scrollY > 150) {
