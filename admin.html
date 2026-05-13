@@ -8,25 +8,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* CSS Khusus Admin untuk Layout Sidebar */
-        body { display: flex; background: #f4f9f8; min-height: 100vh; }
+        //* CSS ADMIN FOR LAYOUT SIDEBAR */
+        body { 
+            display: flex;
+            background: #f4f9f8;
+            min-height: 100vh;
+        }
         .admin-sidebar { 
-            width: 260px; background: #006661; color: white; 
-            position: fixed; height: 100%; padding: 20px 0; 
+            width: 260px;
+            background: #006661;
+            color: white; 
+            position: fixed;
+            height: 100%;
+            padding: 20px 0; 
             overflow-y: auto;
         }
-        .admin-sidebar h2 { text-align: center; font-size: 1.5rem; margin-bottom: 30px; }
+        .admin-sidebar h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
         .admin-nav a { 
-            display: block; color: rgba(255,255,255,0.8); padding: 12px 25px; 
-            text-decoration: none; font-weight: 600; font-size: 0.9rem;
+            display: block;
+            color: rgba(255,255,255,0.8);
+            padding: 12px 25px; 
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
             transition: 0.3s;
         }
-        .admin-nav a:hover { background: rgba(255,255,255,0.1); color: white; }
-        
-        .admin-main { margin-left: 260px; flex: 1; padding: 40px; }
+        .admin-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .admin-main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+        }
         .admin-card { 
-            background: white; border-radius: 15px; padding: 30px; 
-            margin-bottom: 40px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
+            background: white;
+            border-radius: 15px;
+            padding: 30px; 
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
         }
         .admin-card h3 { color: #006661; border-bottom: 2px solid #f4f9f8; padding-bottom: 10px; margin-bottom: 20px; }
         
