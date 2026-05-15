@@ -565,3 +565,46 @@ footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; 
 .cv-btn i {
     margin-right: 8px;
 }
+/* --- Section Certification --- */
+#cert-list .media-info h4 {
+    font-size: 0.95rem; /* Ukuran Title Sertifikat */
+    margin-bottom: 2px;
+}
+
+#cert-list .media-info h5 {
+    font-size: 0.8rem; /* Ukuran Publisher/Lembaga */
+    margin-bottom: 8px;
+}
+
+#cert-list .media-info p {
+    font-size: 0.75rem; /* Ukuran Description */
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+#cert-list .tech-badge {
+    font-size: 0.6rem; /* Ukuran Tech Stack di Cert */
+    padding: 2px 8px;
+}
+
+/* --- Section Project --- */
+#project-list .media-info h4 {
+    font-size: 1rem; /* Ukuran Project Title */
+    margin-bottom: 5px;
+}
+
+#project-list .media-info p {
+    font-size: 0.8rem; /* Ukuran Description Project */
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+#project-list .tech-badge {
+    font-size: 0.6rem; /* Ukuran Tech Stack di Project */
+    padding: 2px 8px;
+}
+
+#project-list .btn-github {
+    font-size: 0.7rem; /* Ukuran Teks Button Link Github */
+    padding: 6px 12px; /* Mengecilkan ukuran tombolnya juga agar pas */
+}
