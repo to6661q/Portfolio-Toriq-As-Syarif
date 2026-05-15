@@ -565,15 +565,17 @@ footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; 
 .cv-btn i {
     margin-right: 8px;
 }
-/* --- Section Certification --- */
+
+/* Container Certification */
 #cert-list .media-info h4 {
-    font-size: 0.95rem; /* Ukuran Title Sertifikat */
-    margin-bottom: 2px;
+    font-size: 0.9rem; /* Ukuran Title */
+    margin-bottom: 4px;
 }
 
 #cert-list .media-info h5 {
-    font-size: 0.8rem; /* Ukuran Publisher/Lembaga */
+    font-size: 0.75rem; /* Ukuran Publisher */
     margin-bottom: 8px;
+    color: #666;
 }
 
 #cert-list .media-info p {
@@ -583,28 +585,31 @@ footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; 
 }
 
 #cert-list .tech-badge {
-    font-size: 0.6rem; /* Ukuran Tech Stack di Cert */
+    font-size: 0.6rem; /* Ukuran Tech Stack */
     padding: 2px 8px;
 }
-
-/* --- Section Project --- */
+/* Container Project */
 #project-list .media-info h4 {
-    font-size: 1rem; /* Ukuran Project Title */
-    margin-bottom: 5px;
+    font-size: 0.95rem; /* Ukuran Project Title */
+    margin-bottom: 6px;
 }
 
 #project-list .media-info p {
-    font-size: 0.8rem; /* Ukuran Description Project */
-    line-height: 1.5;
+    font-size: 0.75rem; /* Ukuran Description */
+    line-height: 1.4;
     margin-bottom: 12px;
 }
 
 #project-list .tech-badge {
-    font-size: 0.6rem; /* Ukuran Tech Stack di Project */
+    font-size: 0.6rem; /* Ukuran Tech Stack */
     padding: 2px 8px;
 }
 
-#project-list .btn-github {
-    font-size: 0.7rem; /* Ukuran Teks Button Link Github */
-    padding: 6px 12px; /* Mengecilkan ukuran tombolnya juga agar pas */
+/* Tombol Link Github */
+#project-list .project-link {
+    font-size: 0.7rem; 
+    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
