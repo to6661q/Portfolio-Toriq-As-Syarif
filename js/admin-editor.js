@@ -28,16 +28,16 @@ async function uploadFile(file, folder) {
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `${folder}/${fileName}`;
         // CHECK BUCKET NAME
-        // CHANGE'portfolio-assets' WITH ORIGINAL BUCKET NAME AT SUPABASE
+        // CHANGE'assets' WITH ORIGINAL BUCKET NAME AT SUPABASE
         const { data, error } = await supabase.storage
-            .from('portfolio-assets') 
+            .from('assets') 
             .upload(filePath, file);
     if (error) {
         console.error("Upload error details:", error);
         return null;
     }
     const { data: { publicUrl } } = supabase.storage
-        .from('portfolio-assets')
+        .from('assets')
         .getPublicUrl(filePath);
     return publicUrl;
 }
