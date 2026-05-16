@@ -109,7 +109,8 @@
             <a href="#section-biodata"><i class="fas fa-id-card"></i> Biodata</a>
             <a href="#section-experience"><i class="fas fa-briefcase"></i> Experience</a>
             <a href="#section-cert"><i class="fas fa-award"></i> Certifications</a>
-           <a href="#section-volunteer"><i class="fas fa-hand-holding-heart"></i> Volunteer</a>
+            <a href="#section-softcert"><i class="fas fa-graduation-cap"></i> Soft Certifications</a>
+            <a href="#section-volunteer"><i class="fas fa-hand-holding-heart"></i> Volunteer</a>
             <a href="#section-project"><i class="fas fa-code"></i> Projects</a>
             <a href="#section-contact"><i class="fas fa-envelope"></i> Contact</a>
             <a href="#section-footer"><i class="fas fa-shoe-prints"></i> Footer</a>
@@ -167,7 +168,7 @@
                     <input type="text" id="skill-name" placeholder="Skill Name" required>
                     <label style="font-size: 0.8rem; display: block; margin-top: 10px;">Skill Logo (Image)</label>
                     <input type="file" id="skill-img" accept="image/*">
-                    <button type="submit">Add Skill</button>
+                    <button type="submit" class="btn-save" style="margin-top:5px;">Add Skill</button>
                 </form>
                 <div id="list-skill"></div>
             </div>
@@ -188,12 +189,13 @@
             <form id="work-form">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div class="form-group">
-                    <label>Start Date</label>
-                    <input type="date" id="e-start" required>
-                </div>
-                <div class="form-group">
-                    <label>End Date</label>
-                    <input type="date" id="e-end"> </div>
+                        <label>Start Date</label>
+                        <input type="date" id="e-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="e-end"> 
+                    </div>
                 </div>
                 <input type="text" id="e-title" placeholder="Position">
                 <input type="text" id="e-company" placeholder="Company">
@@ -221,13 +223,29 @@
             </form>
             <div id="list-certification"></div>
         </section>
-  <section id="section-volunteer" class="admin-card">
+        <section id="section-softcert" class="admin-card">
+            <h3>Section 5B: Soft Certifications</h3>
+            <form id="softcert-form">
+                <div class="form-group">
+                    <label>Date Issued</label>
+                    <input type="date" id="sc-date" required>
+                </div>   
+                <input type="text" id="sc-title" placeholder="Title">
+                <input type="text" id="sc-publisher" placeholder="Publisher">
+                <textarea id="sc-desc" placeholder="Description"></textarea>
+                <input type="text" id="sc-tech" placeholder="Tech Stack (Pisahkan dengan spasi)">
+                <input type="file" id="sc-img">
+                <button type="submit" class="btn-save" style="margin-top:10px;">Save Soft Certification</button>
+            </form>
+            <div id="softcert-table-body"></div>
+        </section>
+        <section id="section-volunteer" class="admin-card">
             <h3>Section 6: Volunteer</h3>
             <form id="volunteer-form">
                 <div class="form-group">
-                <label>Activity Date</label>
-                <input type="date" id="v-date" required>
-            </div>
+                    <label>Activity Date</label>
+                    <input type="date" id="v-date" required>
+                </div>
                 <input type="text" id="v-title" placeholder="Title">
                 <input type="text" id="v-org" placeholder="Organization">
                 <textarea id="v-desc" placeholder="Description"></textarea>
@@ -242,7 +260,7 @@
             <form id="project-form">
                 <input type="text" id="p-title" placeholder="Project Title" required>
                 <textarea id="p-desc" placeholder="Description"></textarea>
-                <input type="text" id="p-tech" placeholder="Tech Stack (contoh: PHP, Laravel, Docker)">
+                <input type="text" id="p-tech" placeholder="Tech Stack (contoh: PHP Laravel Docker)">
                 <input type="url" id="p-link" placeholder="GitHub Link">
                 <label style="display:block; margin-top:10px; font-size:0.8rem; font-weight:bold;">Project Image</label>
                 <input type="file" id="p-img" accept="image/*">
@@ -270,33 +288,9 @@
                 <label>Quotes (Enter multiple quotes, one per line)</label>
                 <textarea id="f-quotes" rows="6" placeholder="Quote 1...&#10;Quote 2..."></textarea>
             </div>
-            <button type="button" onclick="window.saveFooterSettings()" class="btn-save">Update Footer</button>
+            <button type="button" id="btn-save-footer" onclick="window.saveFooterSettings()" class="btn-save">Update Footer</button>
         </section>
     </main>
-    <script type="module" src="js/admin-editor.js">
-        // DATE FORMAT FUNCTION
-        const formatTgl = (str) => {
-            if(!str) return "";
-            return new Date(str).toLocaleDateString('id-ID', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
-        };
-        // EXPERIENCE TEMPLATE
-        fetchTo('experience', 'exp-list', d => `
-            <div class="media-card">
-                ${d.image_url ? `<img src="${d.image_url}" alt="${d.position}">` : ''}
-                <div class="media-info">
-                    <span class="date-tag">
-                        ${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : 'Present'}
-                    </span>
-                    <h4>${d.position}</h4>
-                    <h5>${d.company}</h5>
-                    <p>${d.description}</p>
-                </div>
-            </div>
-        `);
-    </script>
+    <script type="module" src="js/admin-editor.js"></script>
 </body>
 </html>
