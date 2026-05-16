@@ -384,7 +384,7 @@ section {
 /* --- GRID LAYOUT UNTUK CERT & PROJECT --- */
 
 /* Target ID kontainer tempat data di-render */
-#cert-list, #project-list {
+#cert-list, #project-list, #softcert-list {
     display: grid;
     /* Membuat 4 kolom dengan lebar yang sama (1fr) */
     grid-template-columns: repeat(4, 1fr); 
@@ -407,14 +407,14 @@ section {
 
 /* Jika layar berukuran tablet (di bawah 1024px), ubah jadi 2 kolom */
 @media (max-width: 1024px) {
-    #cert-list, #project-list {
+    #cert-list, #project-list, #softcert-list {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 /* Jika layar berukuran HP (di bawah 600px), ubah jadi 1 kolom */
 @media (max-width: 600px) {
-    #cert-list, #project-list {
+    #cert-list, #project-list, #softcert-list {
         grid-template-columns: 1fr;
     }
 }
@@ -571,18 +571,18 @@ footer { background: var(--primary); color: var(--white); padding: 15px 0 15px; 
    ============================================================ */
 
 /* 1. SEKSI SERTIFIKASI */
-#cert-list .media-info h4 {
+#cert-list .media-info h4, #softcert-list .media-info h4 {
     font-size: 1rem !important; /* Mengecilkan Title */
     margin-bottom: 5px !important;
 }
 
-#cert-list .media-info h5 {
+#cert-list .media-info h5,#softcert-list .media-info h4 {
     font-size: 0.8rem !important; /* Mengecilkan Publisher */
     margin-bottom: 10px !important;
     opacity: 0.8;
 }
 
-#cert-list .media-info p {
+#cert-list .media-info p, #softcert-list .media-info h4 {
     font-size: 0.8rem !important; /* Mengecilkan Deskripsi */
     line-height: 1.5 !important;
 }
