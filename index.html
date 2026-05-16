@@ -200,7 +200,7 @@ async function init() {
         if (prof.cv_url && document.getElementById('cv-download-link')) {
             const cvLink = document.getElementById('cv-download-link');
             cvLink.href = prof.cv_url;
-            cvLink.style.style.display = 'inline-block';
+            cvLink.style.display = 'inline-block'; // <-- SUDAH DIPERBAIKI (Sebelumnya .style.style)
         }
     }
 
@@ -243,7 +243,7 @@ async function init() {
             <span>${s.name}</span>
         </div>`);
 
-    // 3. RENDER SOFT CERTIFICATIONS (Diubah menjadi rapi menggunakan fetchTo agar tidak memblokir)
+    // 3. RENDER SOFT CERTIFICATIONS
     fetchTo('softcert', 'softcert-list', d => `
         <div class="media-card">
             ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
@@ -322,7 +322,7 @@ async function init() {
         modal.onclick = (e) => { if(e.target === modal) closeModal(); };
     }
 }
-        window.onload = init;
+window.onload = init;
    </script>
 </body>
 </html>
