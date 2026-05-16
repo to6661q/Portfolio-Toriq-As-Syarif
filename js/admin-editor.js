@@ -184,7 +184,17 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     btn.innerText = "Update Profile";
     refreshAll();
 };
-
+// FUNGSI BARU: MENYELAMATKAN AMBISI UPDATE BIO DESCRIPTION LU
+window.updateBioDesc = async () => {
+    const bioDesc = document.getElementById('bio-desc').value;
+    const { error } = await supabase.from('profile').update({ description: bioDesc }).eq('id', 1);
+    if (error) {
+        alert("Gagal menyimpan deskripsi: " + error.message);
+    } else {
+        alert("Deskripsi Biodata Berhasil Disimpan!");
+        refreshAll();
+    }
+};
 // GENERIC FORM HANDLER
 const initGenericForm = (formId, table, type, payloadFn, fileId = null) => {
     const form = document.getElementById(formId);
