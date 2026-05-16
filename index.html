@@ -20,7 +20,13 @@
         /* Gaya Dropdown Desktop */
         .dropdown {
             position: relative;
-            display: inline-block;
+            display: flex;        /* Diubah dari inline-block menjadi flex */
+            align-items: center;  /* Memastikan link di dalam div ini sejajar lurus */
+        }
+                /* 3. Seleraskan teks "CERTIF" dengan ikon panahnya agar tidak saling tarik-menarik */
+        .dropdown-toggle {
+            display: inline-flex; /* Membuat teks dan ikon panah menyatu dalam satu flex baris */
+            align-items: center;  /* Menyetarakan teks dengan ikon panah di tengah-tengah */
         }
         .dropdown-menu {
             display: none;
@@ -35,13 +41,13 @@
             transform: translateX(-50%);
             padding: 8px 0;
             margin-top: 5px;
-   
         }
         .dropdown-menu a {
             color: rgba(255, 255, 255, 0.85) !important;
             padding: 10px 20px !important;
             text-decoration: none;
             display: block !important;
+            font-size: 0.8rem !important;
             text-transform: none !important;
             letter-spacing: 0px !important;
             border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -80,10 +86,11 @@
                 display: flex;
             }
             .menu-items {
-                flex-direction: column;
-                gap: 15px !important;
-                text-align: center;
-                width: 100%;
+.menu-items {
+    display: flex;
+    gap: 25px;
+    align-items: center; /* KUNCI UTAMA: Menjaga semua direct <a> dan <div> sejajar lurus secara vertikal */
+}
             }
             .menu-items a {
                 display: block;
@@ -121,7 +128,7 @@
                     <a href="#experience">Experience</a>
                     
                     <div class="dropdown" id="cert-dropdown">
-                        <a href="#" class="dropdown-toggle">CERTIFICATION <i class="fas fa-caret-down" style="font-size: 0.75rem; margin-left: 3px;"></i></a>
+                        <a href="#" class="dropdown-toggle">CERTIFICATION<i class="fas fa-caret-down" style="font-size: 0.75rem; margin-left: 3px;"></i></a>
                         <div class="dropdown-menu">
                             <a href="#cert">Hard Skill</a>
                             <a href="#softcert">Soft Skill</a>
