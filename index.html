@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* CSS TAMBAHAN UNTUK HAMBURGER MENU RESPONSIF */
+        /* CSS RESPONSIF HAMBURGER & DROPDOWN MENU CERTIF */
         .menu-toggle {
             display: none;
             color: #ffffff;
@@ -16,6 +16,49 @@
             cursor: pointer;
             transition: 0.3s ease;
         }
+
+        /* Gaya Dropdown Desktop */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #006661; /* Menyamakan warna hijau utama */
+            min-width: 220px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border-radius: 6px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 0;
+            margin-top: 5px;
+        }
+        .dropdown-menu a {
+            color: rgba(255, 255, 255, 0.85) !important;
+            padding: 10px 20px !important;
+            text-decoration: none;
+            display: block !important;
+            font-size: 0.8rem !important;
+            text-transform: none !important;
+            letter-spacing: 0px !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+            opacity: 1 !important;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Responsif Layar HP/Tablet (Max 768px) */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -47,6 +90,20 @@
                 padding: 5px 0;
                 font-size: 0.9rem;
             }
+            /* Dropdown mode Mobile Accordion */
+            .dropdown-menu {
+                position: static;
+                transform: none;
+                box-shadow: none;
+                background-color: rgba(0, 0, 0, 0.15);
+                width: 100%;
+                display: none;
+                padding: 5px 0;
+                margin-top: 5px;
+            }
+            .dropdown.open-active .dropdown-menu {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -62,16 +119,15 @@
                     <a href="#profile">Profile</a>
                     <a href="#biodata">Bio</a>
                     <a href="#experience">Experience</a>
+                    
                     <div class="dropdown" id="cert-dropdown">
-                        <a href="#" class="dropdown-toggle">Certification
-                            <i class="fas fa-caret-down" style="font-size: 0.75rem; margin-left: 3px;"></i></a>
+                        <a href="#" class="dropdown-toggle">CERTIF <i class="fas fa-caret-down" style="font-size: 0.75rem; margin-left: 3px;"></i></a>
                         <div class="dropdown-menu">
                             <a href="#cert">Hardskill Certification</a>
                             <a href="#softcert">Softskill Certifications</a>
                         </div>
                     </div>
-                    <a href="#cert">Certifications</a>
-                    <a href="#softcert">Soft Certifications</a>
+
                     <a href="#volunteer">Volunteer</a>
                     <a href="#project">Projects</a>
                     <a href="#contact">Contact</a>
@@ -225,7 +281,7 @@
         };
 
         async function init() {
-            // LOGIKAH TOOGLE HAMBURGER MENU
+            // LOGIKA TOGGLE HAMBURGER MENU
             const hamburgerBtn = document.getElementById('hamburger-btn');
             const navMenu = document.getElementById('nav-menu');
             if (hamburgerBtn && navMenu) {
@@ -238,10 +294,28 @@
                         icon.className = 'fas fa-bars';
                     }
                 });
+            }
+
+            // LOGIKA KLIK DROPDOWN MENU "CERTIF" PADA LAYAR MOBILE HP
+            const certDropdown = document.getElementById('cert-dropdown');
+            if (certDropdown) {
+                const toggleLink = certDropdown.querySelector('.dropdown-toggle');
+                toggleLink.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        certDropdown.classList.toggle('open-active');
+                    }
+                });
+            }
+
+            // TUTUP HAMBURGER SAAT LINK DIKLIK (KECUALI KLIK PADA CERTIF MANDIRI)
+            if (navMenu) {
                 navMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        navMenu.classList.remove('active');
-                        hamburgerBtn.querySelector('i').className = 'fas fa-bars';
+                    link.addEventListener('click', (e) => {
+                        if (!link.classList.contains('dropdown-toggle')) {
+                            navMenu.classList.remove('active');
+                            if (hamburgerBtn) hamburgerBtn.querySelector('i').className = 'fas fa-bars';
+                        }
                     });
                 });
             }
@@ -262,7 +336,6 @@
                 }
             }
 
-            // HELPER FETCH MENGGUNAKAN SORTING DYNAMIC COLUMN
             const fetchTo = async (table, elId, templateFn, orderColumn = 'id') => {
                 const { data } = await supabase.from(table).select('*').order(orderColumn, { ascending: false });
                 const container = document.getElementById(elId);
@@ -291,7 +364,7 @@
                     <span>${s.name}</span>
                 </div>`, 'id');
 
-            // URUTKAN BERDASARKAN TANGGAL TERBARU DI INDEX (DESCENDING)
+            // TETAP MENGGUNAKAN FITUR TANGGAL TERBARU DAHULU (DESCENDING)
             fetchTo('experience', 'exp-list', mediaTemplate, 'start_date');
             fetchTo('cert', 'cert-list', mediaTemplate, 'date');
             fetchTo('softcert', 'softcert-list', mediaTemplate, 'issue_date');
