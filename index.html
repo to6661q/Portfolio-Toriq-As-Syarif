@@ -17,7 +17,8 @@
                     <a href="#profile">Profile</a>
                     <a href="#biodata">Bio</a>
                     <a href="#experience">Experience</a>
-                    <a href="#cert">Hardskill Certification</a>
+                    <a href="#cert">Certifications</a>
+                    <a href="#softcert">Soft Certifications</a>
                     <a href="#volunteer">Volunteer</a>
                     <a href="#project">Projects</a>
                     <a href="#contact">Contact</a>
@@ -74,23 +75,29 @@
     </section>
     <section id="cert" class="section">
         <div class="container">
-            <h2 class="section-title">Certifications</h2>
+            <h2 class="section-title">Hardskill Certifications</h2>
             <div id="cert-list" class="main-grid"></div>
         </div>
     </section>
-    <section id="volunteer" class="section bg-light">
+    <section id="softcert" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Softskill Certifications</h2>
+            <div id="softcert-list" class="main-grid"></div>
+        </div>
+    </section>
+    <section id="volunteer" class="section">
         <div class="container">
             <h2 class="section-title">Volunteer Activities</h2>
             <div id="vol-list" class="main-grid"></div>
         </div>
     </section>
-    <section id="project" class="section">
+    <section id="project" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Projects</h2>
             <div id="project-list" class="main-grid"></div>
         </div>
     </section>
-     <section id="contact" class="section bg-light">
+    <section id="contact" class="section">
         <h2 class="section-title">Contact</h2>
         <div class="container contact-row">
             <div class="contact-info">
@@ -106,19 +113,19 @@
                 </div>
             </div>   
         </div>
-     </section>
+    </section>
     <footer>
         <div class="container text-center">
             <p class="copyright">@2026 Toriq As Syarif - toriqnain@gmail.com</p>
         </div>
     </footer>
     <div id="image-modal" class="modal">
-        <span class="close-modal">&times;</span>
+        <span class="close-modal">×</span>
         <img class="modal-content" id="img-full">
         <div id="caption"></div>
     </div>
-   <script type="module">
-import { supabase } from './js/supabase-config.js';
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
         const quotes = [
             "Life is a journey, not a destination.",
             "The art of life is a constant readjustment to our surroundings.",
@@ -211,7 +218,7 @@ import { supabase } from './js/supabase-config.js';
 
             fetchTo('experience', 'exp-list', mediaTemplate);
             fetchTo('cert', 'cert-list', mediaTemplate);
-            fetchTo('softcert', 'softcert-list', mediaTemplate); // Logika render soft skill di index
+            fetchTo('softcert', 'softcert-list', mediaTemplate);
             fetchTo('volunteer', 'vol-list', mediaTemplate);
 
             fetchTo('project', 'project-list', d => {
@@ -252,6 +259,6 @@ import { supabase } from './js/supabase-config.js';
             }
         }
         window.onload = init;
-   </script>
+    </script>
 </body>
 </html>
