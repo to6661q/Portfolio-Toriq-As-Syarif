@@ -225,6 +225,13 @@ initGenericForm('certification-form', 'cert', 'cert', () => ({
     description: document.getElementById('c-desc').value,
     tech_stack: document.getElementById('cert-tech').value
 }), 'c-img');
+initGenericForm('softcert-form', 'softcert', 'softcert', () => ({
+    title: document.getElementById('sc-title').value,
+    publisher: document.getElementById('sc-publisher').value,
+    issue_date: document.getElementById('sc-date').value ? document.getElementById('sc-date').value : null,
+    description: document.getElementById('sc-desc').value,
+    tech_stack: document.getElementById('sc-tech').value
+}), 'sc-img');
 initGenericForm('volunteer-form', 'volunteer', 'volunteer', () => ({
     date: document.getElementById('v-date').value,
     title: document.getElementById('v-title').value,
