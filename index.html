@@ -118,7 +118,7 @@
         <div id="caption"></div>
     </div>
    <script type="module">
-        import { supabase } from './js/supabase-config.js';
+import { supabase } from './js/supabase-config.js';
         const quotes = [
             "Life is a journey, not a destination.",
             "The art of life is a constant readjustment to our surroundings.",
@@ -135,8 +135,8 @@
             "Terbentur, terbentur, terbentuk.",
             "Stay 'green' so you can keep growing.",
             "Enjoy the process and have a good meal."
-            ];
-        // DATE FUNCTION
+        ];
+
         const formatTgl = (str) => {
             if (!str) return "";
             const dateObj = new Date(str);
@@ -147,46 +147,32 @@
                 year: 'numeric'
             });
         };
-        // MASTER TEMPLATE (Experience, Cert, Volunteer)
+
         const mediaTemplate = (d) => {
-            // DaATE STYLE: Bold & #006661 (via CSS class)
-            let displayDate = "";
-            if (d.start_date) {
-                displayDate = `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}`;
-            } else if (d.date) {
-                displayDate = formatTgl(d.date);
-            }
-            // Tech STYLE: Badge #2596be (via CSS class)
-            let techBadges = "";
-            if (d.tech_stack) {
-                techBadges = d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('');
-            }
+            let displayDate = d.start_date ? `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}` : formatTgl(d.date || d.issue_date);
+            let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
             return `
             <div class="media-card">
                 ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
                 <div class="media-info">
-                    <span class="date-text-new">${d.start_date ? formatTgl(d.start_date) : formatTgl(d.date)}</span>
+                    <span class="date-text-new">${displayDate}</span>
                     <h4>${d.title || d.position}</h4>
                     <h5 class="text-muted">${d.company || d.publisher || d.organization || ''}</h5>
                     <p class="text-muted">${d.description || ''}</p>
-                    
                     ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
                 </div>
             </div>`;
         };
+
         async function init() {
-            // QUOTES (Style via CSS #random-quote)
             const quoteEl = document.getElementById('random-quote');
             if(quoteEl) quoteEl.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-            // LOAD PROFILE
+
             const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
             if (prof) {
                 if(document.getElementById('display-name')) document.getElementById('display-name').innerText = prof.full_name;
                 if(document.getElementById('display-headline')) document.getElementById('display-headline').innerText = prof.headline;
-                if(document.getElementById('display-desc')) {
-                    document.getElementById('display-desc').innerText = prof.description;
-                    document.getElementById('display-desc').classList.add('text-muted');
-                }
+                if(document.getElementById('display-desc')) document.getElementById('display-desc').innerText = prof.description;
                 if(prof.photo_url && document.getElementById('display-photo')) document.getElementById('display-photo').src = prof.photo_url;
                 if (prof.cv_url && document.getElementById('cv-download-link')) {
                     const cvLink = document.getElementById('cv-download-link');
@@ -194,90 +180,76 @@
                     cvLink.style.display = 'inline-block';
                 }
             }
-            // HELPER FETCH
+
             const fetchTo = async (table, elId, templateFn) => {
-                const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
+                const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
                 const container = document.getElementById(elId);
                 if (data && container) {
                     container.innerHTML = data.map(templateFn).join('');
                 }
             };
-             // REVISION: Education & Achievement Description
+
             fetchTo('education', 'edu-list', d => `
                 <div class="sub-item">
                      <strong>${d.school}</strong><br>
                     <small class="text-muted">${d.degree} | ${d.year}</small>
                 </div>`);
+                
             fetchTo('achievement', 'ach-list', d => `
                 <div class="sub-item">
                     <strong>${d.title}</strong><br>
                     <small class="text-muted">${d.publisher} (${d.date})</small>
                 </div>`);
-            // RENDER SKILLS
+
             fetchTo('skill', 'skill-list', s => `
                 <div class="skill-card-new">
                     <div class="skill-icon-wrapper">
                         <img src="${s.image_url || 'img/default.png'}" alt="${s.name}">
                     </div>
                     <span>${s.name}</span>
-                </div>
-            `);
-            // REVISION: Experience, Cert, Volunteer Master Template
-            const mediaTemplate = (d) => {
-                let displayDate = d.start_date ? `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}` : formatTgl(d.date);
+                </div>`);
+
+            fetchTo('experience', 'exp-list', mediaTemplate);
+            fetchTo('cert', 'cert-list', mediaTemplate);
+            fetchTo('softcert', 'softcert-list', mediaTemplate); // Logika render soft skill di index
+            fetchTo('volunteer', 'vol-list', mediaTemplate);
+
+            fetchTo('project', 'project-list', d => {
                 let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
                 return `
                     <div class="media-card">
-                        ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+                        ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
                         <div class="media-info">
-                            <span class="date-text-new">${displayDate}</span>
-                            <h4>${d.title || d.position}</h4>
-                            <h5 class="text-muted">${d.company || d.publisher || d.organization || ''}</h5>
-                            <p class="text-muted">${d.description || ''}</p> ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
+                            <h4>${d.title}</h4> <p class="text-muted">${d.description}</p> ${techBadges ? `<div class="tech-container" style="margin-bottom:15px;">${techBadges}</div>` : ''}
+                            <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:#006661; color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
                         </div>
                     </div>`;
-                };
-                fetchTo('experience', 'exp-list', mediaTemplate);
-                fetchTo('cert', 'cert-list', mediaTemplate);
-                fetchTo('volunteer', 'vol-list', mediaTemplate);
-                // REVISION: Project Template
-                fetchTo('project', 'project-list', d => {
-                    let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
-                    return `
-                        <div class="media-card">
-                            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
-                            <div class="media-info">
-                                <h4>${d.title}</h4> <p class="text-muted">${d.description}</p> ${techBadges ? `<div class="tech-container" style="margin-bottom:15px;">${techBadges}</div>` : ''}
-                                <a href="${d.link_github}" target="_blank" class="github-btn" style="text-decoration:none; background:#006661; color:white; padding:8px 15px; border-radius:5px; font-size:0.8rem;">
-                                    <i class="fab fa-github"></i> GitHub
-                                </a>
-                            </div>
-                        </div>`;
+            });
+
+            fetchTo('contact', 'socmed-list', d => `
+                <a href="${d.url}" target="_blank" title="${d.platform}">
+                    <i class="${d.icon_class}"></i>
+                </a>`);
+
+            const modal = document.getElementById("image-modal");
+            const modalImg = document.getElementById("img-full");
+            if (modal && modalImg) {
+                document.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'IMG' && !e.target.closest('.admin-sidebar')) {
+                        modal.style.display = "block";
+                        modalImg.src = e.target.src;
+                        document.body.style.overflow = "hidden";
+                    }
                 });
-                // CONTACT ICON (Title via CSS .contact-title)
-                fetchTo('contact', 'socmed-list', d => `
-                    <a href="${d.url}" target="_blank" title="${d.platform}">
-                        <i class="${d.icon_class}"></i>
-                    </a>
-                `);
-                // LOGIC IMAGE POP-UP (LIGHTBOX)
-                const modal = document.getElementById("image-modal");
-                const modalImg = document.getElementById("img-full");
-                if (modal && modalImg) {
-                    document.addEventListener('click', (e) => {
-                        if (e.target.tagName === 'IMG' && !e.target.closest('.admin-sidebar')) {
-                            modal.style.display = "block";
-                            modalImg.src = e.target.src;
-                            document.body.style.overflow = "hidden";
-                        }
-                    });
-                    const closeModal = () => {
-                        modal.style.display = "none";
-                        document.body.style.overflow = "auto";
-                    };
-                    document.querySelector('.close-modal').onclick = closeModal;
-                    modal.onclick = (e) => { if(e.target === modal) closeModal(); };
-                }
+                const closeModal = () => {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                };
+                document.querySelector('.close-modal').onclick = closeModal;
+                modal.onclick = (e) => { if(e.target === modal) closeModal(); };
+            }
         }
         window.onload = init;
    </script>
