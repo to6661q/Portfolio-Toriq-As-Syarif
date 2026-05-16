@@ -109,6 +109,7 @@
             <a href="#section-biodata"><i class="fas fa-id-card"></i> Biodata</a>
             <a href="#section-experience"><i class="fas fa-briefcase"></i> Experience</a>
             <a href="#section-cert"><i class="fas fa-award"></i> Certifications</a>
+            <a href="#softcert"><i class="fas fa-graduation-cap"></i> Soft Certifications</a>
             <a href="#section-volunteer"><i class="fas fa-hand-holding-heart"></i> Volunteer</a>
             <a href="#section-project"><i class="fas fa-code"></i> Projects</a>
             <a href="#section-contact"><i class="fas fa-envelope"></i> Contact</a>
@@ -221,6 +222,51 @@
             </form>
             <div id="list-certification"></div>
         </section>
+        <section id="softcert" class="admin-section">
+    <h2>Manage Soft Certifications</h2>
+    <form id="softcert-form" class="admin-form">
+        <div class="form-group">
+            <label>Certificate Title</label>
+            <input type="text" id="sc-title" required>
+        </div>
+        <div class="form-group">
+            <label>Publisher / Institution</label>
+            <input type="text" id="sc-publisher" required>
+        </div>
+        <div class="form-group">
+            <label>Issue Date</label>
+            <input type="date" id="sc-date">
+        </div>
+        <div class="form-group">
+            <label>Description (Max 250 characters)</label>
+            <textarea id="sc-desc" rows="3" maxlength="250"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Skills / Tech Stack (Separate with space)</label>
+            <input type="text" id="sc-tech" placeholder="Communication Leadership Teamwork">
+        </div>
+        <div class="form-group">
+            <label>Certificate Image Logotype</label>
+            <input type="file" id="sc-img" accept="image/*">
+        </div>
+        <button type="submit" class="btn-save">Save Certificate</button>
+        <button type="button" id="btn-cancel-softcert" class="btn-cancel" style="display:none;">Cancel Edit</button>
+    </form>
+
+    <div class="admin-table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Publisher</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="softcert-table-body">
+                </tbody>
+        </table>
+    </div>
+</section>
         <section id="section-volunteer" class="admin-card">
             <h3>Section 6: Volunteer</h3>
             <form id="volunteer-form">
