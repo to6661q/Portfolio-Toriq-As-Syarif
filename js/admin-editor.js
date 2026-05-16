@@ -24,11 +24,20 @@ const formatDateIDN = (dateString) => {
     return new Date(dateString).toLocaleDateString('id-ID', options);
 };
 
-// HELPER UPLOAD
+// HELPER UPLOAD (SUDAH DIPERBAIKI: NAMA FILE CV TETAP ASLI)
 async function uploadFile(file, folder) {
     if (!file) return null;
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
+    
+    let fileName;
+    if (folder === 'documents') {
+        // Jika yang diunggah adalah CV, pertahankan nama aslinya (misal: myCV.pdf)
+        fileName = file.name;
+    } else {
+        // Untuk gambar/aset lain, tetap gunakan nama random agar tidak bentrok di storage
+        const fileExt = file.name.split('.').pop();
+        fileName = `${Math.random()}.${fileExt}`;
+    }
+    
     const filePath = `${folder}/${fileName}`;
     const { data, error } = await supabase.storage
         .from('assets') 
@@ -57,7 +66,6 @@ async function refreshAll() {
         if (document.getElementById('f-quotes')) document.getElementById('f-quotes').value = foot.quotes_list || '';
     }
     
-    // PENYESUAIAN PARAMETER SORTING KOLOM TANGGAL
     renderList('education', 'list-education', 'school', 'id');
     renderList('skill', 'list-skill', 'name', 'id');
     renderList('achievement', 'list-achievement', 'title', 'date');
@@ -159,6 +167,17 @@ window.saveFooterSettings = async () => {
     }
 };
 
+window.updateBioDesc = async () => {
+    const bioDesc = document.getElementById('bio-desc').value;
+    const { error } = await supabase.from('profile').update({ description: bioDesc }).eq('id', 1);
+    if (error) {
+        alert("Gagal menyimpan deskripsi: " + error.message);
+    } else {
+        alert("Deskripsi Biodata Berhasil Disimpan!");
+        refreshAll();
+    }
+};
+
 // PROFILE
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
@@ -184,17 +203,7 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     btn.innerText = "Update Profile";
     refreshAll();
 };
-// FUNGSI BARU: MENYELAMATKAN AMBISI UPDATE BIO DESCRIPTION LU
-window.updateBioDesc = async () => {
-    const bioDesc = document.getElementById('bio-desc').value;
-    const { error } = await supabase.from('profile').update({ description: bioDesc }).eq('id', 1);
-    if (error) {
-        alert("Gagal menyimpan deskripsi: " + error.message);
-    } else {
-        alert("Deskripsi Biodata Berhasil Disimpan!");
-        refreshAll();
-    }
-};
+
 // GENERIC FORM HANDLER
 const initGenericForm = (formId, table, type, payloadFn, fileId = null) => {
     const form = document.getElementById(formId);
