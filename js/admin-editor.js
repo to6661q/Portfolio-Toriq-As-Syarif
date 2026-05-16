@@ -6,6 +6,7 @@ let editingIds = {
     achievement: null,
     experience: null,
     cert: null,
+    softcert: null,
     volunteer: null,
     project: null,
     contact: null
