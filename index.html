@@ -18,7 +18,7 @@
                     <a href="#biodata">Bio</a>
                     <a href="#experience">Experience</a>
                     <a href="#cert">Hardskill Certification</a>
-                    <a href="#softcert"><i class="fas fa-graduation-cap"></i> Soft Certifications</a>
+                    <a href="#cert">Softskill Certification</a>>
                     <a href="#volunteer">Volunteer</a>
                     <a href="#project">Projects</a>
                     <a href="#contact">Contact</a>
@@ -79,6 +79,13 @@
             <div id="cert-list" class="main-grid"></div>
         </div>
     </section>
+    <section id="soft-publications">
+    <div class="container">
+        <h2 class="section-title">Soft Skills Certifications</h2>
+        <div id="softcert-list">
+            </div>
+    </div>
+</section>
     <section id="volunteer" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Volunteer Activities</h2>
@@ -223,6 +230,28 @@
                     <span>${s.name}</span>
                 </div>
             `);
+
+
+            // Tambahkan baris ini di dalam fungsi inisialisasi data halaman depan (init/load data)
+const { data: softCerts } = await supabase.from('softcert').select('*').order('issue_date', { ascending: false });
+
+if (softCerts) {
+    const softCertContainer = document.getElementById('softcert-list');
+    softCertContainer.innerHTML = softCerts.map(d => `
+        <div class="media-card">
+            ${d.image_url ? `<img src="${d.image_url}" alt="${d.title}">` : ''}
+            <div class="media-info">
+                <span class="date-text-new">${d.issue_date ? new Date(d.issue_date).toLocaleDateString('id-ID', {month: 'long', year: 'numeric'}) : ''}</span>
+                <h4>${d.title}</h4>
+                <h5>${d.publisher}</h5>
+                <p>${d.description || ''}</p>
+                <div class="tech-container">
+                    ${d.tech_stack ? d.tech_stack.split(' ').map(tech => `<span class="tech-badge">${tech}</span>`).join('') : ''}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
             // REVISION: Experience, Cert, Volunteer Master Template
             const mediaTemplate = (d) => {
                 let displayDate = d.start_date ? `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}` : formatTgl(d.date);
