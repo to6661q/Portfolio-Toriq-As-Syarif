@@ -43,7 +43,7 @@ async function uploadFile(file, folder) {
     return publicUrl;
 }
 
-// REFRESH DATA
+// REFRESH DATA DENGAN SORTING KOLOM TANGGAL DINAMIS (TERBARU DAHULU)
 async function refreshAll() {
     const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).maybeSingle();
     if (prof) {
@@ -56,20 +56,22 @@ async function refreshAll() {
         if (document.getElementById('f-email')) document.getElementById('f-email').value = foot.email || '';
         if (document.getElementById('f-quotes')) document.getElementById('f-quotes').value = foot.quotes_list || '';
     }
-    renderList('education', 'list-education', 'school');
-    renderList('skill', 'list-skill', 'name');
-    renderList('achievement', 'list-achievement', 'title');
-    renderList('experience', 'list-work', 'position');
-    renderList('cert', 'list-certification', 'title');
-    renderList('softcert', 'softcert-table-body', 'title');
-    renderList('volunteer', 'list-volunteer', 'title');
-    renderList('project', 'list-project', 'title');
-    renderList('contact', 'list-contact', 'platform');
+    
+    // PENYESUAIAN PARAMETER SORTING KOLOM TANGGAL
+    renderList('education', 'list-education', 'school', 'id');
+    renderList('skill', 'list-skill', 'name', 'id');
+    renderList('achievement', 'list-achievement', 'title', 'date');
+    renderList('experience', 'list-work', 'position', 'start_date');
+    renderList('cert', 'list-certification', 'title', 'date');
+    renderList('softcert', 'softcert-table-body', 'title', 'issue_date');
+    renderList('volunteer', 'list-volunteer', 'title', 'date');
+    renderList('project', 'list-project', 'title', 'id');
+    renderList('contact', 'list-contact', 'platform', 'id');
 }
 
-// UPDATE FUNCTION renderList
-async function renderList(table, elId, key) {
-    const { data } = await supabase.from(table).select('*').order('id', { ascending: false });
+// UPDATE FUNCTION RENDERLIST MENDUKUNG SORTING KOLOM KUSTOM
+async function renderList(table, elId, key, orderColumn = 'id') {
+    const { data } = await supabase.from(table).select('*').order(orderColumn, { ascending: false });
     const el = document.getElementById(elId);
     if (!el) return;
     el.innerHTML = data?.map(item => {
@@ -107,24 +109,34 @@ window.prepareEdit = async (table, id) => {
         document.getElementById('e-title').value = data.position || '';
         document.getElementById('e-company').value = data.company || '';
         document.getElementById('e-desc').value = data.description || '';
+        document.getElementById('exp-tech').value = data.tech_stack || '';
     } else if (table === 'volunteer') {
         document.getElementById('v-title').value = data.title || '';
         document.getElementById('v-org').value = data.organization || '';
+        document.getElementById('v-desc').value = data.description || '';
+        document.getElementById('vol-tech').value = data.tech_stack || '';
     } else if (table === 'contact') {
         document.getElementById('co-platform').value = data.platform || '';
+        document.getElementById('co-icon').value = data.icon_class || '';
         document.getElementById('co-url').value = data.url || '';
     } else if (table === 'cert') {
         document.getElementById('c-title').value = data.title || '';
         document.getElementById('c-issuer').value = data.publisher || '';
         document.getElementById('c-desc').value = data.description || '';
+        document.getElementById('cert-tech').value = data.tech_stack || '';
     } else if (table === 'softcert') {
         document.getElementById('sc-title').value = data.title || '';
         document.getElementById('sc-publisher').value = data.publisher || '';
         document.getElementById('sc-desc').value = data.description || '';
+        document.getElementById('sc-tech').value = data.tech_stack || '';
+    } else if (table === 'project') {
+        document.getElementById('p-title').value = data.title || '';
+        document.getElementById('p-desc').value = data.description || '';
+        document.getElementById('p-tech').value = data.tech_stack || '';
+        document.getElementById('p-link').value = data.link_github || '';
     }
     
-    const targetId = table === 'softcert' ? 'softcert' : `section-${table}`;
-    const targetSection = document.getElementById(targetId);
+    const targetSection = document.getElementById(`section-${table}`);
     if (targetSection) {
         const btn = targetSection.querySelector('button[type="submit"]');
         if(btn) btn.innerText = "Update Data";
@@ -140,15 +152,14 @@ window.saveFooterSettings = async () => {
         email: email, 
         quotes_list: quotes 
     });
-    if (error) {
-        alert("Gagal update footer: " + error.message);
-    } else {
+    if (error) alert("Gagal update footer: " + error.message);
+    else {
         alert("Footer Berhasil Diperbarui!");
         refreshAll();
     }
 };
 
-// PROFILE FORM SUBMIT
+// PROFILE
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
@@ -168,11 +179,8 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     if (cvUrl) payload.cv_url = cvUrl;
     
     const { error } = await supabase.from('profile').upsert(payload);
-    if (error) {
-        alert("Not save: " + error.message);
-    } else {
-        alert("Profile & CV Saved!");
-    }
+    if (error) alert("Not save: " + error.message);
+    else alert("Profile & CV Saved!");
     btn.innerText = "Update Profile";
     refreshAll();
 };
@@ -190,24 +198,15 @@ const initGenericForm = (formId, table, type, payloadFn, fileId = null) => {
             const url = await uploadFile(document.getElementById(fileId).files[0], table);
             if (url) payload.image_url = url;
         }
-        
-        let resError;
         if (editingIds[type]) {
-            const { error } = await supabase.from(table).update(payload).eq('id', editingIds[type]);
-            resError = error;
+            await supabase.from(table).update(payload).eq('id', editingIds[type]);
             editingIds[type] = null;
         } else {
-            const { error } = await supabase.from(table).insert([payload]);
-            resError = error;
+            await supabase.from(table).insert([payload]);
         } 
-        
-        if (resError) {
-            alert(`Gagal menyimpan ke tabel [${table}]: ` + resError.message);
-        } else {
-            alert("Data Saved!");
-            e.target.reset();
-        }
+        e.target.reset();
         btn.innerText = `Save ${type}`;
+        alert("Data Saved!");
         refreshAll();
     };
 };
@@ -239,7 +238,7 @@ initGenericForm('certification-form', 'cert', 'cert', () => ({
     tech_stack: document.getElementById('cert-tech').value
 }), 'c-img');
 initGenericForm('softcert-form', 'softcert', 'softcert', () => ({
-    issue_date: document.getElementById('sc-date').value || null,
+    issue_date: document.getElementById('sc-date').value,
     title: document.getElementById('sc-title').value,
     publisher: document.getElementById('sc-publisher').value,
     description: document.getElementById('sc-desc').value,
@@ -278,5 +277,4 @@ if (logoutBtn) {
         }
     });
 }
-
 window.onload = refreshAll;
