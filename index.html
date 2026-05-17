@@ -8,11 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* ==========================================================================
-           FIX MOBILE RESPONSIVE HAMBURGER & DROPDOWN HEADER
-           ========================================================================== */
-        
-        /* Desktop Base Overrides (Memastikan Sejajar Sempurna) */
+        /* CSS RESPONSIF HAMBURGER & DROPDOWN HEADER */
         .nav-flex {
             display: flex !important;
             justify-content: space-between !important;
@@ -24,8 +20,6 @@
             align-items: center !important;
             gap: 25px !important;
         }
-        
-        /* Tombol Hamburger (Tersembunyi di Desktop) */
         .menu-toggle {
             display: none;
             color: #ffffff;
@@ -33,8 +27,6 @@
             cursor: pointer;
             transition: 0.3s ease;
         }
-
-        /* Gaya Dropdown Menu Desktop */
         .dropdown {
             position: relative;
             display: flex;
@@ -82,7 +74,6 @@
             display: block;
         }
 
-        /* Responsif Sempurna untuk Layar HP / Tablet (Max 768px) */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block !important;
@@ -120,7 +111,6 @@
                 flex-direction: column !important;
                 width: 100% !important;
             }
-            /* Dropdown mode Accordion di HP */
             .dropdown-menu {
                 position: static !important;
                 transform: none !important;
@@ -154,14 +144,15 @@
                     <a href="#experience">Experience</a>
                     
                     <div class="dropdown" id="cert-dropdown">
-                        <a href="#" class="dropdown-toggle">CERTIF <i class="fas fa-caret-down" style="font-size: 0.75rem; margin-left: 3px;"></i></a>
+                        <a href="#" class="dropdown-toggle">CERT <i class="fas fa-caret-down" style="font-size: 0.75rem; margin-left: 3px;"></i></a>
                         <div class="dropdown-menu">
                             <a href="#cert">Hardskill Certification</a>
                             <a href="#softcert">Softskill Certification</a>
+                            <a href="#othercert">Others Certification</a>
                         </div>
                     </div>
 
-                    <a href="#volunteer">Volunteer</a>
+                    <a href="#achievement">Achievement</a>
                     <a href="#project">Projects</a>
                     <a href="#contact">Contact</a>
                 </div>   
@@ -171,6 +162,7 @@
             </nav>
         </div>
     </header>
+
     <section id="profile" class="hero-section">
         <div class="container">
             <p id="random-quote" class="quote text-center">"Loading inspiration..."</p>
@@ -186,6 +178,7 @@
             </div>
         </div>
     </section>
+
     <section id="biodata" class="section">
         <div class="container">
             <h2 class="section-title">Biodata</h2>
@@ -199,8 +192,8 @@
                     <div id="edu-list"></div>
                 </div>
                 <div class="bio-card">
-                    <h3><i class="fas fa-trophy"></i> Achievement</h3>
-                    <div id="ach-list"></div>
+                    <h3><i class="fas fa-users"></i> Extracurricular</h3>
+                    <div id="extra-list"></div>
                 </div>
                 <div class="bio-card full-width">
                     <h3><i class="fas fa-laptop-code"></i> Skills</h3>
@@ -209,37 +202,50 @@
             </div>
         </div>
     </section>
+
     <section id="experience" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Work Experience</h2>
             <div id="exp-list" class="main-grid"></div>
         </div>
     </section>
+
     <section id="cert" class="section">
         <div class="container">
             <h2 class="section-title">Hardskill Certifications</h2>
             <div id="cert-list" class="main-grid"></div>
         </div>
     </section>
+
     <section id="softcert" class="section bg-light">
         <div class="container">
             <h2 class="section-title">Softskill Certifications</h2>
             <div id="softcert-list" class="main-grid"></div>
         </div>
     </section>
-    <section id="volunteer" class="section">
+
+    <section id="othercert" class="section">
         <div class="container">
-            <h2 class="section-title">Volunteer Activities</h2>
-            <div id="vol-list" class="main-grid"></div>
+            <h2 class="section-title">Others Certifications</h2>
+            <div id="othercert-list" class="main-grid"></div>
         </div>
     </section>
-    <section id="project" class="section bg-light">
+
+    <section id="achievement" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Achievements</h2>
+            <div id="ach-list" class="main-grid"></div>
+        </div>
+    </section>
+
+    <section id="project" class="section">
         <div class="container">
             <h2 class="section-title">Projects</h2>
             <div id="project-list" class="main-grid"></div>
         </div>
     </section>
-     <section id="contact" class="section">
+
+    <section id="contact" class="section bg-light">
         <h2 class="section-title">Contact</h2>
         <div class="container contact-row">
             <div class="contact-info">
@@ -255,18 +261,21 @@
                 </div>
             </div>   
         </div>
-     </section>
+    </section>
+
     <footer>
         <div class="container text-center">
             <p class="copyright">@2026 Toriq As Syarif - toriqnain@gmail.com</p>
         </div>
     </footer>
+
     <div id="image-modal" class="modal">
         <span class="close-modal">×</span>
         <img class="modal-content" id="img-full">
         <div id="caption"></div>
     </div>
-   <script type="module">
+
+    <script type="module">
         import { supabase } from './js/supabase-config.js';
         const quotes = [
             "Life is a journey, not a destination.",
@@ -286,7 +295,6 @@
             "Enjoy the process and have a good meal."
         ];
 
-        // DATE FUNCTION
         const formatTgl = (str) => {
             if (!str) return "";
             const dateObj = new Date(str);
@@ -298,23 +306,33 @@
             });
         };
 
+        const mediaTemplate = (d) => {
+            let displayDate = d.start_date ? `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}` : formatTgl(d.date || d.issue_date);
+            let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
+            return `
+            <div class="media-card">
+                ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
+                <div class="media-info">
+                    <span class="date-text-new">${displayDate}</span>
+                    <h4>${d.title || d.position}</h4>
+                    <h5 class="text-muted">${d.company || d.publisher || d.organization || ''}</h5>
+                    <p class="text-muted">${d.description || ''}</p>
+                    ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
+                </div>
+            </div>`;
+        };
+
         async function init() {
-            // 🛠️ INTERAKSI HAMBURGER MENU PADA MOBILE
             const hamburgerBtn = document.getElementById('hamburger-btn');
             const navMenu = document.getElementById('nav-menu');
             if (hamburgerBtn && navMenu) {
                 hamburgerBtn.addEventListener('click', () => {
                     navMenu.classList.toggle('active');
                     const icon = hamburgerBtn.querySelector('i');
-                    if (navMenu.classList.contains('active')) {
-                        icon.className = 'fas fa-times';
-                    } else {
-                        icon.className = 'fas fa-bars';
-                    }
+                    icon.className = navMenu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
                 });
             }
 
-            // 🛠️ INTERAKSI DROPDOWN KLIK DI HP
             const certDropdown = document.getElementById('cert-dropdown');
             if (certDropdown) {
                 const toggleLink = certDropdown.querySelector('.dropdown-toggle');
@@ -326,7 +344,6 @@
                 });
             }
 
-            // TUTUP MENU SETELAH KLIK LINK (HP)
             if (navMenu) {
                 navMenu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
@@ -338,19 +355,14 @@
                 });
             }
 
-            // QUOTES
             const quoteEl = document.getElementById('random-quote');
             if(quoteEl) quoteEl.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-            
-            // LOAD PROFILE
+
             const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
             if (prof) {
                 if(document.getElementById('display-name')) document.getElementById('display-name').innerText = prof.full_name;
                 if(document.getElementById('display-headline')) document.getElementById('display-headline').innerText = prof.headline;
-                if(document.getElementById('display-desc')) {
-                    document.getElementById('display-desc').innerText = prof.description;
-                    document.getElementById('display-desc').classList.add('text-muted');
-                }
+                if(document.getElementById('display-desc')) document.getElementById('display-desc').innerText = prof.description;
                 if(prof.photo_url && document.getElementById('display-photo')) document.getElementById('display-photo').src = prof.photo_url;
                 if (prof.cv_url && document.getElementById('cv-download-link')) {
                     const cvLink = document.getElementById('cv-download-link');
@@ -359,7 +371,6 @@
                 }
             }
 
-            // HELPER FETCH MENDUKUNG KOLOM SORTING TANGGAL DARI YANG TERBARU
             const fetchTo = async (table, elId, templateFn, orderColumn = 'id') => {
                 const { data } = await supabase.from(table).select('*').order(orderColumn, { ascending: false });
                 const container = document.getElementById(elId);
@@ -374,11 +385,12 @@
                     <small class="text-muted">${d.degree} | ${d.year}</small>
                 </div>`, 'id');
 
-            fetchTo('achievement', 'ach-list', d => `
+            // REVISI 4: TAMPILAN EXTRACURRICULAR STRUKTUR DAN ISIAN SAMA SEPERTI EDUCATION
+            fetchTo('extracurricular', 'extra-list', d => `
                 <div class="sub-item">
-                    <strong>${d.title}</strong><br>
-                    <small class="text-muted">${d.publisher} (${d.date})</small>
-                </div>`, 'date');
+                     <strong>${d.name}</strong><br>
+                    <small class="text-muted">${d.role} | ${d.year}</small>
+                </div>`, 'id');
 
             fetchTo('skill', 'skill-list', s => `
                 <div class="skill-card-new">
@@ -386,29 +398,17 @@
                         <img src="${s.image_url || 'img/default.png'}" alt="${s.name}">
                     </div>
                     <span>${s.name}</span>
-                </div>
-            `, 'id');
+                </div>`, 'id');
 
-            const mediaTemplate = (d) => {
-                let displayDate = d.start_date ? `${formatTgl(d.start_date)} - ${d.end_date ? formatTgl(d.end_date) : "Present"}` : formatTgl(d.date || d.issue_date);
-                let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
-                return `
-                    <div class="media-card">
-                        ${d.image_url ? `<img src="${d.image_url}" alt="${d.title || d.position}">` : ''}
-                        <div class="media-info">
-                            <span class="date-text-new">${displayDate}</span>
-                            <h4>${d.title || d.position}</h4>
-                            <h5 class="text-muted">${d.company || d.publisher || d.organization || ''}</h5>
-                            <p class="text-muted">${d.description || ''}</p> ${techBadges ? `<div class="tech-container">${techBadges}</div>` : ''}
-                        </div>
-                    </div>`;
-            };
-
-            // EKSEKUSI DATA SESUAI TIMELINE TERBARU (DESCENDING)
             fetchTo('experience', 'exp-list', mediaTemplate, 'start_date');
             fetchTo('cert', 'cert-list', mediaTemplate, 'date');
             fetchTo('softcert', 'softcert-list', mediaTemplate, 'issue_date');
-            fetchTo('volunteer', 'vol-list', mediaTemplate, 'date');
+            
+            // REVISI 2: FETCHING KEBUTUHAN DATA LAINNYA
+            fetchTo('othercert', 'othercert-list', mediaTemplate, 'issue_date');
+            
+            // REVISI 3: FETCHING ACHIEVEMENT SEBAGAI MEDIA TEMPLATE UTUH
+            fetchTo('achievement', 'ach-list', mediaTemplate, 'date');
 
             fetchTo('project', 'project-list', d => {
                 let techBadges = d.tech_stack ? d.tech_stack.trim().split(/\s+/).map(skill => `<span class="tech-badge">${skill}</span>`).join('') : "";
@@ -427,10 +427,8 @@
             fetchTo('contact', 'socmed-list', d => `
                 <a href="${d.url}" target="_blank" title="${d.platform}">
                     <i class="${d.icon_class}"></i>
-                </a>
-            `, 'id');
+                </a>`, 'id');
 
-            // LIGHTBOX LOGIC
             const modal = document.getElementById("image-modal");
             const modalImg = document.getElementById("img-full");
             if (modal && modalImg) {
@@ -450,6 +448,6 @@
             }
         }
         window.onload = init;
-   </script>
+    </script>
 </body>
 </html>
