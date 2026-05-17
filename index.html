@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* CSS RESPONSIF HAMBURGER & DROPDOWN HEADER */
+        /* ==========================================================================
+           FIX MOBILE RESPONSIVE HAMBURGER & DROPDOWN HEADER
+           ========================================================================== */
+        
+        /* Desktop Base Overrides */
         .nav-flex {
             display: flex !important;
             justify-content: space-between !important;
@@ -20,6 +24,8 @@
             align-items: center !important;
             gap: 25px !important;
         }
+        
+        /* Tombol Hamburger */
         .menu-toggle {
             display: none;
             color: #ffffff;
@@ -27,6 +33,8 @@
             cursor: pointer;
             transition: 0.3s ease;
         }
+
+        /* Gaya Dropdown Menu Desktop */
         .dropdown {
             position: relative;
             display: flex;
@@ -74,6 +82,29 @@
             display: block;
         }
 
+        /* ==========================================================================
+           REVISI 1: PENYERAGAMAN UKURAN TEKS SOFTSKILL & OTHERS DENGAN HARDSKILL
+           ========================================================================== */
+        #softcert .media-info h4, #othercert .media-info h4 {
+            font-size: 1.15rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 5px !important;
+        }
+        #softcert .media-info h5, #othercert .media-info h5 {
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 8px !important;
+        }
+        #softcert .media-info p, #othercert .media-info p {
+            font-size: 0.85rem !important;
+            line-height: 1.5 !important;
+        }
+        #softcert .date-text-new, #othercert .date-text-new {
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+        }
+
+        /* Responsif Sempurna untuk Layar HP / Tablet (Max 768px) */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block !important;
@@ -385,7 +416,6 @@
                     <small class="text-muted">${d.degree} | ${d.year}</small>
                 </div>`, 'id');
 
-            // REVISI 4: TAMPILAN EXTRACURRICULAR STRUKTUR DAN ISIAN SAMA SEPERTI EDUCATION
             fetchTo('extracurricular', 'extra-list', d => `
                 <div class="sub-item">
                      <strong>${d.name}</strong><br>
@@ -403,11 +433,7 @@
             fetchTo('experience', 'exp-list', mediaTemplate, 'start_date');
             fetchTo('cert', 'cert-list', mediaTemplate, 'date');
             fetchTo('softcert', 'softcert-list', mediaTemplate, 'issue_date');
-            
-            // REVISI 2: FETCHING KEBUTUHAN DATA LAINNYA
             fetchTo('othercert', 'othercert-list', mediaTemplate, 'issue_date');
-            
-            // REVISI 3: FETCHING ACHIEVEMENT SEBAGAI MEDIA TEMPLATE UTUH
             fetchTo('achievement', 'ach-list', mediaTemplate, 'date');
 
             fetchTo('project', 'project-list', d => {
