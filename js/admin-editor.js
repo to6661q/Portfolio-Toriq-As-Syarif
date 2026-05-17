@@ -8,7 +8,8 @@ let editingIds = {
     experience: null,
     cert: null,
     softcert: null,
-    volunteer: null,
+    othercert: null,
+    extracurricular: null,
     project: null,
     contact: null
 };
@@ -24,35 +25,21 @@ const formatDateIDN = (dateString) => {
     return new Date(dateString).toLocaleDateString('id-ID', options);
 };
 
-// HELPER UPLOAD (SUDAH DIPERBAIKI: NAMA FILE CV TETAP ASLI)
+// HELPER UPLOAD (NAMA FILE CV TETAP ASLI SANGAT AMAN)
 async function uploadFile(file, folder) {
     if (!file) return null;
-    
-    let fileName;
-    if (folder === 'documents') {
-        // Jika yang diunggah adalah CV, pertahankan nama aslinya (misal: myCV.pdf)
-        fileName = file.name;
-    } else {
-        // Untuk gambar/aset lain, tetap gunakan nama random agar tidak bentrok di storage
-        const fileExt = file.name.split('.').pop();
-        fileName = `${Math.random()}.${fileExt}`;
-    }
-    
+    let fileName = folder === 'documents' ? file.name : `${Math.random()}.${file.name.split('.').pop()}`;
     const filePath = `${folder}/${fileName}`;
-    const { data, error } = await supabase.storage
-        .from('assets') 
-        .upload(filePath, file);
+    const { data, error } = await supabase.storage.from('assets').upload(filePath, file);
     if (error) {
         console.error("Upload error details:", error);
         return null;
     }
-    const { data: { publicUrl } } = supabase.storage
-        .from('assets')
-        .getPublicUrl(filePath);
+    const { data: { publicUrl } } = supabase.storage.from('assets').getPublicUrl(filePath);
     return publicUrl;
 }
 
-// REFRESH DATA DENGAN SORTING KOLOM TANGGAL DINAMIS (TERBARU DAHULU)
+// REFRESH DATA DENGAN SORTING TIMELINE TERBARU DAHULU
 async function refreshAll() {
     const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).maybeSingle();
     if (prof) {
@@ -65,19 +52,18 @@ async function refreshAll() {
         if (document.getElementById('f-email')) document.getElementById('f-email').value = foot.email || '';
         if (document.getElementById('f-quotes')) document.getElementById('f-quotes').value = foot.quotes_list || '';
     }
-    
     renderList('education', 'list-education', 'school', 'id');
     renderList('skill', 'list-skill', 'name', 'id');
-    renderList('achievement', 'list-achievement', 'title', 'date');
+    renderList('extracurricular', 'list-extracurricular', 'name', 'id');
     renderList('experience', 'list-work', 'position', 'start_date');
     renderList('cert', 'list-certification', 'title', 'date');
     renderList('softcert', 'softcert-table-body', 'title', 'issue_date');
-    renderList('volunteer', 'list-volunteer', 'title', 'date');
+    renderList('othercert', 'othercert-table-body', 'title', 'issue_date');
+    renderList('achievement', 'list-achievement', 'title', 'date');
     renderList('project', 'list-project', 'title', 'id');
     renderList('contact', 'list-contact', 'platform', 'id');
 }
 
-// UPDATE FUNCTION RENDERLIST MENDUKUNG SORTING KOLOM KUSTOM
 async function renderList(table, elId, key, orderColumn = 'id') {
     const { data } = await supabase.from(table).select('*').order(orderColumn, { ascending: false });
     const el = document.getElementById(elId);
@@ -85,8 +71,9 @@ async function renderList(table, elId, key, orderColumn = 'id') {
     el.innerHTML = data?.map(item => {
         let dateInfo = "";
         if (table === 'experience') dateInfo = `<small>${formatDateIDN(item.start_date)} - ${item.end_date ? formatDateIDN(item.end_date) : 'Present'}</small>`;
-        if (table === 'cert' || table === 'volunteer') dateInfo = `<small>${formatDateIDN(item.date)}</small>`;
-        if (table === 'softcert') dateInfo = `<small>${formatDateIDN(item.issue_date)}</small>`;
+        if (table === 'cert' || table === 'achievement') dateInfo = `<small>${formatDateIDN(item.date)}</small>`;
+        if (table === 'softcert' || table === 'othercert') dateInfo = `<small>${formatDateIDN(item.issue_date)}</small>`;
+        if (table === 'education' || table === 'extracurricular') dateInfo = `<small>${item.year}</small>`;
         return `
         <div class="manage-item" style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #eee; align-items:center;">
             <div>
@@ -118,11 +105,10 @@ window.prepareEdit = async (table, id) => {
         document.getElementById('e-company').value = data.company || '';
         document.getElementById('e-desc').value = data.description || '';
         document.getElementById('exp-tech').value = data.tech_stack || '';
-    } else if (table === 'volunteer') {
-        document.getElementById('v-title').value = data.title || '';
-        document.getElementById('v-org').value = data.organization || '';
-        document.getElementById('v-desc').value = data.description || '';
-        document.getElementById('vol-tech').value = data.tech_stack || '';
+    } else if (table === 'extracurricular') {
+        document.getElementById('extra-name').value = data.name || '';
+        document.getElementById('extra-role').value = data.role || '';
+        document.getElementById('extra-year').value = data.year || '';
     } else if (table === 'contact') {
         document.getElementById('co-platform').value = data.platform || '';
         document.getElementById('co-icon').value = data.icon_class || '';
@@ -137,6 +123,17 @@ window.prepareEdit = async (table, id) => {
         document.getElementById('sc-publisher').value = data.publisher || '';
         document.getElementById('sc-desc').value = data.description || '';
         document.getElementById('sc-tech').value = data.tech_stack || '';
+    } else if (table === 'othercert') {
+        document.getElementById('oc-title').value = data.title || '';
+        document.getElementById('oc-publisher').value = data.publisher || '';
+        document.getElementById('oc-desc').value = data.description || '';
+        document.getElementById('oc-tech').value = data.tech_stack || '';
+    } else if (table === 'achievement') {
+        document.getElementById('ach-date').value = data.date || '';
+        document.getElementById('ach-title').value = data.title || '';
+        document.getElementById('ach-pub').value = data.publisher || '';
+        document.getElementById('ach-desc').value = data.description || '';
+        document.getElementById('ach-tech').value = data.tech_stack || '';
     } else if (table === 'project') {
         document.getElementById('p-title').value = data.title || '';
         document.getElementById('p-desc').value = data.description || '';
@@ -155,39 +152,24 @@ window.prepareEdit = async (table, id) => {
 window.saveFooterSettings = async () => {
     const email = document.getElementById('f-email').value;
     const quotes = document.getElementById('f-quotes').value;
-    const { error } = await supabase.from('footer_settings').upsert({ 
-        id: 1, 
-        email: email, 
-        quotes_list: quotes 
-    });
+    const { error } = await supabase.from('footer_settings').upsert({ id: 1, email: email, quotes_list: quotes });
     if (error) alert("Gagal update footer: " + error.message);
-    else {
-        alert("Footer Berhasil Diperbarui!");
-        refreshAll();
-    }
+    else { alert("Footer Berhasil Diperbarui!"); refreshAll(); }
 };
 
 window.updateBioDesc = async () => {
     const bioDesc = document.getElementById('bio-desc').value;
     const { error } = await supabase.from('profile').update({ description: bioDesc }).eq('id', 1);
-    if (error) {
-        alert("Gagal menyimpan deskripsi: " + error.message);
-    } else {
-        alert("Deskripsi Biodata Berhasil Disimpan!");
-        refreshAll();
-    }
+    if (error) alert("Gagal menyimpan deskripsi: " + error.message);
+    else { alert("Deskripsi Biodata Berhasil Disimpan!"); refreshAll(); }
 };
 
-// PROFILE
 document.getElementById('profile-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button');
     btn.innerText = "Saving...";
-    const photoInput = document.getElementById('p-photo');
-    const cvInput = document.getElementById('profile-cv');
-    const photoUrl = await uploadFile(photoInput.files[0], 'profiles');
-    const cvUrl = await uploadFile(cvInput.files[0], 'documents');
-    
+    const photoUrl = await uploadFile(document.getElementById('p-photo').files[0], 'profiles');
+    const cvUrl = await uploadFile(document.getElementById('profile-cv').files[0], 'documents');
     const payload = {
         id: 1,
         full_name: document.getElementById('full_name').value,
@@ -196,7 +178,6 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     };
     if (photoUrl) payload.photo_url = photoUrl;
     if (cvUrl) payload.cv_url = cvUrl;
-    
     const { error } = await supabase.from('profile').upsert(payload);
     if (error) alert("Not save: " + error.message);
     else alert("Profile & CV Saved!");
@@ -204,7 +185,6 @@ document.getElementById('profile-form').onsubmit = async (e) => {
     refreshAll();
 };
 
-// GENERIC FORM HANDLER
 const initGenericForm = (formId, table, type, payloadFn, fileId = null) => {
     const form = document.getElementById(formId);
     if (!form) return;
@@ -235,12 +215,18 @@ initGenericForm('education-form', 'education', 'education', () => ({
     degree: document.getElementById('edu-degree').value,
     year: document.getElementById('edu-year').value
 }));
+initGenericForm('extracurricular-form', 'extracurricular', 'extracurricular', () => ({
+    name: document.getElementById('extra-name').value,
+    role: document.getElementById('extra-role').value,
+    year: document.getElementById('extra-year').value
+}));
 initGenericForm('achievement-form', 'achievement', 'achievement', () => ({
     date: document.getElementById('ach-date').value,
     title: document.getElementById('ach-title').value,
     publisher: document.getElementById('ach-pub').value,
-    description: document.getElementById('ach-desc').value
-}));
+    description: document.getElementById('ach-desc').value,
+    tech_stack: document.getElementById('ach-tech').value
+}), 'ach-img');
 initGenericForm('work-form', 'experience', 'experience', () => ({
     start_date: document.getElementById('e-start').value,
     end_date: document.getElementById('e-end').value,
@@ -263,13 +249,13 @@ initGenericForm('softcert-form', 'softcert', 'softcert', () => ({
     description: document.getElementById('sc-desc').value,
     tech_stack: document.getElementById('sc-tech').value
 }), 'sc-img');
-initGenericForm('volunteer-form', 'volunteer', 'volunteer', () => ({
-    date: document.getElementById('v-date').value,
-    title: document.getElementById('v-title').value,
-    organization: document.getElementById('v-org').value,
-    description: document.getElementById('v-desc').value,
-    tech_stack: document.getElementById('vol-tech').value
-}), 'v-img');
+initGenericForm('othercert-form', 'othercert', 'othercert', () => ({
+    issue_date: document.getElementById('oc-date').value,
+    title: document.getElementById('oc-title').value,
+    publisher: document.getElementById('oc-publisher').value,
+    description: document.getElementById('oc-desc').value,
+    tech_stack: document.getElementById('oc-tech').value
+}), 'oc-img');
 initGenericForm('project-form', 'project', 'project', () => ({
     title: document.getElementById('p-title').value,
     description: document.getElementById('p-desc').value,
@@ -290,9 +276,8 @@ if (logoutBtn) {
     logoutBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         if (confirm("Are you sure you want to exit the admin panel?")) {
-            const { error } = await supabase.auth.signOut();
-            if (error) alert("Not Logout: " + error.message);
-            else window.location.href = 'login.html'; 
+            await supabase.auth.signOut();
+            window.location.href = 'login.html'; 
         }
     });
 }
