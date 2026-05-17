@@ -83,23 +83,30 @@
         }
 
         /* ==========================================================================
-           REVISI 1: PENYERAGAMAN UKURAN TEKS SOFTSKILL & OTHERS DENGAN HARDSKILL
+           REVISI 1 & 2 & 3: PENYERAGAMAN GAYA DAN UKURAN TEKS CERTIFICATIONS
            ========================================================================== */
-        #softcert .media-info h4, #othercert .media-info h4 {
+        /* 1. Judul Sertifikat (H4) Disamakan Ukurannya */
+        #cert .media-info h4, #softcert .media-info h4, #othercert .media-info h4 {
             font-size: 1.15rem !important;
             font-weight: 700 !important;
             margin-bottom: 5px !important;
         }
-        #softcert .media-info h5, #othercert .media-info h5 {
+
+        /* 2. Publisher / Institution (H5) Dibuat BOLD TEBAL untuk Ketiganya */
+        #cert .media-info h5, #softcert .media-info h5, #othercert .media-info h5 {
             font-size: 0.9rem !important;
-            font-weight: 600 !important;
+            font-weight: 700 !important; /* KUNCI UTAMA: BOLD PUBLISHER */
             margin-bottom: 8px !important;
         }
-        #softcert .media-info p, #othercert .media-info p {
+
+        /* 3. Deskripsi Sertifikat (P) Disamakan */
+        #cert .media-info p, #softcert .media-info p, #othercert .media-info p {
             font-size: 0.85rem !important;
             line-height: 1.5 !important;
         }
-        #softcert .date-text-new, #othercert .date-text-new {
+
+        /* 4. Teks Tanggal Disamakan */
+        #cert .date-text-new, #softcert .date-text-new, #othercert .date-text-new {
             font-size: 0.8rem !important;
             font-weight: 600 !important;
         }
